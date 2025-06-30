@@ -20,5 +20,5 @@ dev() {
 	fi
 }
 
-dev()	# Runs bigbluebutton-html5 from bigbluebutton/dev/bigbluebutton-html5.
-prod()	# Swaps back.
+dev		# Runs bigbluebutton-html5 from bigbluebutton/dev/bigbluebutton-html5.
+prod	# Swaps back.
