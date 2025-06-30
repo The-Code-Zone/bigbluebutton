@@ -227,6 +227,25 @@ const UserCameraButtonsContainterWrapper = styled.div<UserCameraButtonsContainte
   `}
 `;
 
+const VolumeControlContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+`;
+
+const VolumeSlider = styled.input`
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  outline: none;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 export default {
   Content,
   UserCameraButtonsContainterWrapper,
@@ -238,4 +257,6 @@ export default {
   BottomBar,
   VideoDisabled,
   RaiseHand,
+  VolumeControlContainer,
+  VolumeSlider,
 };

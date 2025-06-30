@@ -48,6 +48,8 @@ class VideoService {
 
   private clientSessionUUID: string;
 
+  private volumes: Map<string, number>;
+
   constructor() {
     this.userParameterProfile = null;
     this.isMobile = deviceInfo.isMobile;
@@ -55,6 +57,7 @@ class VideoService {
     this.numberOfDevices = 0;
     this.record = null;
     this.clientSessionUUID = '0';
+    this.volumes = new Map();
 
     if (navigator.mediaDevices) {
       this.updateNumberOfDevices = this.updateNumberOfDevices.bind(this);
@@ -67,6 +70,9 @@ class VideoService {
     this.webRtcPeersRef = {};
     this.activePeers = {};
   }
+
+  setVolume(cameraId: string, volume: number) { this.volumes.set(cameraId, volume); }
+  getVolume(cameraId: string) { return this.volumes.get(cameraId) ?? 1; }
 
   static fetchNumberOfDevices(devices: MediaDeviceInfo[]) {
     const deviceIds: string[] = [];
@@ -623,4 +629,6 @@ export default {
   getStats: () => videoService.getStats(),
   buildStreamName: (deviceId: string) => videoService.buildStreamName(deviceId),
   startVirtualBackground: VideoService.startVirtualBackground,
+  setVolume: videoService.setVolume.bind(videoService),
+  getVolume: videoService.getVolume.bind(videoService),
 };

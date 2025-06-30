@@ -113,6 +113,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   const [isMirrored, setIsMirrored] = useState<boolean>(VideoService.mirrorOwnWebcam(stream.userId));
   const [isVideoSqueezed, setIsVideoSqueezed] = useState(false);
   const [isSelfViewDisabled, setIsSelfViewDisabled] = useState(false);
+  const [volume, setVolume] = useState(() => VideoService.getVolume(cameraId));
 
   const resizeObserver = new ResizeObserver((entry) => {
     if (entry && entry[0]?.contentRect?.width < VIDEO_CONTAINER_WIDTH_BOUND) {
@@ -123,6 +124,13 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
 
   const videoTag = useRef<HTMLVideoElement | null>(null);
   const videoContainer = useRef<HTMLDivElement | null>(null);
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    VideoService.setVolume(cameraId, newVolume);
+    if (videoTag.current) { videoTag.current.volume = newVolume; }
+  }
 
   useEffect(() => {
     setUserCamerasRequestedFromPlugin((userCamera) => {
@@ -214,6 +222,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   useEffect(() => {
     const playElement = (elem: HTMLVideoElement) => {
       if (elem.paused) {
+        elem.volume = VideoService.getVolume(cameraId);
         elem.play().catch((error) => {
           // NotAllowedError equals autoplay issues, fire autoplay handling event
           if (error.name === 'NotAllowedError') {
@@ -303,6 +312,18 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
           stream={stream}
         />
       </Styled.BottomBar>
+      {isStream && (
+        <Styled.VolumeControlContainer>
+          <Styled.VolumeSlider
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={volume}
+            onChange={handleVolumeChange}
+          />
+        </Styled.VolumeControlContainer>
+      )}
     </Styled.WebcamConnecting>
   );
 
@@ -441,11 +462,11 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
       </Styled.VideoContainer>
 
       {isStream && ((isSelfViewDisabled && stream.userId === Auth.userID)
-      || disabledCams.includes(cameraId)) && (
-        <Styled.VideoDisabled>
-          {intl.formatMessage(intlMessages.disableDesc)}
-        </Styled.VideoDisabled>
-      )}
+        || disabledCams.includes(cameraId)) && (
+          <Styled.VideoDisabled>
+            {intl.formatMessage(intlMessages.disableDesc)}
+          </Styled.VideoDisabled>
+        )}
 
       {/* eslint-disable-next-line no-nested-ternary */}
 
@@ -456,7 +477,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
         isVideoSqueezed ? renderWebcamConnectingSqueezed() : renderWebcamConnecting()
       )}
       {((isSelfViewDisabled && stream.userId === Auth.userID) || disabledCams.includes(cameraId))
-      && renderWebcamConnecting()}
+        && renderWebcamConnecting()}
     </Styled.Content>
   );
 };
