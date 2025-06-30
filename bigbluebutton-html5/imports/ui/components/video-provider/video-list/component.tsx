@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
+import React, { Component } from 'react';
 import { IntlShape, defineMessages, injectIntl } from 'react-intl';
 import { UpdatedDataForUserCameraDomElement } from 'bigbluebutton-html-plugin-sdk/dist/cjs/dom-element-manipulation/user-camera/types';
 import { throttle } from '/imports/utils/throttle';
@@ -83,7 +83,6 @@ interface VideoListProps {
   onVideoItemMount: (stream: string, video: HTMLVideoElement) => void;
   onVideoItemUnmount: (stream: string) => void;
   onVirtualBgDrop: (stream: string, type: string, name: string, data: string) => Promise<unknown>;
-  onVolumeChange: (userId: string, volume: number) => void;
 }
 
 interface VideoListState {
@@ -353,15 +352,8 @@ class VideoList extends Component<VideoListProps, VideoListState> {
       setUserCamerasRequestedFromPlugin,
       focusedId,
       pluginUserCameraHelperPerPosition,
-      onVolumeChange,
     } = this.props;
     const numOfStreams = streams.length;
-
-    const [participantVolumes, setParticipantVolumes] = useState<{ [userId: string]: number }>({});
-
-    const handleVolumeChange = (userId: string, volume: number) => {
-      setParticipantVolumes(prev => ({ ...prev, [userId]: volume }));
-    };
 
     return streams.map((item) => {
       const { userId, name } = item;
@@ -369,16 +361,6 @@ class VideoList extends Component<VideoListProps, VideoListState> {
       const stream = isStream ? item.stream : null;
       const key = isStream ? stream : userId;
       const isFocused = isStream && focusedId === stream && numOfStreams > 2;
-
-      const videoRef = useRef<HTMLVideoElement>(null);
-
-      useEffect(() => {
-        if (videoRef.current) {
-          videoRef.current.volume = participantVolumes[userId] ?? 1;
-        }
-        // When you have access to the RemoteAudioTrack for a participant:
-        remoteAudioTrack.setVolume(participantVolumes[userId] ?? 1);
-      }, [participantVolumes[userId]]);
 
       return (
         <Styled.VideoListItem
@@ -407,17 +389,7 @@ class VideoList extends Component<VideoListProps, VideoListState> {
                 return isStream ? onVirtualBgDrop(item.stream, type, name, data) : Promise.resolve(null);
               }
             }
-          >
-            <video ref={videoRef} volume={participantVolumes[userId] ?? 1} />
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={item.volume || 0.5}
-              onChange={(e) => handleVolumeChange(userId, parseFloat(e.target.value))}
-            />
-          </VideoListItemContainer>
+          />
         </Styled.VideoListItem>
       );
     });
