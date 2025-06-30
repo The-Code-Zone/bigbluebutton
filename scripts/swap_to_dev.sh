@@ -6,6 +6,7 @@ PROD_SH="$HOME/bigbluebutton/bigbluebutton-html5/run-prod.sh"
 prod() {
 	if [ -f "$PROD_SH" ]; then
 		$PROD_SH
+		sudo bbb-conf --restart
 	else
 		echo "PROD_SH not found: $PROD_SH"
 	fi
@@ -20,5 +21,5 @@ dev() {
 	fi
 }
 
-dev		# Runs bigbluebutton-html5 from bigbluebutton/dev/bigbluebutton-html5.
-prod	# Swaps back.
+dev
+prod
