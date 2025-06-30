@@ -413,6 +413,18 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
           user={user}
           stream={stream}
         />
+        {isStream && (
+          <Styled.VolumeControlContainer>
+            <Styled.VolumeSlider
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={volume}
+              onChange={handleVolumeChange}
+            />
+          </Styled.VolumeControlContainer>
+        )}
       </Styled.BottomBar>
     </>
   );
