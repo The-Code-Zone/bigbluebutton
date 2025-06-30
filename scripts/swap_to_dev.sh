@@ -21,5 +21,5 @@ dev() {
 	fi
 }
 
+trap prod SIGINT
 dev
-prod
