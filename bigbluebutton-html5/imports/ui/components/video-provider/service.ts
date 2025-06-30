@@ -57,6 +57,7 @@ class VideoService {
     this.numberOfDevices = 0;
     this.record = null;
     this.clientSessionUUID = '0';
+    logger.info({ logCode: 'videoservice_create_volumes' }, 'Creating VideoService volumes map');
     this.volumes = new Map();
 
     if (navigator.mediaDevices) {
@@ -71,8 +72,15 @@ class VideoService {
     this.activePeers = {};
   }
 
-  setVolume(cameraId: string, volume: number) { this.volumes.set(cameraId, volume); }
-  getVolume(cameraId: string) { return this.volumes.get(cameraId) ?? 1; }
+  setVolume(cameraId: string, volume: number) {
+    logger.info({ logCode: 'videoservice_set_volume' }, `Camera ${cameraId} volume set to ${volume}`);
+    this.volumes.set(cameraId, volume);
+  }
+  getVolume(cameraId: string) {
+    const volume = this.volumes.get(cameraId) ?? 1;
+    logger.info({ logCode: 'videoservice_get_volume' }, `Camera ${cameraId} volume set to ${volume}`);
+    return volume;
+  }
 
   static fetchNumberOfDevices(devices: MediaDeviceInfo[]) {
     const deviceIds: string[] = [];

@@ -22,6 +22,7 @@ import useCurrentUser from '/imports/ui/core/hooks/useCurrentUser';
 import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
 import PluginButtonContainer from '../../../plugins/plugin-button/container';
 import { UserCameraHelperAreas } from '../../../plugins-engine/extensible-areas/components/user-camera-helper/types';
+import logger from '/imports/startup/client/logger';
 
 const intlMessages = defineMessages({
   disableDesc: {
@@ -113,7 +114,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   const [isMirrored, setIsMirrored] = useState<boolean>(VideoService.mirrorOwnWebcam(stream.userId));
   const [isVideoSqueezed, setIsVideoSqueezed] = useState(false);
   const [isSelfViewDisabled, setIsSelfViewDisabled] = useState(false);
-  const [volume, setVolume] = useState(() => VideoService.getVolume(cameraId));
+  const [volume, setVolume] = useState<number>(VideoService.getVolume(cameraId));
 
   const resizeObserver = new ResizeObserver((entry) => {
     if (entry && entry[0]?.contentRect?.width < VIDEO_CONTAINER_WIDTH_BOUND) {
@@ -126,6 +127,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   const videoContainer = useRef<HTMLDivElement | null>(null);
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    logger.info({ logCode: 'videolistitem_handle_volume_change' }, `handleVolumeChange called for camera ${cameraId}`);
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     VideoService.setVolume(cameraId, newVolume);
@@ -312,7 +314,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
           stream={stream}
         />
       </Styled.BottomBar>
-      {isStream && (
+      {isStream && stream.userId !== Auth.userID && (
         <Styled.VolumeControlContainer>
           <Styled.VolumeSlider
             type="range"
