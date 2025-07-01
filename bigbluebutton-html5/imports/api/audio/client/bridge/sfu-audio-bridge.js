@@ -460,6 +460,14 @@ export default class SFUAudioBridge extends BaseAudioBridge {
   }
 
   handleRemoteTrackAdded({ track }) {
+    logger.info({
+      logCode: 'sfuaudio_handle_remote_track_added',
+      extraInfo: {
+        track: track.id,
+        kind: track.kind,
+      },
+    }, 'Remote track added');
+
     const mediaElement = document.createElement('audio');
     mediaElement.autoplay = true;
     mediaElement.srcObject = new MediaStream([track]);
