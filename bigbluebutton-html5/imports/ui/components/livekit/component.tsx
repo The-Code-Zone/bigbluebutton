@@ -36,6 +36,7 @@ import { useIceServers } from '/imports/ui/components/livekit/hooks';
 import LKAutoplayModalContainer from '/imports/ui/components/livekit/autoplay-modal/container';
 import connectionStatus, { MetricStatus } from '/imports/ui/core/graphql/singletons/connectionStatus';
 import SelectiveSubscription from '/imports/ui/components/livekit/selective-subscription/component';
+import { PerUserAudioRenderer } from './PerUserVolume';
 
 interface BBBLiveKitRoomProps {
   url?: string;
@@ -347,7 +348,7 @@ const BBBLiveKitRoom: React.FC<BBBLiveKitRoomProps> = ({
     >
       <LiveKitObserver room={liveKitRoom} url={url} usingAudio={usingAudio} />
       {withAudioPlayback && <LKAutoplayModalContainer />}
-      {withAudioPlayback && <RoomAudioRenderer />}
+      {withAudioPlayback && <PerUserAudioRenderer />}
       {usingAudio && withSelectiveSubscription && <SelectiveSubscription />}
     </LiveKitRoom>
   );
