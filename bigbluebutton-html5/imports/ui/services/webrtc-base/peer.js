@@ -34,6 +34,7 @@ export default class WebRtcPeer extends EventEmitter2 {
 
     this._handleIceCandidate = this._handleIceCandidate.bind(this);
     this._handleSignalingStateChange = this._handleSignalingStateChange.bind(this);
+    this._handleTrack = this._handleTrack.bind(this);
     this._gatheringTimeout = this.options.gatheringTimeout;
 
     this._assignOverrides();
@@ -145,6 +146,15 @@ export default class WebRtcPeer extends EventEmitter2 {
       this.emit('candidategatheringdone');
       this.candidateGatheringDone = true;
     }
+  }
+
+  _handleTrack({ track, streams }) {
+    this.logger.debug('BBB::WebRtcPeer::_handleTrack - track received', {
+      id: track.id,
+      kind: track.kind,
+      streams: streams.map((s) => s.id),
+    });
+    this.emit('trackadded', { track, streams });
   }
 
   _handleIceCandidate({ candidate }) {
@@ -319,6 +329,7 @@ export default class WebRtcPeer extends EventEmitter2 {
     }
 
     this.peerConnection.addEventListener('icecandidate', this._handleIceCandidate);
+    this.peerConnection.addEventListener('track', this._handleTrack);
     this._trackQueueFlushEvents();
   }
 
@@ -371,11 +382,11 @@ export default class WebRtcPeer extends EventEmitter2 {
     switch (this.mode) {
       case 'recvonly': {
         const useAudio = this.mediaConstraints
-        && ((typeof this.mediaConstraints.audio === 'boolean' && this.mediaConstraints.audio)
-          || (typeof this.mediaConstraints.audio === 'object'));
+          && ((typeof this.mediaConstraints.audio === 'boolean' && this.mediaConstraints.audio)
+            || (typeof this.mediaConstraints.audio === 'object'));
         const useVideo = this.mediaConstraints
-        && ((typeof this.mediaConstraints.video === 'boolean' && this.mediaConstraints.video)
-          || (typeof this.mediaConstraints.video === 'object'));
+          && ((typeof this.mediaConstraints.video === 'boolean' && this.mediaConstraints.video)
+            || (typeof this.mediaConstraints.video === 'object'));
 
         if (useAudio) {
           this.peerConnection.addTransceiver('audio', {
