@@ -169,10 +169,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/The-Code-Zone/bigbluebutton.git"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx lint-staged"
-    }
   }
 }
