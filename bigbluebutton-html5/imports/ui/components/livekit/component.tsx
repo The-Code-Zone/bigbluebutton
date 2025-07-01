@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import {
   LiveKitRoom,
-  RoomAudioRenderer,
   useLocalParticipant,
   useIsSpeaking,
   useConnectionState,

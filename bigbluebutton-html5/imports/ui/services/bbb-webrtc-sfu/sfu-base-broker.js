@@ -1,7 +1,6 @@
 import logger from '/imports/startup/client/logger';
 import { notifyStreamStateChange } from '/imports/ui/services/bbb-webrtc-sfu/stream-state-service';
 import { SFU_BROKER_ERRORS } from '/imports/ui/services/bbb-webrtc-sfu/broker-base-errors';
-import EventEmitter2 from 'eventemitter2';
 
 const WS_HEARTBEAT_OPTS = {
   interval: 15000,
