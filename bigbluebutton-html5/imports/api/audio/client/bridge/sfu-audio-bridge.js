@@ -468,16 +468,17 @@ export default class SFUAudioBridge extends BaseAudioBridge {
       },
     }, 'Remote track added');
 
-    const mediaElement = document.createElement('audio');
-    mediaElement.autoplay = true;
-    mediaElement.srcObject = new MediaStream([track]);
-    mediaElement.play();
-
     this.remoteAudioElements.set(track.id, mediaElement);
+    logger.info({
+      logCode: 'sfuaudio_remote_track_mapped',
+    }, `Remote audio track added to map ${this.remoteAudioElements}`);
     track.onended = () => {
       const el = this.remoteAudioElements.get(track.id);
       if (el) {
         this.remoteAudioElements.delete(track.id);
+        logger.info({
+          logCode: 'sfuaudio_remote_track_unmapped',
+        }, `Remote audio track removed from map ${this.remoteAudioElements}`);
       }
     };
   }
