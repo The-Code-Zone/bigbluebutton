@@ -21,6 +21,7 @@ import type { Stream, StreamItem, VideoItem } from './types';
 import { VIDEO_TYPES } from './enums';
 import BBBVideoStream from '/imports/ui/services/webrtc-base/bbb-video-stream';
 import { getLKStats } from '/imports/ui/services/livekit';
+import { makeVar } from '@apollo/client';
 
 const TOKEN = '_';
 
@@ -48,7 +49,7 @@ class VideoService {
 
   private clientSessionUUID: string;
 
-  private volumes: Map<string, number>;
+  public volumes = makeVar<Record<string, number>>({});
 
   constructor() {
     this.userParameterProfile = null;
@@ -58,7 +59,6 @@ class VideoService {
     this.record = null;
     this.clientSessionUUID = '0';
     logger.info({ logCode: 'videoservice_create_volumes' }, 'Creating VideoService volumes map');
-    this.volumes = new Map();
 
     if (navigator.mediaDevices) {
       this.updateNumberOfDevices = this.updateNumberOfDevices.bind(this);
@@ -74,10 +74,10 @@ class VideoService {
 
   setVolume(cameraId: string, volume: number) {
     logger.info({ logCode: 'videoservice_set_volume' }, `Camera ${cameraId} volume set to ${volume}`);
-    this.volumes.set(cameraId, volume);
+    this.volumes({ ...this.volumes(), [cameraId]: volume });
   }
   getVolume(cameraId: string) {
-    const volume = this.volumes.get(cameraId) ?? 1;
+    const volume = this.volumes()[cameraId] ?? 1;
     logger.info({ logCode: 'videoservice_get_volume' }, `Camera ${cameraId} volume set to ${volume}`);
     return volume;
   }
@@ -639,4 +639,5 @@ export default {
   startVirtualBackground: VideoService.startVirtualBackground,
   setVolume: videoService.setVolume.bind(videoService),
   getVolume: videoService.getVolume.bind(videoService),
+  volumes: videoService.volumes,
 };
