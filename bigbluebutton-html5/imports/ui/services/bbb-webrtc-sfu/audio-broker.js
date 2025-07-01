@@ -104,6 +104,7 @@ class AudioBroker extends BaseBroker {
         this.webRtcPeer.iceQueue = [];
         this.webRtcPeer.start();
         this.webRtcPeer.peerConnection.onconnectionstatechange = this.handleConnectionStateChange.bind(this);
+        this.webRtcPeer.on('trackadded', this.handleTrackAdded.bind(this));
 
         if (this.offering) {
           // We are the offerer
@@ -141,6 +142,19 @@ class AudioBroker extends BaseBroker {
         reject(normalizedError);
       }
     });
+  }
+
+  handleTrackAdded({ track }) {
+    if (track.kind !== 'audio') {
+      return;
+    };
+
+    logger.debug({
+      logCode: `${this.logCodePrefix}_track_added`,
+      extraInfo: { trackId: track.id, sfuComponent: this.sfuComponent },
+    }, 'Audio track added');
+
+    this.emit('onremotetrackadded', { track });
   }
 
   joinAudio() {
