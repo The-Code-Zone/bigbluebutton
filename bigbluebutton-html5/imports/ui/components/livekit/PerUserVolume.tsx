@@ -1,10 +1,9 @@
 import { getTrackReferenceId, trackReferencesObservable } from '@livekit/components-core';
-import { AudioTrack } from '@livekit/components-react/dist/components/participant/AudioTrack';
-import { useTracks } from '@livekit/components-react/dist/hooks/useTracks';
+import { AudioTrack, useTracks } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import logger from '/imports/startup/client/logger';
-import { useReactiveVar } from '@apollo/client/react/hooks/useReactiveVar';
+import { useReactiveVar } from '@apollo/client';
 import VideoService from '/imports/ui/components/video-provider/service';
 
 /** @public */
