@@ -9,7 +9,7 @@ const WS_HEARTBEAT_OPTS = {
 };
 const ICE_RESTART = 'restartIce';
 
-class BaseBroker extends EventEmitter2 {
+class BaseBroker {
   static getPeerRole(role) {
     switch (role) {
       case 'send':
@@ -36,7 +36,6 @@ class BaseBroker extends EventEmitter2 {
   }
 
   constructor(sfuComponent, wsUrl) {
-    super();
     this.wsUrl = wsUrl;
     this.sfuComponent = sfuComponent;
     this.ws = null;

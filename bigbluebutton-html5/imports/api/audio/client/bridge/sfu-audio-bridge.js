@@ -93,7 +93,6 @@ export default class SFUAudioBridge extends BaseAudioBridge {
     this.isListenOnly = false;
     this.bypassGUM = false;
     this.supportsTransparentListenOnly = isTransparentListenOnlyEnabled;
-    this.remoteAudioElements = new Map();
 
     this.handleTermination = this.handleTermination.bind(this);
   }
@@ -200,7 +199,7 @@ export default class SFUAudioBridge extends BaseAudioBridge {
     // doesn't get triggered - this is a retry attempt and the user shouldn't be
     // terminated yet
     if (!this.broker?.started) {
-      this.broker.onended = () => { };
+      this.broker.onended = () => {};
     }
 
     // Notify the user that the bridge is reconnecting - this can be read as
@@ -457,31 +456,6 @@ export default class SFUAudioBridge extends BaseAudioBridge {
     this.reconnecting = false;
 
     return this._startBroker(options);
-  }
-
-  handleRemoteTrackAdded({ track }) {
-    logger.info({
-      logCode: 'sfuaudio_handle_remote_track_added',
-      extraInfo: {
-        track: track.id,
-        kind: track.kind,
-      },
-    }, 'Remote track added');
-
-    const FAKE_USERID = 'user_id_goes_here';
-    this.remoteAudioElements.set(track.id, FAKE_USERID);
-    logger.info({
-      logCode: 'sfuaudio_remote_track_mapped',
-    }, `Remote audio track added to map: ${JSON.stringify(Array.from(this.remoteAudioElements.entries()))}`);
-    track.onended = () => {
-      const el = this.remoteAudioElements.get(track.id);
-      if (el) {
-        this.remoteAudioElements.delete(track.id);
-        logger.info({
-          logCode: 'sfuaudio_remote_track_unmapped',
-        }, `Remote audio track removed from map: ${JSON.stringify(Array.from(this.remoteAudioElements.entries()))}`);
-      }
-    };
   }
 
   sendDtmf(tones) {
