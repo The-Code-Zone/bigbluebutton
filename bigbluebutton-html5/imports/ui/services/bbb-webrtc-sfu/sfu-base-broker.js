@@ -36,6 +36,7 @@ class BaseBroker extends EventEmitter2 {
   }
 
   constructor(sfuComponent, wsUrl) {
+    super();
     this.wsUrl = wsUrl;
     this.sfuComponent = sfuComponent;
     this.ws = null;
