@@ -468,7 +468,8 @@ export default class SFUAudioBridge extends BaseAudioBridge {
       },
     }, 'Remote track added');
 
-    this.remoteAudioElements.set(track.id, mediaElement);
+    const FAKE_USERID = 'user_id_goes_here';
+    this.remoteAudioElements.set(track.id, FAKE_USERID);
     logger.info({
       logCode: 'sfuaudio_remote_track_mapped',
     }, `Remote audio track added to map ${this.remoteAudioElements}`);
