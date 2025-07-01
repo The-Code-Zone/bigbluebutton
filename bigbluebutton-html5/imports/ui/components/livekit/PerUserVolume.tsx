@@ -1,4 +1,4 @@
-import { getTrackReferenceId, trackReferencesObservable } from '@livekit/components-core';
+import { getTrackReferenceId } from '@livekit/components-core';
 import { AudioTrack, useTracks } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import * as React from 'react';
@@ -7,9 +7,7 @@ import { useReactiveVar } from '@apollo/client';
 import VideoService from '/imports/ui/components/video-provider/service';
 
 /** @public */
-export interface RoomAudioRendererProps {
-    /** Sets the volume for all audio tracks rendered by this component. By default, the range is between `0.0` and `1.0`. */
-    volume?: number;
+export interface PerUserAudioRendererProps {
     /**
      * If set to `true`, mutes all audio tracks rendered by the component.
      * @remarks
@@ -20,19 +18,20 @@ export interface RoomAudioRendererProps {
 }
 
 /**
- * The `RoomAudioRenderer` component is a drop-in solution for adding audio to your LiveKit app.
- * It takes care of handling remote participants’ audio tracks and makes sure that microphones and screen share are audible.
+ * The `PerUserAudioRenderer` component reads audio track volumes from
+ * the `VideoService.volumes` reactive variable and renders audio tracks
+ * for each participant in the room, excluding the local participant.
  *
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <RoomAudioRenderer />
+ *   <PerUserAudioRenderer />
  * </LiveKitRoom>
  * ```
  * @public
  */
-export function PerUserAudioRenderer({ volume, muted }: RoomAudioRendererProps) {
-    logger.warn({ logCode: 'peruseraudiorenderer_call' }, 'Initialised PerUserAudioRenderer.');
+export function PerUserAudioRenderer({ muted }: PerUserAudioRendererProps) {
+    logger.warn({ logCode: 'peruser_audiorenderer_render' }, 'Rendered PerUserAudioRenderer.');
     const tracks = useTracks(
         [Track.Source.Microphone, Track.Source.ScreenShareAudio, Track.Source.Unknown],
         {
@@ -49,7 +48,7 @@ export function PerUserAudioRenderer({ volume, muted }: RoomAudioRendererProps) 
                 const userId = trackRef.participant.identity;
                 const userVolume = volumes[userId] ?? 1;
 
-                logger.warn({ logCode: 'peruseraudiorenderer_track' }, `Rendering audio track for user ${userId} with volume ${userVolume}`);
+                logger.warn({ logCode: 'peruser_audiorenderer_track_render' }, `Rendering AudioTrack ${userId} with volume ${userVolume}`);
 
                 return (
                     <AudioTrack
