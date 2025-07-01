@@ -226,7 +226,6 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   useEffect(() => {
     const playElement = (elem: HTMLVideoElement) => {
       if (elem.paused) {
-        elem.volume = VideoService.getVolume(cameraId);
         elem.play().catch((error) => {
           // NotAllowedError equals autoplay issues, fire autoplay handling event
           if (error.name === 'NotAllowedError') {
