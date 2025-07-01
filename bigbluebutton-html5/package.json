@@ -168,7 +168,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bigbluebutton/bigbluebutton.git"
+    "url": "https://github.com/The-Code-Zone/bigbluebutton.git"
   },
   "husky": {
     "hooks": {
