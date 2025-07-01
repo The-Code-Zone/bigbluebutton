@@ -93,6 +93,7 @@ export default class SFUAudioBridge extends BaseAudioBridge {
     this.isListenOnly = false;
     this.bypassGUM = false;
     this.supportsTransparentListenOnly = isTransparentListenOnlyEnabled;
+    this.remoteAudioElements = new Map();
 
     this.handleTermination = this.handleTermination.bind(this);
   }
@@ -199,7 +200,7 @@ export default class SFUAudioBridge extends BaseAudioBridge {
     // doesn't get triggered - this is a retry attempt and the user shouldn't be
     // terminated yet
     if (!this.broker?.started) {
-      this.broker.onended = () => {};
+      this.broker.onended = () => { };
     }
 
     // Notify the user that the bridge is reconnecting - this can be read as
@@ -427,6 +428,8 @@ export default class SFUAudioBridge extends BaseAudioBridge {
           brokerOptions,
         );
 
+        this.broker.on('onremotetrackadded', this.handleRemoteTrackAdded.bind(this));
+
         this.broker.onended = this.handleTermination.bind(this);
         this.broker.onerror = (error) => {
           // Broker failures can be successfully handled if they're retryable
@@ -454,6 +457,21 @@ export default class SFUAudioBridge extends BaseAudioBridge {
     this.reconnecting = false;
 
     return this._startBroker(options);
+  }
+
+  handleRemoteTrackAdded({ track }) {
+    const mediaElement = document.createElement('audio');
+    mediaElement.autoplay = true;
+    mediaElement.srcObject = new MediaStream([track]);
+    mediaElement.play();
+
+    this.remoteAudioElements.set(track.id, mediaElement);
+    track.onended = () => {
+      const el = this.remoteAudioElements.get(track.id);
+      if (el) {
+        this.remoteAudioElements.delete(track.id);
+      }
+    };
   }
 
   sendDtmf(tones) {
