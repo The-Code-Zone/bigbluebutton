@@ -417,7 +417,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
           user={user}
           stream={stream}
         />
-        {isStream && (
+        {isStream && stream.userId !== Auth.userID && (
           <Styled.VolumeControlContainer>
             <Styled.VolumeSlider
               type="range"
