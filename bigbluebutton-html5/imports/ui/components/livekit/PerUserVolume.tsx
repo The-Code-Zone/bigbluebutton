@@ -31,7 +31,6 @@ export interface PerUserAudioRendererProps {
  * @public
  */
 export function PerUserAudioRenderer({ muted }: PerUserAudioRendererProps) {
-    logger.warn({ logCode: 'peruser_audiorenderer_render' }, 'Rendered PerUserAudioRenderer.');
     const tracks = useTracks(
         [Track.Source.Microphone, Track.Source.ScreenShareAudio, Track.Source.Unknown],
         {
@@ -39,6 +38,14 @@ export function PerUserAudioRenderer({ muted }: PerUserAudioRendererProps) {
             onlySubscribed: true,
         },
     ).filter((ref) => !ref.participant.isLocal && ref.publication.kind === Track.Kind.Audio);
+
+    logger.info({
+        logCode: 'peruser_audiorenderer_render',
+        extraInfo: {
+            muted,
+            trackCount: tracks.length,
+        },
+    }, 'Rendered PerUserAudioRenderer.');
 
     const volumes = useReactiveVar(VideoService.volumes);
 
@@ -48,7 +55,15 @@ export function PerUserAudioRenderer({ muted }: PerUserAudioRendererProps) {
                 const userId = trackRef.participant.identity;
                 const userVolume = volumes[userId] ?? 1;
 
-                logger.warn({ logCode: 'peruser_audiorenderer_track_render' }, `Rendering AudioTrack ${userId} with volume ${userVolume}`);
+                logger.info({
+                    logCode: 'peruser_audiorenderer_track_render',
+                    extraInfo: {
+                        trackRef: getTrackReferenceId(trackRef),
+                        trackKind: trackRef.publication.kind,
+                        userId: userId,
+                        volume: userVolume,
+                    },
+                }, `Rendering AudioTrack ${userId} at ${userVolume} volume.`);
 
                 return (
                     <AudioTrack
