@@ -53,35 +53,35 @@ class BaseBroker {
     window.addEventListener('beforeunload', this.onbeforeunload);
   }
 
-  set started (val) {
+  set started(val) {
     this._started = val;
   }
 
-  get started () {
+  get started() {
     return this._started;
   }
 
-  onbeforeunload () {
+  onbeforeunload() {
     return this.stop();
   }
 
-  onstart () {
+  onstart() {
     // To be implemented by inheritors
   }
 
-  onerror (error) {
+  onerror(error) {
     // To be implemented by inheritors
   }
 
-  onended () {
+  onended() {
     // To be implemented by inheritors
   }
 
-  handleSFUError (sfuResponse) {
+  handleSFUError(sfuResponse) {
     // To be implemented by inheritors
   }
 
-  sendLocalDescription (localDescription) {
+  sendLocalDescription(localDescription) {
     // To be implemented by inheritors
   }
 
@@ -117,7 +117,7 @@ class BaseBroker {
     return normalizedError;
   }
 
-  openWSConnection () {
+  openWSConnection() {
     return new Promise((resolve, reject) => {
       this.ws = new WebSocket(this.wsUrl);
 
@@ -142,7 +142,7 @@ class BaseBroker {
     this.clearWSHeartbeat();
 
     if (this.ws !== null) {
-      this.ws.onclose = function (){};
+      this.ws.onclose = function () { };
       this.ws.close();
     }
   }
@@ -189,7 +189,7 @@ class BaseBroker {
     }
   }
 
-  sendMessage (message) {
+  sendMessage(message) {
     const jsonMessage = JSON.stringify(message);
 
     try {
@@ -206,7 +206,7 @@ class BaseBroker {
     }
   }
 
-  ping () {
+  ping() {
     this.sendMessage({ id: 'ping' });
   }
 
@@ -218,7 +218,7 @@ class BaseBroker {
     this.processIceQueue();
   }
 
-  _validateStartResponse (sfuResponse) {
+  _validateStartResponse(sfuResponse) {
     const { response, role } = sfuResponse;
 
     if (response !== 'accepted') {
@@ -273,7 +273,7 @@ class BaseBroker {
     }
   }
 
-  populatePeerConfiguration () {
+  populatePeerConfiguration() {
     this.addIceServers();
     if (this.forceRelay) {
       this.setRelayTransportPolicy();
@@ -282,17 +282,17 @@ class BaseBroker {
     return this.peerConfiguration;
   }
 
-  addIceServers () {
+  addIceServers() {
     if (this.iceServers && this.iceServers.length > 0) {
       this.peerConfiguration.iceServers = this.iceServers;
     }
   }
 
-  setRelayTransportPolicy () {
+  setRelayTransportPolicy() {
     this.peerConfiguration.iceTransportPolicy = 'relay';
   }
 
-  handleConnectionStateChange (eventIdentifier) {
+  handleConnectionStateChange(eventIdentifier) {
     if (this.webRtcPeer) {
       const { peerConnection } = this.webRtcPeer;
       const { connectionState } = peerConnection;
@@ -357,7 +357,7 @@ class BaseBroker {
     });
   }
 
-  processIceQueue () {
+  processIceQueue() {
     const peer = this.webRtcPeer;
     while (peer.iceQueue.length) {
       const candidate = peer.iceQueue.shift();
@@ -365,7 +365,7 @@ class BaseBroker {
     }
   }
 
-  handleIceCandidate (candidate) {
+  handleIceCandidate(candidate) {
     const peer = this.webRtcPeer;
 
     if (peer.negotiated) {
@@ -426,16 +426,16 @@ class BaseBroker {
     }
   }
 
-  disposePeer () {
+  disposePeer() {
     if (this.webRtcPeer) {
       this.webRtcPeer.dispose();
       this.webRtcPeer = null;
     }
   }
 
-  stop () {
-    this.onstart = function(){};
-    this.onerror = function(){};
+  stop() {
+    this.onstart = function () { };
+    this.onerror = function () { };
     window.removeEventListener('beforeunload', this.onbeforeunload);
 
     if (this.webRtcPeer?.peerConnection) {
@@ -452,7 +452,7 @@ class BaseBroker {
     }, `Stopped broker session for ${this.sfuComponent}`);
 
     this.onended();
-    this.onended = function(){};
+    this.onended = function () { };
   }
 }
 

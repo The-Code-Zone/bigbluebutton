@@ -319,6 +319,7 @@ export default class WebRtcPeer extends EventEmitter2 {
     }
 
     this.peerConnection.addEventListener('icecandidate', this._handleIceCandidate);
+    this.peerConnection.addEventListener('track', this._handleTrack);
     this._trackQueueFlushEvents();
   }
 
@@ -371,11 +372,11 @@ export default class WebRtcPeer extends EventEmitter2 {
     switch (this.mode) {
       case 'recvonly': {
         const useAudio = this.mediaConstraints
-        && ((typeof this.mediaConstraints.audio === 'boolean' && this.mediaConstraints.audio)
-          || (typeof this.mediaConstraints.audio === 'object'));
+          && ((typeof this.mediaConstraints.audio === 'boolean' && this.mediaConstraints.audio)
+            || (typeof this.mediaConstraints.audio === 'object'));
         const useVideo = this.mediaConstraints
-        && ((typeof this.mediaConstraints.video === 'boolean' && this.mediaConstraints.video)
-          || (typeof this.mediaConstraints.video === 'object'));
+          && ((typeof this.mediaConstraints.video === 'boolean' && this.mediaConstraints.video)
+            || (typeof this.mediaConstraints.video === 'object'));
 
         if (useAudio) {
           this.peerConnection.addTransceiver('audio', {

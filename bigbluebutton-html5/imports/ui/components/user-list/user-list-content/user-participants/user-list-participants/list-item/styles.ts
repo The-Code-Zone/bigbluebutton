@@ -25,22 +25,22 @@ import {
 import Icon from '/imports/ui/components/common/icon/icon-ts/component';
 
 interface AvatarProps {
-    moderator?: boolean;
-    presenter?: boolean;
-    talking?: boolean;
-    muted?: boolean;
-    listenOnly?: boolean;
-    voice?: boolean;
-    noVoice?: boolean;
-    color?: string;
-    whiteboardAccess?: boolean;
-    animations?: boolean;
-    emoji?: boolean;
-    avatar?: string;
-    isChrome?: boolean;
-    isFirefox?: boolean;
-    isEdge?: boolean;
-    isSkeleton?: boolean;
+  moderator?: boolean;
+  presenter?: boolean;
+  talking?: boolean;
+  muted?: boolean;
+  listenOnly?: boolean;
+  voice?: boolean;
+  noVoice?: boolean;
+  color?: string;
+  whiteboardAccess?: boolean;
+  animations?: boolean;
+  emoji?: boolean;
+  avatar?: string;
+  isChrome?: boolean;
+  isFirefox?: boolean;
+  isEdge?: boolean;
+  isSkeleton?: boolean;
 }
 
 interface UserItemContentsProps {
@@ -138,8 +138,7 @@ const Avatar = styled.div<AvatarProps>`
   font-size: .85rem;
   border: 2px solid transparent;
   user-select: none;
-  ${
-  ({ color }) => css`
+  ${({ color }) => css`
     background-color: ${color};
   `}
   }
@@ -214,8 +213,8 @@ const Avatar = styled.div<AvatarProps>`
   `}
 
   ${({
-    presenter, isChrome, isFirefox, isEdge,
-  }) => presenter && (isChrome || isFirefox || isEdge) && `
+  presenter, isChrome, isFirefox, isEdge,
+}) => presenter && (isChrome || isFirefox || isEdge) && `
     &:before {
       padding: ${indicatorPadding} !important;
     }
@@ -244,8 +243,8 @@ const Avatar = styled.div<AvatarProps>`
   `}
 
   ${({
-    whiteboardAccess, isChrome, isFirefox, isEdge,
-  }) => whiteboardAccess && (isChrome || isFirefox || isEdge) && `
+  whiteboardAccess, isChrome, isFirefox, isEdge,
+}) => whiteboardAccess && (isChrome || isFirefox || isEdge) && `
     &:before {
       padding: ${indicatorPadding};
     }
@@ -418,6 +417,25 @@ const IconRightContainer = styled.div`
   margin: .25rem;  
 `;
 
+const VolumeControlContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+`;
+
+const VolumeSlider = styled.input`
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  outline: none;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 export default {
   Avatar,
   Skeleton,
@@ -427,4 +445,6 @@ export default {
   UserNameSub,
   UserName,
   IconRightContainer,
+  VolumeControlContainer,
+  VolumeSlider,
 };
