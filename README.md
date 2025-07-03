@@ -6,7 +6,7 @@ BigBlueButton is an open-source virtual classroom designed to help teachers teac
 - For full technical documentation of BigBlueButton see [https://docs.bigbluebutton.org/](https://docs.bigbluebutton.org/).
 - BigBlueButton and the BigBlueButton Logo are trademarks of [BigBlueButton Inc](https://bigbluebutton.org).
 
-### Managing/Deploying/Updating
+## Managing/Deploying/Updating
 
 `~/bigbluebutton` - the live build. **nothing in here should ever be touched manually except config files.**
 
@@ -31,3 +31,12 @@ random extra bits
 - server can be stopped and started with `~$ sudo bbb-conf --stop` and `~$ sudo bbb-conf --start`.
 - can check on status of components with `~$ bbb-conf --status`. it'll say if things are currently active or aren't running for some reason
 - `~$ bbb-conf` will list all the basic commands
+
+## Monitoring
+1. `~$ cd ~/bigbluebutton/bbb-monitoring`
+2. `~$ sudo docker-compose up -d` -- update/start monitoring docker images.
+3.  go to `/monitoring` on the domain to view Grafana metrics
+   
+`~$ sudo docker-compose stop` to stop monitoring
+
+`~$ sudo docker-compose up` (omitting `-d`/`-detach`) to view docker logs in the terminal
