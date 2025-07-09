@@ -138,23 +138,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   <!-- fonts -->
   <link rel="preload" href="fonts/BbbIcons/bbb-icons.woff2?v=VERSION" as="font" type="font/woff2"
     crossorigin="anonymous" />
-  <!-- <link rel="preload" href="fonts/SourceSansPro/SourceSansPro-Light.woff?v=VERSION" as="font" crossorigin="anonymous" />
-  <link rel="preload" href="fonts/SourceSansPro/SourceSansPro-Regular.woff?v=VERSION" as="font"
-    crossorigin="anonymous" />
-  <link rel="preload" href="fonts/SourceSansPro/SourceSansPro-Semibold.woff?v=VERSION" as="font"
-    crossorigin="anonymous" />
-  <link rel="preload" href="fonts/SourceSansPro/SourceSansPro-Bold.woff?v=VERSION" as="font" crossorigin="anonymous" />
-  <link rel="preload" href="fonts/SourceSansPro/SourceSansPro-LightItalic.woff?v=VERSION" as="font"
-    crossorigin="anonymous" />
-  <link rel="preload" href="fonts/SourceSansPro/SourceSansPro-Italic.woff?v=VERSION" as="font"
-    crossorigin="anonymous" />
-  <link rel="preload" href="fonts/SourceSansPro/SourceSansPro-SemiboldItalic.woff?v=VERSION" as="font"
-    crossorigin="anonymous" />
-  <link rel="preload" href="fonts/SourceSansPro/SourceSansPro-BoldItalic.woff?v=VERSION" as="font"
-    crossorigin="anonymous" /> -->
   <!-- tcz fonts -->
-  <link rel="preload" href="fonts/TCZ/LunchBoxLight.woff2?v=VERSION" as="font" type="font/woff2"
-    crossorigin="anonymous" />
+  <!-- <link rel="preload" href="fonts/TCZ/LunchBoxLight.woff2?v=VERSION" as="font" type="font/woff2"
+    crossorigin="anonymous" /> -->
   <link rel="preload" href="fonts/TCZ/LunchBoxBold.woff2?v=VERSION" as="font" type="font/woff2"
     crossorigin="anonymous" />
 
@@ -174,16 +160,18 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       font-style: normal;
     }
 
+    /* Overriding all weights as Bold. More visible to young eyes. */
+
     @font-face {
       font-family: 'Lunchbox';
-      src: url('fonts/TCZ/LunchBoxLight.woff2') format('woff2');
+      src: url('fonts/TCZ/LunchBoxBold.woff2') format('woff2');
       font-weight: 300;
       font-style: normal;
     }
 
     @font-face {
       font-family: 'Lunchbox';
-      src: url('fonts/TCZ/LunchBoxLight.woff2') format('woff2');
+      src: url('fonts/TCZ/LunchBoxBold.woff2') format('woff2');
       font-weight: normal;
       font-style: normal;
     }

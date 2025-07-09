@@ -1,7 +1,7 @@
 public:
   app:
     mobileFontSize: 16px
-    desktopFontSize: 14px
+    desktopFontSize: 18px
     audioChatNotification: false
     # Shows the audio modal when user joins the room. The audio modal prompts
     # user to select an option ("Microphone" and/or "Listen only") for joining
