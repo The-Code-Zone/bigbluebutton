@@ -17,6 +17,13 @@ const colorBlueLighterChannel = '146 188 234';
 
 const colorTransparent = 'var(--color-transparent, #ff000000)';
 
+const colorRichPurple = 'var(--color-rich-purple, #4B006F)';
+const colorSageGreen = 'var(--color-sage-green, #13A89E)';
+const colorOrangeyYellow = 'var(--color-orangey-yellow, #FFC022)';
+const colorLimeGreen = 'var(--color-lime-green, #A0CB61)';
+const colorBlushRed = 'var(--color-blush-red, #DF5972)';
+const colorSettledBlue = 'var(--color-settled-blue, #5587C6)';
+
 const colorPrimary = 'var(--color-primary, #0F70D7)';
 const colorDanger = 'var(--color-danger, #DF2721)';
 const colorDangerDark = 'var(--color-danger-dark, #AE1010)';
@@ -127,6 +134,12 @@ const toastWarningColor = `var(--toast-warning-color, ${colorWhite})`;
 const toastWarningBg = `var(--toast-warning-bg, ${colorWarning})`;
 
 export {
+  colorRichPurple,
+  colorSageGreen,
+  colorOrangeyYellow,
+  colorLimeGreen,
+  colorBlushRed,
+  colorSettledBlue,
   colorWhite,
   colorOffWhite,
   colorBlack,
