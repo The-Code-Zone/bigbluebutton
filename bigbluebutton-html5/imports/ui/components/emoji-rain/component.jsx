@@ -11,6 +11,10 @@ const EmojiRain = ({ reactions }) => {
   const NUMBER_OF_EMOJIS = window.meetingClientSettings.public.app.emojiRain.numberOfEmojis;
   const EMOJI_RAIN_ENABLED = window.meetingClientSettings.public.app.emojiRain.enabled;
 
+  logger.debug({
+    logCode: 'emoji_rain_component_initialization',
+  }, `EmojiRain component initialized: enabled=${EMOJI_RAIN_ENABLED}, emojiSize=${EMOJI_SIZE}, numberOfEmojis=${NUMBER_OF_EMOJIS}`);
+
   const { animations } = Settings.application;
 
   function createEmojiRain(emoji) {
