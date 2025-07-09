@@ -15,7 +15,7 @@ function getAverageCharacterWidth(text: string, font: string) {
 }
 
 const TICK_SIZE = 6;
-const AVERAGE_CHAR_WIDTH = getAverageCharacterWidth('0', 'Source Sans Pro') ?? 6;
+const AVERAGE_CHAR_WIDTH = getAverageCharacterWidth('0', 'Lunchbox') ?? 6;
 const ELLIPSIS = '...';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -102,7 +102,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .toastBodyClass {
-    font-family: 'Source Sans Pro';
+    font-family: 'Lunchbox';
     margin: auto auto;
     flex: 1;
     background-color: inherit;
