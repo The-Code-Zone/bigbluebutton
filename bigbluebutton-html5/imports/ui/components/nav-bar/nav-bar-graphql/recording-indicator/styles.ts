@@ -174,7 +174,7 @@ const RecordingStatusViewOnly = styled.div<RecordingStatusViewOnlyProps>`
   `}
 `;
 
-const SpinnerOverlay = styled(SpinnerStyles.Spinner)<SpinnerOverlayProps>`
+const SpinnerOverlay = styled(SpinnerStyles.Spinner) <SpinnerOverlayProps>`
   & > div {
     background-color: white;
     height: 0.5625rem;
@@ -182,12 +182,12 @@ const SpinnerOverlay = styled(SpinnerStyles.Spinner)<SpinnerOverlayProps>`
   }
 `;
 
-const Bounce1 = styled(SpinnerStyles.Bounce1)<SpinnerOverlayProps>`
+const Bounce1 = styled(SpinnerStyles.Bounce1) <SpinnerOverlayProps>`
   height: 0.5625rem;
   width: 0.5625rem;
 `;
 
-const Bounce2 = styled(SpinnerStyles.Bounce2)<SpinnerOverlayProps>`
+const Bounce2 = styled(SpinnerStyles.Bounce2) <SpinnerOverlayProps>`
   height: 0.5625rem;
   width: 0.5625rem;
 `;

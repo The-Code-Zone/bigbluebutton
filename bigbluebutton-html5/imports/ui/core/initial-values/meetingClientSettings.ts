@@ -6,7 +6,7 @@ export const meetingClientSettingsInitialValues: MeetingClientSettings = {
     app: {
       terminateAndRetryConnection: 30000,
       mobileFontSize: '16px',
-      desktopFontSize: '14px',
+      desktopFontSize: '20px',
       audioChatNotification: false,
       autoJoin: true,
       listenOnlyMode: true,
