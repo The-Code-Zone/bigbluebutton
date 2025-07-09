@@ -19,6 +19,8 @@ import { useIsReactionsEnabled } from '/imports/ui/services/features';
 import useWhoIsTalking from '/imports/ui/core/hooks/useWhoIsTalking';
 import useWhoIsUnmuted from '/imports/ui/core/hooks/useWhoIsUnmuted';
 import { getSettingsSingletonInstance } from '/imports/ui/services/settings';
+import { useReactiveVar } from '@apollo/client';
+import VideoService from '/imports/ui/components/video-provider/service';
 
 const messages = defineMessages({
   moderator: {
@@ -102,6 +104,14 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
     }) as PluginSdk.UserListItemAdditionalInformationInterface[];
   }
 
+  const volumes = useReactiveVar(VideoService.volumes);
+  const volume = volumes[user.userId] ?? 1;
+
+  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(event.target.value);
+    VideoService.setVolume(user.userId, newVolume);
+  };
+
   const intl = useIntl();
   const { data: talkingUsers } = useWhoIsTalking();
   const { data: unmutedUsers } = useWhoIsUnmuted();
@@ -124,7 +134,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
     subs.push(intl.formatMessage(messages.mobile));
   }
   if ((user.locked || user.userLockSettings?.disablePublicChat)
-      && (user.userLockSettings?.disablePublicChat || lockSettings?.hasActiveLockSetting) && !user.isModerator) {
+    && (user.userLockSettings?.disablePublicChat || lockSettings?.hasActiveLockSetting) && !user.isModerator) {
     subs.push(
       <span key={uniqueId('lock-')}>
         <Icon iconName="lock" />
@@ -161,8 +171,8 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
     const itemToRender = item as PluginSdk.UserListItemLabel;
     subs.push(
       <span key={itemToRender.id}>
-        { itemToRender.icon
-          && <Styled.UserAdditionalInformationIcon iconName={itemToRender.icon} /> }
+        {itemToRender.icon
+          && <Styled.UserAdditionalInformationIcon iconName={itemToRender.icon} />}
         {itemToRender.label}
       </span>,
     );
@@ -264,6 +274,16 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
           {subs.length ? addSeparator(subs) : null}
         </Styled.UserNameSub>
       </Styled.UserNameContainer>
+      <Styled.VolumeControlContainer>
+        <Styled.VolumeSlider
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={volume}
+          onChange={handleVolumeChange}
+        />
+      </Styled.VolumeControlContainer>
       {renderUserListItemIconsFromPlugin(userItemsFromPlugin)}
     </Styled.UserItemContents>
   );

@@ -34,7 +34,6 @@ export default class WebRtcPeer extends EventEmitter2 {
 
     this._handleIceCandidate = this._handleIceCandidate.bind(this);
     this._handleSignalingStateChange = this._handleSignalingStateChange.bind(this);
-    this._handleTrack = this._handleTrack.bind(this);
     this._gatheringTimeout = this.options.gatheringTimeout;
 
     this._assignOverrides();
@@ -146,15 +145,6 @@ export default class WebRtcPeer extends EventEmitter2 {
       this.emit('candidategatheringdone');
       this.candidateGatheringDone = true;
     }
-  }
-
-  _handleTrack({ track, streams }) {
-    this.logger.debug('BBB::WebRtcPeer::_handleTrack - track received', {
-      id: track.id,
-      kind: track.kind,
-      streams: streams.map((s) => s.id),
-    });
-    this.emit('trackadded', { track, streams });
   }
 
   _handleIceCandidate({ candidate }) {

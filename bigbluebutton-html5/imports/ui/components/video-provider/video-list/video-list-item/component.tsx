@@ -23,6 +23,7 @@ import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
 import PluginButtonContainer from '../../../plugins/plugin-button/container';
 import { UserCameraHelperAreas } from '../../../plugins-engine/extensible-areas/components/user-camera-helper/types';
 import logger from '/imports/startup/client/logger';
+import { useReactiveVar } from '@apollo/client';
 
 const intlMessages = defineMessages({
   disableDesc: {
@@ -114,7 +115,6 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   const [isMirrored, setIsMirrored] = useState<boolean>(VideoService.mirrorOwnWebcam(stream.userId));
   const [isVideoSqueezed, setIsVideoSqueezed] = useState(false);
   const [isSelfViewDisabled, setIsSelfViewDisabled] = useState(false);
-  const [volume, setVolume] = useState<number>(VideoService.getVolume(cameraId));
 
   const resizeObserver = new ResizeObserver((entry) => {
     if (entry && entry[0]?.contentRect?.width < VIDEO_CONTAINER_WIDTH_BOUND) {
@@ -127,11 +127,9 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   const videoContainer = useRef<HTMLDivElement | null>(null);
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    logger.info({ logCode: 'videolistitem_handle_volume_change' }, `handleVolumeChange called for camera ${cameraId}`);
+    logger.info({ logCode: 'videolistitem_handle_volume_change' }, `handleVolumeChange called for user ${stream.userId}`);
     const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
-    VideoService.setVolume(cameraId, newVolume);
-    if (videoTag.current) { videoTag.current.volume = newVolume; }
+    VideoService.setVolume(stream.userId, newVolume);
   }
 
   useEffect(() => {
@@ -170,6 +168,10 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   }));
 
   let user;
+
+  const volumes = useReactiveVar(VideoService.volumes);
+  const volume = volumes[stream.userId] ?? 1;
+
   let streamId = '';
   switch (stream.type) {
     case VIDEO_TYPES.STREAM: {
@@ -224,7 +226,6 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   useEffect(() => {
     const playElement = (elem: HTMLVideoElement) => {
       if (elem.paused) {
-        elem.volume = VideoService.getVolume(cameraId);
         elem.play().catch((error) => {
           // NotAllowedError equals autoplay issues, fire autoplay handling event
           if (error.name === 'NotAllowedError') {
@@ -318,9 +319,9 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
         <Styled.VolumeControlContainer>
           <Styled.VolumeSlider
             type="range"
-            min="0"
-            max="1"
-            step="0.05"
+            min={0}
+            max={1}
+            step={0.01}
             value={volume}
             onChange={handleVolumeChange}
           />
@@ -415,13 +416,13 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
           user={user}
           stream={stream}
         />
-        {isStream && (
+        {isStream && stream.userId !== Auth.userID && (
           <Styled.VolumeControlContainer>
             <Styled.VolumeSlider
               type="range"
-              min="0"
-              max="1"
-              step="0.05"
+              min={0}
+              max={1}
+              step={0.01}
               value={volume}
               onChange={handleVolumeChange}
             />
