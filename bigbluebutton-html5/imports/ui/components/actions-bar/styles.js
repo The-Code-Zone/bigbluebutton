@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { smallOnly } from '/imports/ui/stylesheets/styled-components/breakpoints';
 import { smPaddingX, smPaddingY, barsPadding } from '/imports/ui/stylesheets/styled-components/general';
-import { colorWhite, colorBackground } from '/imports/ui/stylesheets/styled-components/palette';
+import { colorWhite, colorBackground, colorTransparent } from '/imports/ui/stylesheets/styled-components/palette';
 import Button from '/imports/ui/components/common/button/component';
 
 const ActionsBar = styled.div`
@@ -13,7 +13,7 @@ const ActionsBar = styled.div`
 const ActionsBarWrapper = styled.section`
   flex: 1;
   padding: ${barsPadding};
-  background-color: ${colorBackground};
+  background-color: ${colorTransparent};
   position: relative;
   order: 3;
 `;
