@@ -188,7 +188,7 @@ const UserActions: React.FC<UserActionProps> = (props) => {
       });
     }
 
-    if (numOfStreams > 0 && isStream) {
+    if (numOfStreams > 2 && isStream) {
       menuItems.push({
         key: `${cameraId}-focus`,
         label: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Label`]),
