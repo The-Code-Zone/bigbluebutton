@@ -360,7 +360,7 @@ class VideoList extends Component<VideoListProps, VideoListState> {
       const isStream = item.type !== VIDEO_TYPES.GRID;
       const stream = isStream ? item.stream : null;
       const key = isStream ? stream : userId;
-      const isFocused = isStream && focusedId === stream && numOfStreams > 2;
+      const isFocused = isStream && focusedId === stream && numOfStreams > 0;
 
       return (
         <Styled.VideoListItem
