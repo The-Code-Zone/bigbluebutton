@@ -36,6 +36,9 @@ const colorMutedBackground = 'var(--color-muted-background, #F3F6F9)';
 const colorBackground = `var(--color-background, ${colorGrayDark})`;
 const colorOverlay = 'var(--color-overlay, rgba(6, 23, 42, 0.75))';
 
+const colorTalkingBorder = `var(--color-talking-border, ${colorSageGreen})`;
+const colorNotTalkingBorder = `var(--color-not-talking-border, ${colorTransparent})`;
+
 const userListBg = `var(--user-list-bg, ${colorOffWhite})`;
 const userListText = `var(--user-list-text, ${colorGray})`;
 const unreadMessagesBg = `var(--unread-messages-bg, ${colorDanger})`;

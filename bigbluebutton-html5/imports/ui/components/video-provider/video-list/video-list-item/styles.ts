@@ -8,6 +8,8 @@ import {
   webcamBackgroundColor,
   colorDanger,
   webcamPlaceholderBorder,
+  colorTalkingBorder,
+  colorNotTalkingBorder,
 } from '/imports/ui/stylesheets/styled-components/palette';
 import { TextElipsis } from '/imports/ui/stylesheets/styled-components/placeholders';
 
@@ -50,7 +52,7 @@ const Content = styled.div<{
     bottom: 0;
     left: 0;
     pointer-events: none;
-    border: 2px solid ${colorBlack};
+    border: 2px solid ${colorNotTalkingBorder};
     border-radius: 10px;
 
     ${({ isStream }) => !isStream && `
@@ -58,7 +60,7 @@ const Content = styled.div<{
     `}
 
     ${({ talking }) => talking && `
-      border: 2px solid ${colorPrimary};
+      border: 2px solid ${colorTalkingBorder};
     `}
 
     ${({ talking, customHighlight }) => talking && customHighlight && customHighlight.length > 0 && `
