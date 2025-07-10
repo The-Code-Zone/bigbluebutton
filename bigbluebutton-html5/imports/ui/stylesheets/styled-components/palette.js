@@ -24,7 +24,7 @@ const colorLimeGreen = 'var(--color-lime-green, #A0CB61)';
 const colorBlushRed = 'var(--color-blush-red, #DF5972)';
 const colorSettledBlue = 'var(--color-settled-blue, #5587C6)';
 
-const colorPrimary = `var(--color-primary, #OF70D7)`;
+const colorPrimary = `var(--color-primary, #0F70D7)`;
 const colorDanger = 'var(--color-danger, #DF2721)';
 const colorDangerDark = 'var(--color-danger-dark, #AE1010)';
 const colorSuccess = 'var(--color-success, #008081)';
