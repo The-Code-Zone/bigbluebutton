@@ -1,20 +1,20 @@
 const lineHeightComputed = '1rem';
 const lineHeightBase = '1.25';
-const fontSizeBase = '1.5rem';
-const fontSizeSmall = '1.25rem';
-const fontSizeSmaller = '1.1rem';
-const fontSizeSmallest = '1rem';
-const fontSizeXS = '.9rem';
-const fontSizeLarge = '1.75rem';
-const fontSizeLarger = '2rem';
-const fontSizeXL = '2.25rem';
-const fontSizeXXL = '2.5rem';
-const fontSizeMD = '1.5rem';
+const fontSizeBase = '1em';
+const fontSizeSmall = '0.875rem';
+const fontSizeSmaller = '.75rem';
+const fontSizeSmallest = '.35rem';
+const fontSizeXS = '.575rem';
+const fontSizeLarge = '1.25rem';
+const fontSizeLarger = '1.5rem';
+const fontSizeXL = '1.75rem';
+const fontSizeXXL = '2.75rem';
+const fontSizeMD = '0.95rem';
 
 const headingsFontWeight = '700';
 const btnFontWeight = '700';
 const talkerFontWeight = '700';
-const toolbarButtonFontSize = '2rem';
+const toolbarButtonFontSize = '1.75rem';
 const modalTitleFw = '700';
 
 export {
