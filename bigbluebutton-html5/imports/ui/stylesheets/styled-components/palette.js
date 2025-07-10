@@ -143,6 +143,8 @@ export {
   colorLimeGreen,
   colorBlushRed,
   colorSettledBlue,
+  colorTalkingBorder,
+  colorNotTalkingBorder,
   colorWhite,
   colorOffWhite,
   colorBlack,
