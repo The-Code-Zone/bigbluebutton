@@ -9,13 +9,13 @@ const colorGrayLight = 'var(--color-gray-light, #8B9AA8)';
 const colorGrayLighter = 'var(--color-gray-lighter, #A7B3BD)';
 const colorGrayLightest = 'var(--color-gray-lightest, #D4D9DF)';
 
-const colorBlueLight = 'var(--color-blue-light, #54a1f3)';
-const colorBlueLighter = 'var(--color-blue-lighter, #92BCEA)';
-const colorBlueLightest = 'var(--color-blue-lightest, #E4ECF2)';
-const colorBlueLightestChannel = '228 236 242';
-const colorBlueLighterChannel = '146 188 234';
-
 const colorTransparent = 'var(--color-transparent, #ff000000)';
+
+var colorBlueLight = 'var(--color-blue-light, #54a1f3)';
+var colorBlueLighter = 'var(--color-blue-lighter, #92BCEA)';
+var colorBlueLightest = 'var(--color-blue-lightest, #E4ECF2)';
+var colorBlueLightestChannel = '228 236 242';
+var colorBlueLighterChannel = '146 188 234';
 
 const colorRichPurple = 'var(--color-rich-purple, #4B006F)';
 const colorSageGreen = 'var(--color-sage-green, #13A89E)';
@@ -24,7 +24,7 @@ const colorLimeGreen = 'var(--color-lime-green, #A0CB61)';
 const colorBlushRed = 'var(--color-blush-red, #DF5972)';
 const colorSettledBlue = 'var(--color-settled-blue, #5587C6)';
 
-const colorPrimary = 'var(--color-primary, #0F70D7)';
+const colorPrimary = `var(--color-primary, ${colorOrangeyYellow})`;
 const colorDanger = 'var(--color-danger, #DF2721)';
 const colorDangerDark = 'var(--color-danger-dark, #AE1010)';
 const colorSuccess = 'var(--color-success, #008081)';
@@ -33,7 +33,7 @@ const colorOffline = `var(--color-offline, ${colorGrayLight})`;
 const colorMuted = 'var(--color-muted, #586571)';
 const colorMutedBackground = 'var(--color-muted-background, #F3F6F9)';
 
-const colorBackground = `var(--color-background, ${colorGrayDark})`;
+const colorBackground = `var(--color-background, ${colorOrangeyYellow})`;
 const colorOverlay = 'var(--color-overlay, rgba(6, 23, 42, 0.75))';
 
 const userListBg = `var(--user-list-bg, ${colorOffWhite})`;
