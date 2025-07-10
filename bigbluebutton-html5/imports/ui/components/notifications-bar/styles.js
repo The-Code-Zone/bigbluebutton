@@ -4,6 +4,7 @@ import {
   colorGray,
   colorWhite,
   colorPrimary,
+  colorTransparent,
   colorSuccess,
   colorDanger,
 } from '/imports/ui/stylesheets/styled-components/palette';
@@ -28,8 +29,8 @@ const NotificationsBar = styled.div`
 
   ${({ color }) => color === 'primary' && `
     color: ${colorWhite};
-    background-color: ${colorPrimary};
-    border-color: ${colorPrimary};
+    background-color: ${colorTransparent};
+    border-color: ${colorTransparent};
   `}
   
   ${({ color }) => color === 'success' && `
