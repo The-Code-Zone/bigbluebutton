@@ -24,7 +24,7 @@ const colorLimeGreen = 'var(--color-lime-green, #A0CB61)';
 const colorBlushRed = 'var(--color-blush-red, #DF5972)';
 const colorSettledBlue = 'var(--color-settled-blue, #5587C6)';
 
-const colorPrimary = `var(--color-primary, ${colorOrangeyYellow})`;
+const colorPrimary = `var(--color-primary, #OF70D7)`;
 const colorDanger = 'var(--color-danger, #DF2721)';
 const colorDangerDark = 'var(--color-danger-dark, #AE1010)';
 const colorSuccess = 'var(--color-success, #008081)';
@@ -33,7 +33,7 @@ const colorOffline = `var(--color-offline, ${colorGrayLight})`;
 const colorMuted = 'var(--color-muted, #586571)';
 const colorMutedBackground = 'var(--color-muted-background, #F3F6F9)';
 
-const colorBackground = `var(--color-background, ${colorOrangeyYellow})`;
+const colorBackground = `var(--color-background, ${colorGrayDark})`;
 const colorOverlay = 'var(--color-overlay, rgba(6, 23, 42, 0.75))';
 
 const userListBg = `var(--user-list-bg, ${colorOffWhite})`;
