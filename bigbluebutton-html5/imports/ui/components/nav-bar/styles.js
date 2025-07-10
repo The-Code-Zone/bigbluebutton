@@ -6,6 +6,7 @@ import {
   colorDanger,
   colorGrayDark,
   colorBackground,
+  colorTransparent,
   colorGray,
 } from '/imports/ui/stylesheets/styled-components/palette';
 import { fontSizeBase } from '/imports/ui/stylesheets/styled-components/typography';
@@ -18,8 +19,9 @@ const Navbar = styled.header`
   flex-direction: column;
   text-align: center;
   font-size: 1.5rem;
-  background-color: ${colorBackground};
+  background-color: ${colorTransparent};
   padding: ${barsPadding} ${barsPadding} 0 ${barsPadding};
+  text-shadow: 1px 1px ${colorGrayDark};
 `;
 
 const Top = styled.div`

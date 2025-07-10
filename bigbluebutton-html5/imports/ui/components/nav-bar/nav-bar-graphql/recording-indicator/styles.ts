@@ -111,6 +111,7 @@ const PresentationTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 30vw;
+  text-shadow: 1px 1px ${colorGray};
 
   [dir='rtl'] & {
     margin-left: 0;

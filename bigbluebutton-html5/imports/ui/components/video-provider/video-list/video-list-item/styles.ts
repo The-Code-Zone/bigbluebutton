@@ -60,7 +60,7 @@ const Content = styled.div<{
     `}
 
     ${({ talking }) => talking && `
-      border: 2px solid ${colorTalkingBorder};
+      border: 3px solid ${colorTalkingBorder};
     `}
 
     ${({ talking, customHighlight }) => talking && customHighlight && customHighlight.length > 0 && `
