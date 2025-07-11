@@ -43,6 +43,7 @@ class VideoMenu extends BaseMenu {
 
   render() {
     const { intl } = this.props;
+    const ENABLE_CAMERA_QUALITY = window.meetingClientSettings.public.app.enableCameraQuality;
 
     return (
       <div>
@@ -69,21 +70,24 @@ class VideoMenu extends BaseMenu {
                 </Styled.Select>
               </Styled.FormElement>
             </Styled.Col>
-            <Styled.Col>
-              <Styled.FormElement aria-label={intl.formatMessage(intlMessages.videoQualityLabel)}>
-                <Styled.LabelSmall htmlFor="videoSelectQuality">
-                  {intl.formatMessage(intlMessages.videoQualityLabel)}
-                </Styled.LabelSmall>
-                <Styled.Select
-                  id="videoSelectQuality"
-                  defaultValue="-1"
-                >
-                  <option value="-1" disabled>
-                    {intl.formatMessage(intlMessages.qualityOptionLabel)}
-                  </option>
-                </Styled.Select>
-              </Styled.FormElement>
-            </Styled.Col>
+            {ENABLE_CAMERA_QUALITY
+              && (
+                <Styled.Col>
+                  <Styled.FormElement aria-label={intl.formatMessage(intlMessages.videoQualityLabel)}>
+                    <Styled.LabelSmall htmlFor="videoSelectQuality">
+                      {intl.formatMessage(intlMessages.videoQualityLabel)}
+                    </Styled.LabelSmall>
+                    <Styled.Select
+                      id="videoSelectQuality"
+                      defaultValue="-1"
+                    >
+                      <option value="-1" disabled>
+                        {intl.formatMessage(intlMessages.qualityOptionLabel)}
+                      </option>
+                    </Styled.Select>
+                  </Styled.FormElement>
+                </Styled.Col>
+              )}
           </Styled.Row>
           <Styled.Row>
             <Styled.Col>

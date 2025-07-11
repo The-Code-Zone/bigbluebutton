@@ -75,6 +75,7 @@ export interface App {
   enableWebcamSelectorButton: boolean
   enableTalkingIndicator: boolean
   enableCameraBrightness: boolean
+  enableCameraQuality: boolean
   mirrorOwnWebcam: boolean
   viewersInWebcam: number
   ipv4FallbackDomain: string
