@@ -47,7 +47,7 @@ const colorText = `var(--color-text, ${colorGray})`;
 const colorLink = `var(--color-link, ${colorPrimary})`;
 
 const listItemBg = `var(--list-item-bg, ${colorOffWhite})`;
-const listItemBgHover = `var(--list-item-bg-hover, ${colorSettledBlue})`;
+const listItemBgHover = `var(--list-item-bg-hover, ${colorWhite})`;
 const colorTipBg = 'var(--color-tip-bg, #333333)';
 const itemFocusBorder = `var(--item-focus-border, ${colorBlueLighter})`;
 

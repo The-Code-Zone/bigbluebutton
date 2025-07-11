@@ -368,7 +368,7 @@ const UserNameContainer = styled.div`
   margin: 0 0 0 ${smPaddingX};
   justify-content: center;
   font-size: 90%;
-  max-width: 70%;
+  max-width: 95%;
 
   [dir="rtl"]  & {
     margin: 0 ${smPaddingX} 0 0;
@@ -422,7 +422,7 @@ const VolumeControlContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 0.25rem 0;
-  max-width: 150px;
+  max-width: 100%;
 `;
 
 const VolumeSlider = styled.input`
