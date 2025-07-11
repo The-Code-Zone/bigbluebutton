@@ -37,7 +37,7 @@ const UserTitle: React.FC<UserTitleProps> = ({
 
   return (
     <Styled.Container>
-      <Styled.SmallTitle>
+      <Styled.UsersSmallTitle>
         <span
           data-test-users-count={count}
           data-test-users-with-audio-count={countWithAudio}
@@ -49,7 +49,7 @@ const UserTitle: React.FC<UserTitleProps> = ({
             },
           )}
         </span>
-      </Styled.SmallTitle>
+      </Styled.UsersSmallTitle>
       <UserTitleOptionsContainer />
     </Styled.Container>
   );
