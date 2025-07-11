@@ -10,6 +10,7 @@ const OptionsButton = styled(Button)`
   display: block;
   padding: 0;
   margin: 0 0.25rem;
+  background-color: white;
 
   span {
     padding: inherit;
