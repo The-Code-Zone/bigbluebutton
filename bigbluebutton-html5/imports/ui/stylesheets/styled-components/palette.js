@@ -39,14 +39,15 @@ const colorOverlay = 'var(--color-overlay, rgba(6, 23, 42, 0.75))';
 const colorTalkingBorder = `var(--color-talking-border, ${colorPrimary})`;
 const colorNotTalkingBorder = `var(--color-not-talking-border, ${colorTransparent})`;
 
-const userListBg = `var(--user-list-bg, ${colorOffWhite})`;
+const userListBg = `var(--user-list-bg, ${colorTransparent})`;
 const userListText = `var(--user-list-text, ${colorGray})`;
 const unreadMessagesBg = `var(--unread-messages-bg, ${colorDanger})`;
 const colorGrayLabel = `var(--color-gray-label, ${colorGray})`;
 const colorText = `var(--color-text, ${colorGray})`;
 const colorLink = `var(--color-link, ${colorPrimary})`;
 
-const listItemBgHover = 'var(--list-item-bg-hover, #DCE4ED)';
+const listItemBg = `var(--list-item-bg, {colorGrayLight})`;
+const listItemBgHover = `var(--list-item-bg-hover, ${colorSettledBlue})`;
 const colorTipBg = 'var(--color-tip-bg, #333333)';
 const itemFocusBorder = `var(--item-focus-border, ${colorBlueLighter})`;
 
@@ -172,6 +173,7 @@ export {
   colorGrayLabel,
   colorText,
   colorLink,
+  listItemBg,
   listItemBgHover,
   colorTipBg,
   itemFocusBorder,
