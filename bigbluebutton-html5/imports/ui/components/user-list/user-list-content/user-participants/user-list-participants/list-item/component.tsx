@@ -236,12 +236,14 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
     return modifiedElements;
   }
 
+  const ENABLE_AVATARS = window.meetingClientSettings.public.app.enableAvatars;
+
   const Settings = getSettingsSingletonInstance();
   const animations = Settings?.application?.animations;
 
   return (
     <Styled.UserItemContents id={`user-index-${index}`} tabIndex={-1} data-test={(user.userId === Auth.userID) ? 'userListItemCurrent' : 'userListItem'} role="listitem">
-      <Styled.Avatar
+      {ENABLE_AVATARS && (<Styled.Avatar
         data-test={user.isModerator ? 'moderatorAvatar' : 'viewerAvatar'}
         data-test-presenter={user.presenter ? '' : undefined}
         data-test-avatar="userAvatar"
@@ -261,7 +263,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
         isEdge={isEdge}
       >
         {avatarContent}
-      </Styled.Avatar>
+      </Styled.Avatar>)}
       <Styled.UserNameContainer>
         <Styled.UserName>
           <TooltipContainer title={user.name} role="button">
@@ -273,17 +275,18 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
         <Styled.UserNameSub data-test={user.mobile ? 'mobileUser' : undefined}>
           {subs.length ? addSeparator(subs) : null}
         </Styled.UserNameSub>
+        <Styled.VolumeControlContainer>
+          <Styled.VolumeSlider
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            onChange={handleVolumeChange}
+          />
+        </Styled.VolumeControlContainer>
       </Styled.UserNameContainer>
-      <Styled.VolumeControlContainer>
-        <Styled.VolumeSlider
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          value={volume}
-          onChange={handleVolumeChange}
-        />
-      </Styled.VolumeControlContainer>
+
       {renderUserListItemIconsFromPlugin(userItemsFromPlugin)}
     </Styled.UserItemContents>
   );

@@ -421,12 +421,13 @@ const VolumeControlContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 0.5rem;
+  padding: 0.25rem 0;
+  max-width: 150px;
 `;
 
 const VolumeSlider = styled.input`
   width: 100%;
-  height: 5px;
+  height: 1em;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 5px;
   outline: none;
