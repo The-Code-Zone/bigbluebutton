@@ -266,7 +266,7 @@ class VideoPreview extends Component {
     };
   }
 
-  set currentVideoStream (bbbVideoStream) {
+  set currentVideoStream(bbbVideoStream) {
     // Stream is being unset - remove gUM revocation handler to avoid false negatives
     if (this._currentVideoStream) {
       this._currentVideoStream.removeListener('inactive', this.handleLocalStreamInactive);
@@ -278,7 +278,7 @@ class VideoPreview extends Component {
     this._currentVideoStream = bbbVideoStream;
   }
 
-  get currentVideoStream () {
+  get currentVideoStream() {
     return this._currentVideoStream;
   }
 
@@ -300,12 +300,12 @@ class VideoPreview extends Component {
 
     this._isMounted = true;
 
- const populatePreview = ({
+    const populatePreview = ({
       digestedWebcams = [],
       devices,
       areLabelled,
       areIdentified,
-    } = { }) => {
+    } = {}) => {
       if (devices) VideoService.updateNumberOfDevices(devices);
       // Video preview skip is activated, short circuit via a simpler procedure
       if (PreviewService.getSkipVideoPreview() && !forceOpen) {
@@ -361,7 +361,7 @@ class VideoPreview extends Component {
         });
     };
 
-     if (deviceInfo.hasMediaDevices) {
+    if (deviceInfo.hasMediaDevices) {
       const SKIP_INITIAL_ENUM = window.meetingClientSettings.public.media.skipInitialCamEnumeration;
       if (SKIP_INITIAL_ENUM) {
         populatePreview({
@@ -501,7 +501,7 @@ class VideoPreview extends Component {
     }
   }
 
-  updateVirtualBackgroundInfo () {
+  updateVirtualBackgroundInfo() {
     const { webcamDeviceId } = this.state;
 
     if (this.currentVideoStream) {
@@ -596,7 +596,7 @@ class VideoPreview extends Component {
     // Only streams that will be shared should be stored in the service.
     // If the store call returns false, we're duplicating stuff. So clean this one
     // up because it's an impostor.
-    if(!PreviewService.storeStream(webcamDeviceId, this.currentVideoStream)) {
+    if (!PreviewService.storeStream(webcamDeviceId, this.currentVideoStream)) {
       this.currentVideoStream.stop();
     }
 
@@ -739,7 +739,7 @@ class VideoPreview extends Component {
     notify(intl.formatMessage(intlMessages.virtualBgGenericError), 'error', 'video');
   }
 
-  updateDeviceId (deviceId) {
+  updateDeviceId(deviceId) {
     let actualDeviceId = deviceId;
 
     if (!actualDeviceId && this.currentVideoStream) {
@@ -865,7 +865,7 @@ class VideoPreview extends Component {
         bbbVideoStream = await PreviewService.doGUM(updatedDevice, profile);
         this.currentVideoStream = bbbVideoStream;
       }
-    } catch(error) {
+    } catch (error) {
       // When video preview is set to skip, we need some way to bubble errors
       // up to users; so re-throw the error
       if (!this.shouldSkipVideoPreview()) {
@@ -951,13 +951,13 @@ class VideoPreview extends Component {
     return `${intl.formatMessage(intlMessages.cameraLabel)} ${index}`
   }
 
-  isAlreadyShared (webcamId) { 
+  isAlreadyShared(webcamId) {
     const { sharedDevices, cameraAsContentDeviceId } = this.props;
 
     return sharedDevices.includes(webcamId) || webcamId === cameraAsContentDeviceId;
   }
 
-  isCameraAsContentDevice (deviceId) {
+  isCameraAsContentDevice(deviceId) {
     const { cameraAsContentDeviceId } = this.props;
 
     return deviceId === cameraAsContentDeviceId;
@@ -976,12 +976,14 @@ class VideoPreview extends Component {
       selectedProfile,
     } = this.state;
 
+    const ENABLE_CAMERA_QUALITY = window.meetingClientSettings.public.app.enableCameraQualitySelector;
+
     return (
       <Styled.InternCol>
         <Styled.Label htmlFor="setCam">
           {intl.formatMessage(intlMessages.cameraLabel)}
         </Styled.Label>
-        { availableWebcams && availableWebcams.length > 0
+        {availableWebcams && availableWebcams.length > 0
           ? (
             <Styled.Select
               id="setCam"
@@ -1001,7 +1003,7 @@ class VideoPreview extends Component {
             </span>
           )
         }
-        {this.renderQualitySelector()}
+        {ENABLE_CAMERA_QUALITY && this.renderQualitySelector()}
       </Styled.InternCol>
     );
   }
@@ -1015,19 +1017,19 @@ class VideoPreview extends Component {
     const {
       selectedProfile,
       availableWebcams,
-      webcamDeviceId, 
+      webcamDeviceId,
     } = this.state;
 
     const shared = this.isAlreadyShared(webcamDeviceId);
 
-    if (shared) { 
+    if (shared) {
       return (
         <Styled.Label>
           {intl.formatMessage(intlMessages.sharedCameraLabel)}
         </Styled.Label>
       );
     }
-    
+
     if (cameraAsContent) return;
 
     const CAMERA_PROFILES = window.meetingClientSettings.public.kurento.cameraProfiles || [];
@@ -1072,7 +1074,7 @@ class VideoPreview extends Component {
   async handleBrightnessAreaChange() {
     const ENABLE_CAMERA_BRIGHTNESS = window.meetingClientSettings.public.app.enableCameraBrightness;
     const CAMERA_BRIGHTNESS_AVAILABLE = ENABLE_CAMERA_BRIGHTNESS && isVirtualBackgroundSupported();
-    
+
     if (CAMERA_BRIGHTNESS_AVAILABLE && this.currentVideoStream) {
       if (this.currentVideoStream?.virtualBgService == null) {
         await this.startCameraBrightness();
@@ -1109,7 +1111,7 @@ class VideoPreview extends Component {
       ? (brightness * 100) / 200
       : ((200 - brightness) * 100) / 200;
 
-    if(cameraAsContent || webcamDeviceId === cameraAsContentDeviceId){ return null }
+    if (cameraAsContent || webcamDeviceId === cameraAsContentDeviceId) { return null }
 
     return (
       <Styled.InternCol>
@@ -1175,7 +1177,7 @@ class VideoPreview extends Component {
     const {
       showThumbnails: SHOW_THUMBNAILS = true,
     } = window.meetingClientSettings.public.virtualBackgrounds;
-    
+
     return (
       <VirtualBgSelector
         handleVirtualBgSelected={this.handleVirtualBgSelected}
@@ -1192,9 +1194,9 @@ class VideoPreview extends Component {
       cameraAsContent,
       isVirtualBackgroundsEnabled,
     } = this.props;
-  
+
     const shouldShowVirtualBackgrounds = isVirtualBackgroundsEnabled && !cameraAsContent;
-  
+
     return (
       <Styled.ContentCol>
         {tabNumber === 0 && (
@@ -1231,7 +1233,7 @@ class VideoPreview extends Component {
       height: '25vh',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center', 
+      alignItems: 'center',
     };
 
     switch (viewState) {
@@ -1303,7 +1305,7 @@ class VideoPreview extends Component {
       previewError,
     } = this.state;
     const shouldDisableButtons = this.shouldSkipVideoPreview()
-    || !!(deviceError || previewError);
+      || !!(deviceError || previewError);
 
     const shared = this.isAlreadyShared(webcamDeviceId);
 
@@ -1330,37 +1332,37 @@ class VideoPreview extends Component {
 
         <Styled.Footer>
           <Styled.BottomSeparator />
-            <Styled.FooterContainer>
-              {showStopAllButton ? (
-                <Styled.ExtraActions>
-                  <Styled.StopAllButton
-                    color="danger"
-                    label={intl.formatMessage(intlMessages.stopSharingAllLabel)}
-                    onClick={this.handleStopSharingAll}
-                    disabled={shouldDisableButtons}
-                  />
-                </Styled.ExtraActions>
-              ) : null}
-                {!shared && camCapReached ? (
-                  <span>{intl.formatMessage(intlMessages.camCapReached)}</span>
-                ) : (
-                  <div style={{ display: 'flex' }}>
-                      <Styled.CancelButton
-                        data-test="cancelSharingWebcam"
-                        label={intl.formatMessage(intlMessages.cancelLabel)}
-                        onClick={closeModal}
-                      />
-                      <Styled.SharingButton
-                        data-test="startSharingWebcam"
-                        color={shared ? 'danger' : 'primary'}
-                        label={intl.formatMessage(shared ? intlMessages.stopSharingLabel : intlMessages.startSharingLabel)}
-                        onClick={shared ? this.handleStopSharing : this.handleStartSharing}
-                        disabled={isStartSharingDisabled || isStartSharingDisabled === null || shouldDisableButtons}
-                      />
-                  </div>
-                )}
+          <Styled.FooterContainer>
+            {showStopAllButton ? (
+              <Styled.ExtraActions>
+                <Styled.StopAllButton
+                  color="danger"
+                  label={intl.formatMessage(intlMessages.stopSharingAllLabel)}
+                  onClick={this.handleStopSharingAll}
+                  disabled={shouldDisableButtons}
+                />
+              </Styled.ExtraActions>
+            ) : null}
+            {!shared && camCapReached ? (
+              <span>{intl.formatMessage(intlMessages.camCapReached)}</span>
+            ) : (
+              <div style={{ display: 'flex' }}>
+                <Styled.CancelButton
+                  data-test="cancelSharingWebcam"
+                  label={intl.formatMessage(intlMessages.cancelLabel)}
+                  onClick={closeModal}
+                />
+                <Styled.SharingButton
+                  data-test="startSharingWebcam"
+                  color={shared ? 'danger' : 'primary'}
+                  label={intl.formatMessage(shared ? intlMessages.stopSharingLabel : intlMessages.startSharingLabel)}
+                  onClick={shared ? this.handleStopSharing : this.handleStartSharing}
+                  disabled={isStartSharingDisabled || isStartSharingDisabled === null || shouldDisableButtons}
+                />
+              </div>
+            )}
 
-            </Styled.FooterContainer>
+          </Styled.FooterContainer>
         </Styled.Footer>
       </>
     );
@@ -1385,7 +1387,7 @@ class VideoPreview extends Component {
     } = this.props;
 
     const { selectedTab, webcamDeviceId } = this.state;
-    
+
     const BASE_NAME = window.meetingClientSettings.public.app.basename;
     const WebcamSettingsImg = `${BASE_NAME}/resources/images/webcam_settings.svg`;
     const WebcamBackgroundImg = `${BASE_NAME}/resources/images/webcam_background.svg`;
@@ -1408,7 +1410,7 @@ class VideoPreview extends Component {
     } = this.state;
 
     const allowCloseModal = !!(deviceError || previewError)
-    || !PreviewService.getSkipVideoPreview()
+      || !PreviewService.getSkipVideoPreview()
       || forceOpen;
 
     const shouldShowVirtualBackgroundsTab = isVirtualBackgroundsEnabled
@@ -1430,22 +1432,22 @@ class VideoPreview extends Component {
         }}
       >
         <Styled.Container>
-    <Styled.Header>
-      <Styled.WebcamTabs
-        onSelect={this.handleSelectTab}
-        selectedIndex={selectedTab}
-              >
-                <Styled.WebcamTabList>
-                  <Styled.WebcamTabSelector selectedClassName="is-selected">
-                    <Styled.IconSvg
-                      src={WebcamSettingsImg}
-                      darkThemeState={darkThemeState}
-                    />
-                    <span 
-                      id="webcam-settings-title">{this.getModalTitle()}
-                    </span>
-                  </Styled.WebcamTabSelector>
-                  {shouldShowVirtualBackgroundsTab && (
+          <Styled.Header>
+            <Styled.WebcamTabs
+              onSelect={this.handleSelectTab}
+              selectedIndex={selectedTab}
+            >
+              <Styled.WebcamTabList>
+                <Styled.WebcamTabSelector selectedClassName="is-selected">
+                  <Styled.IconSvg
+                    src={WebcamSettingsImg}
+                    darkThemeState={darkThemeState}
+                  />
+                  <span
+                    id="webcam-settings-title">{this.getModalTitle()}
+                  </span>
+                </Styled.WebcamTabSelector>
+                {shouldShowVirtualBackgroundsTab && (
                   <>
                     <Styled.HeaderSeparator />
                     <Styled.WebcamTabSelector selectedClassName="is-selected">
@@ -1457,18 +1459,18 @@ class VideoPreview extends Component {
                     </Styled.WebcamTabSelector>
                   </>
                 )}
-                </Styled.WebcamTabList>
-                
-              </Styled.WebcamTabs>
-            </Styled.Header>
+              </Styled.WebcamTabList>
 
-            {deviceInfo.hasMediaDevices
-                ? this.renderModalContent(selectedTab)
-                : this.supportWarning()
-              }
+            </Styled.WebcamTabs>
+          </Styled.Header>
 
-          </Styled.Container>
-        </Styled.VideoPreviewModal>
+          {deviceInfo.hasMediaDevices
+            ? this.renderModalContent(selectedTab)
+            : this.supportWarning()
+          }
+
+        </Styled.Container>
+      </Styled.VideoPreviewModal>
     );
   }
 }
