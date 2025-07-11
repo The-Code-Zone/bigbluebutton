@@ -77,6 +77,7 @@ public:
     enableTalkingIndicator: true
     enableCameraBrightness: true
     enableCameraQuality: false
+    enableAdvancedVideo: false
     mirrorOwnWebcam: true
     viewersInWebcam: 8
     ipv4FallbackDomain: ''
