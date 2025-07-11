@@ -1,4 +1,4 @@
-const smallOnly = 'only screen and (max-width: 40em)';
+const smallOnly = 'only screen and (max-width: 1px)'; // This is a hack to prevent the mobile UI from kicking in.
 const mediumOnly = 'only screen and (min-width: 40.063em) and (max-width: 64em)';
 const mediumUp = 'only screen and (min-width: 40.063em)';
 const mediumDown = 'only screen and (max-width: 40.0629em)';
