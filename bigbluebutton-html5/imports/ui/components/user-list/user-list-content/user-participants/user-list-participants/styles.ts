@@ -44,8 +44,7 @@ const Avatar = styled.div<AvatarProps>`
   font-size: .85rem;
   border: 2px solid transparent;
   user-select: none;
-  ${
-  ({ color }) => css`
+  ${({ color }) => css`
     background-color: ${color};
   `}
   }
@@ -119,8 +118,8 @@ const Avatar = styled.div<AvatarProps>`
   `}
 
   ${({
-    presenter, isChrome, isFirefox, isEdge,
-  }) => presenter && (isChrome || isFirefox || isEdge) && `
+  presenter, isChrome, isFirefox, isEdge,
+}) => presenter && (isChrome || isFirefox || isEdge) && `
     &:before {
       padding: ${indicatorPadding} !important;
     }
@@ -149,8 +148,8 @@ const Avatar = styled.div<AvatarProps>`
   `}
 
   ${({
-    whiteboardAccess, isChrome, isFirefox, isEdge,
-  }) => whiteboardAccess && (isChrome || isFirefox || isEdge) && `
+  whiteboardAccess, isChrome, isFirefox, isEdge,
+}) => whiteboardAccess && (isChrome || isFirefox || isEdge) && `
     &:before {
       padding: ${indicatorPadding};
     }
@@ -260,14 +259,11 @@ const pulse = (color: string) => keyframes`
 `;
 
 const VirtualizedList = styled(ScrollboxVertical)`
-  background: linear-gradient(#f3f6f9 30%, rgba(255,255,255,0)),
-    linear-gradient(rgba(255,255,255,0), #f3f6f9 70%) 0 100%,
-    /* Shadows */
-    radial-gradient(farthest-side at 50% 0, rgba(0,0,0,.2), rgba(0,0,0,0)),
-    radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,.2), rgba(0,0,0,0)) 0 100%;
-
   outline: none;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 `;
 
 const UserListItem = styled.div`

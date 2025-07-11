@@ -428,9 +428,7 @@ const VolumeControlContainer = styled.div`
 const VolumeSlider = styled.input`
   width: 100%;
   height: 1em;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  outline: none;
+  opacity: 0.9;
 
   &:hover {
     opacity: 1;
