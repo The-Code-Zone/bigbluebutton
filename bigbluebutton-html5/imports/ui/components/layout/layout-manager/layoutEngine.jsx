@@ -91,8 +91,8 @@ const LayoutEngine = () => {
       cameraDockBounds.height = mediaAreaBounds.height;
       cameraDockBounds.maxHeight = mediaAreaBounds.height;
       cameraDockBounds.top = mediaAreaBounds.top;
-      cameraDockBounds.left = isRTL ? mediaAreaBounds.left : 0;
-      cameraDockBounds.right = !isRTL ? sidebarSize : null;
+      cameraDockBounds.left = !isRTL ? mediaAreaBounds.left : 0;
+      cameraDockBounds.right = isRTL ? sidebarSize : null;
     }
 
     if (fullscreen.group === 'webcams') {
@@ -140,7 +140,7 @@ const LayoutEngine = () => {
       width: mediaAreaBounds.width,
       height: navBarHeight,
       top: navBarTop + bannerAreaHeight(),
-      left: isRTL ? mediaAreaBounds.left : 0,
+      left: ! ? mediaAreaBounds.left : 0,
       zIndex: 1,
     };
   };
@@ -176,7 +176,7 @@ const LayoutEngine = () => {
       innerHeight: actionBarHeight.innerHeight,
       padding: actionBarHeight.padding,
       top: windowHeight() - actionBarHeight.height,
-      left: isRTL ? mediaAreaBounds.left : 0,
+      left: !isRTL ? mediaAreaBounds.left : 0,
       zIndex: 1,
     };
   };
@@ -240,8 +240,8 @@ const LayoutEngine = () => {
 
     return {
       top,
-      left: isRTL ? sidebarNavLeft : null,
-      right: !isRTL ? sidebarNavLeft : null,
+      left: !isRTL ? sidebarNavLeft : null,
+      right: isRTL ? sidebarNavLeft : null,
       zIndex: isMobile ? 11 : 2,
     };
   };
@@ -292,8 +292,8 @@ const LayoutEngine = () => {
 
     let left = isMobile ? 0 : sidebarNavWidth;
     let right = isMobile ? 0 : sidebarNavWidth;
-    left = isRTL ? left : null;
-    right = !isRTL ? right : null;
+    left = !isRTL ? left : null;
+    right = isRTL ? right : null;
 
     const zIndex = isMobile ? 11 : 2;
 
@@ -314,7 +314,7 @@ const LayoutEngine = () => {
     if (isMobile) {
       width = windowWidth();
     } else {
-      left = isRTL ? sidebarNavWidth + sidebarContentWidth : 0;
+      left = !isRTL ? sidebarNavWidth + sidebarContentWidth : 0;
       width = windowWidth() - sidebarNavWidth - sidebarContentWidth;
     }
 
