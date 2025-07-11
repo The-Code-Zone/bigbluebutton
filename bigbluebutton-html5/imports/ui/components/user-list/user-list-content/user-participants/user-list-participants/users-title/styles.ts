@@ -6,7 +6,7 @@ import {
 } from '/imports/ui/stylesheets/styled-components/general';
 
 import {
-  colorGray,
+  colorWhite,
 } from '/imports/ui/stylesheets/styled-components/palette';
 
 const Container = styled.div`
@@ -21,7 +21,7 @@ const SmallTitle = styled.h2`
   font-weight: 600;
   text-transform: uppercase;
   padding: 0 ${smPaddingX};
-  color: ${colorGray};
+  color: ${colorWhite};
   flex: 1;
   margin: 0;
 `;
