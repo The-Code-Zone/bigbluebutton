@@ -409,7 +409,7 @@ const RecordingIndicatorContainer: React.FC = () => {
       recordingNotificationEnabled={
         (meetingRecording?.startedBy !== currentUser?.userId
           && currentMeeting?.notifyRecordingIsOn)
-          ?? false
+        ?? false
       }
       serverTime={passedTime > 0 ? passedTime : 0}
       isModerator={currentUser?.isModerator ?? false}

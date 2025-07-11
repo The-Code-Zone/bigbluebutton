@@ -7,12 +7,13 @@ import {
   colorGray,
   listItemBgHover,
   itemFocusBorder,
+  colorTransparent,
 } from '/imports/ui/stylesheets/styled-components/palette';
 import { smPaddingX, borderSize } from '/imports/ui/stylesheets/styled-components/general';
 
 const UserList = styled(FlexColumn)`
   justify-content: flex-start;
-  background-color: ${userListBg};
+  background-color: ${colorTransparent};
   color: ${userListText};
   height: 100%;
 `;
