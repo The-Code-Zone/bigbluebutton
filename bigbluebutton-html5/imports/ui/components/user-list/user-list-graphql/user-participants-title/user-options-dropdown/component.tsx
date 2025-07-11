@@ -359,7 +359,7 @@ const UserTitleOptions: React.FC<UserTitleOptionsProps> = ({
     <>
       <BBBMenu
         trigger={(
-          <Styled.OptionsButton
+          <Styled.ManageUsersButton
             label={intl.formatMessage(intlMessages.optionsLabel)}
             data-test="manageUsers"
             icon="settings"

@@ -264,6 +264,7 @@ const VirtualizedList = styled(ScrollboxVertical)`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  margin-right: 0.3rem;
 `;
 
 const UserListItem = styled.div`
