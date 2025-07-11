@@ -18,10 +18,10 @@ const UsersTitle: React.FC<UsersTitleProps> = ({ count }) => {
 
   return (
     <Styled.Container>
-      <Styled.SmallTitle>
+      <Styled.UserSmallTitle>
         {intl.formatMessage(messages.usersTitle)}
         {` (${count.toLocaleString('en-US', { notation: 'standard' })})`}
-      </Styled.SmallTitle>
+      </Styled.UserSmallTitle>
     </Styled.Container>
   );
 };

@@ -7,6 +7,7 @@ import {
 
 import {
   colorWhite,
+  colorGray,
 } from '/imports/ui/stylesheets/styled-components/palette';
 
 const Container = styled.div`
@@ -21,6 +22,16 @@ const SmallTitle = styled.h2`
   font-weight: 600;
   text-transform: uppercase;
   padding: 0 ${smPaddingX};
+  color: ${colorGray};
+  flex: 1;
+  margin: 0;
+`;
+
+const UserSmallTitle = styled.h2`
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0 ${smPaddingX};
   color: ${colorWhite};
   flex: 1;
   margin: 0;
@@ -29,4 +40,5 @@ const SmallTitle = styled.h2`
 export default {
   Container,
   SmallTitle,
+  UserSmallTitle
 };
