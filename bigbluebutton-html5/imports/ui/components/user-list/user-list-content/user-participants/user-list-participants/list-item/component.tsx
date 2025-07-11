@@ -275,7 +275,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
         <Styled.UserNameSub data-test={user.mobile ? 'mobileUser' : undefined}>
           {subs.length ? addSeparator(subs) : null}
         </Styled.UserNameSub>
-        <Styled.VolumeControlContainer>
+        {!(user.userId === Auth.userID) && (<Styled.VolumeControlContainer>
           <Styled.VolumeSlider
             type="range"
             min={0}
@@ -284,7 +284,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, lockSettings, index }
             value={volume}
             onChange={handleVolumeChange}
           />
-        </Styled.VolumeControlContainer>
+        </Styled.VolumeControlContainer>)}
       </Styled.UserNameContainer>
 
       {renderUserListItemIconsFromPlugin(userItemsFromPlugin)}
