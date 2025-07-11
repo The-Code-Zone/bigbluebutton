@@ -346,9 +346,9 @@ class AudioManager {
     this.userData = userData;
     this.inputDeviceId = getStoredAudioInputDeviceId() || DEFAULT_INPUT_DEVICE_ID;
     this.outputDeviceId = getCurrentAudioSinkId();
-    this._applyCachedOutputDeviceId();
     this._trackPermissionStatus();
     this.loadBridges(bridges, userData);
+    this._applyCachedOutputDeviceId();
     this.transparentListenOnlySupported = this.supportsTransparentListenOnly();
     this.audioEventHandler = audioEventHandler;
     this.observeVoiceActivity();
@@ -525,7 +525,7 @@ class AudioManager {
     const MEDIA = window.meetingClientSettings.public.media;
     const ECHO_TEST_NUMBER = MEDIA.echoTestNumber;
     const EXPERIMENTAL_USE_KMS_TRICKLE_ICE_FOR_MICROPHONE =
-    window.meetingClientSettings.public.app.experimentalUseKmsTrickleIceForMicrophone;
+      window.meetingClientSettings.public.app.experimentalUseKmsTrickleIceForMicrophone;
 
     return this.onAudioJoining
       .bind(this)()
@@ -811,7 +811,7 @@ class AudioManager {
           'no_audio',
         );
       }
-    } catch {}
+    } catch { }
   }
 
   onAudioExit() {
@@ -1212,9 +1212,8 @@ class AudioManager {
 
   playHangUpSound() {
     this.playAlertSound(
-      `${
-        window.meetingClientSettings.public.app.cdn +
-        window.meetingClientSettings.public.app.basename
+      `${window.meetingClientSettings.public.app.cdn +
+      window.meetingClientSettings.public.app.basename
       }` + '/resources/sounds/LeftCall.mp3'
     );
   }
