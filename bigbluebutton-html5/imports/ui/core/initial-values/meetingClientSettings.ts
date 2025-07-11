@@ -53,7 +53,7 @@ export const meetingClientSettingsInitialValues: MeetingClientSettings = {
       enableWebcamSelectorButton: true,
       enableTalkingIndicator: true,
       enableCameraBrightness: true,
-      enableCameraQuality: true,
+      enableCameraQuality: false,
       mirrorOwnWebcam: false,
       viewersInWebcam: 8,
       ipv4FallbackDomain: '',
