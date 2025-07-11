@@ -140,7 +140,7 @@ const LayoutEngine = () => {
       width: mediaAreaBounds.width,
       height: navBarHeight,
       top: navBarTop + bannerAreaHeight(),
-      left: ! ? mediaAreaBounds.left : 0,
+      left: !isRTL ? mediaAreaBounds.left : 0,
       zIndex: 1,
     };
   };
