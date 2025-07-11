@@ -365,7 +365,7 @@ const UserNameContainer = styled.div`
   flex-flow: column;
   min-width: 0;
   flex-grow: 1;
-  margin: 0 0 0 ${smPaddingX};
+  margin: 0 ${smPaddingX} 0 ${smPaddingX};
   justify-content: center;
   font-size: 90%;
   max-width: 95%;
