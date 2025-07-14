@@ -22,6 +22,7 @@ import SessionDetailsModal from '/imports/ui/components/session-details/componen
 import Icon from '/imports/ui/components/common/icon/icon-ts/component';
 import getStorageSingletonInstance from '../../services/storage';
 import getFromUserSettings from '../../services/users-settings';
+import { isMobile } from '../layout/utils';
 
 const intlMessages = defineMessages({
   toggleUserListLabel: {
@@ -346,6 +347,8 @@ class NavBar extends Component {
     const HIDE_PRESENTATION_TITLE = getFromUserSettings('bbb_nav_hide_presentation_title', false);
     const HIDE_SESSION_CONTROL_BUTTONS = getFromUserSettings('bbb_nav_hide_session_control_buttons', false);
     const HIDE_SPEAKERS_LIST = getFromUserSettings('bbb_nav_hide_speakers', false);
+
+    if (isMobile()) { return <></>; }
 
     return (
       <Styled.Navbar
