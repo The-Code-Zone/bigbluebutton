@@ -444,6 +444,9 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   return (
     // @ts-expect-error -> Until everything in Typescript.
     <Styled.Content
+      style={
+        isMobile() ? { display: 'none' } : {}
+      }
       ref={videoContainer}
       talking={talking}
       customHighlight={webcamBorderHighlightColor}

@@ -12,6 +12,7 @@ import useHasUnreadNotes from '../notes/hooks/useHasUnreadNotes';
 import { useShortcut } from '../../core/hooks/useShortcut';
 import useMeeting from '../../core/hooks/useMeeting';
 import { registerTitleView } from '/imports/utils/dom-utils';
+import { isMobile } from '../layout/utils';
 
 const intlMessages = defineMessages({
   defaultViewLabel: {
@@ -93,7 +94,7 @@ const NavBarContainer = ({ children, ...props }) => {
     }
   }
 
-  if (hideNavBar || navBar.display === false) return null;
+  if (hideNavBar || navBar.display === false || isMobile()) return null;
 
   let pluginNavBarItems = [];
   if (pluginsExtensibleAreasAggregatedState.navBarItems) {

@@ -348,7 +348,6 @@ class NavBar extends Component {
     const HIDE_SESSION_CONTROL_BUTTONS = getFromUserSettings('bbb_nav_hide_session_control_buttons', false);
     const HIDE_SPEAKERS_LIST = getFromUserSettings('bbb_nav_hide_speakers', false);
 
-    if (isMobile()) { return <></>; }
 
     return (
       <Styled.Navbar
