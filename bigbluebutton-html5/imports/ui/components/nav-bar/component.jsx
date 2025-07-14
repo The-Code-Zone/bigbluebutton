@@ -346,7 +346,7 @@ class NavBar extends Component {
     const HIDE_SIDEBAR_TOGGLE = getFromUserSettings('bbb_nav_hide_sidebar_toggle', false);
     const HIDE_PRESENTATION_TITLE = getFromUserSettings('bbb_nav_hide_presentation_title', false);
     const HIDE_SESSION_CONTROL_BUTTONS = getFromUserSettings('bbb_nav_hide_session_control_buttons', false);
-    const HIDE_SPEAKERS_LIST = getFromUserSettings('bbb_nav_hide_speakers_nav', false);
+    const HIDE_SPEAKERS_LIST = getFromUserSettings('bbb_nav_hide_speakers', false);
 
     return (
       <Styled.Navbar
