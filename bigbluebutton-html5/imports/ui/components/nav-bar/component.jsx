@@ -22,7 +22,6 @@ import SessionDetailsModal from '/imports/ui/components/session-details/componen
 import Icon from '/imports/ui/components/common/icon/icon-ts/component';
 import getStorageSingletonInstance from '../../services/storage';
 import getFromUserSettings from '../../services/users-settings';
-import { get } from 'http';
 
 const intlMessages = defineMessages({
   toggleUserListLabel: {
