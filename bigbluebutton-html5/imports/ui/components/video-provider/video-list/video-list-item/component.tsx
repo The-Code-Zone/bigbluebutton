@@ -439,8 +439,6 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
     onDrop,
   } = makeDragOperations(stream.userId);
 
-  if (isMobile()) { return <></>; }
-
   return (
     // @ts-expect-error -> Until everything in Typescript.
     <Styled.Content

@@ -424,7 +424,7 @@ class VideoList extends Component<VideoListProps, VideoListState> {
             }}
             style={{
               width: `${optimalGrid.width}px`,
-              maxHeight: `${optimalGrid.height}px`,
+              height: `${optimalGrid.height}px`,
               gridTemplateColumns: `repeat(${optimalGrid.columns}, 1fr)`,
               gridTemplateRows: `repeat(${optimalGrid.rows}, 1fr)`,
             }}
