@@ -5,7 +5,7 @@ import {
   SYNC,
 } from './enums';
 
-const phoneUpperBoundary = 2; // This is a hack to prevent the mobile UI from kicking in.
+const phoneUpperBoundary = 600;
 const tabletPortraitUpperBoundary = 900;
 const tabletLandscapeUpperBoundary = 1200;
 

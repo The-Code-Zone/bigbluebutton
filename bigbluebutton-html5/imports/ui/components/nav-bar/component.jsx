@@ -21,6 +21,8 @@ import Tooltip from '/imports/ui/components/common/tooltip/component';
 import SessionDetailsModal from '/imports/ui/components/session-details/component';
 import Icon from '/imports/ui/components/common/icon/icon-ts/component';
 import getStorageSingletonInstance from '../../services/storage';
+import getFromUserSettings from '../../services/users-settings';
+import { get } from 'http';
 
 const intlMessages = defineMessages({
   toggleUserListLabel: {
@@ -341,6 +343,11 @@ class NavBar extends Component {
     const APP_CONFIG = window.meetingClientSettings?.public?.app;
     const enableTalkingIndicator = APP_CONFIG?.enableTalkingIndicator;
 
+    const HIDE_SIDEBAR_TOGGLE = getFromUserSettings('bbb_nav_hide_sidebar_toggle', false);
+    const HIDE_PRESENTATION_TITLE = getFromUserSettings('bbb_nav_hide_presentation_title', false);
+    const HIDE_SESSION_CONTROL_BUTTONS = getFromUserSettings('bbb_nav_hide_session_control_buttons', false);
+    const HIDE_SPEAKERS_LIST = getFromUserSettings('bbb_nav_hide_speakers_nav', false);
+
     return (
       <Styled.Navbar
         id="Navbar"
@@ -362,74 +369,82 @@ class NavBar extends Component {
       >
         {!hideTopRow && (
           <Styled.Top>
-            <Styled.Left>
-              {shouldShowNavBarToggleButton && isExpanded && document.dir === 'ltr'
-                && <Styled.ArrowLeft iconName="left_arrow" />}
-              {shouldShowNavBarToggleButton && !isExpanded && document.dir === 'rtl'
-                && <Styled.ArrowLeft iconName="left_arrow" />}
-              {shouldShowNavBarToggleButton && (
-                <Styled.NavbarToggleButton
-                  tooltipplacement="right"
-                  onClick={this.handleToggleUserList}
-                  color={isPhone && isExpanded ? 'primary' : 'dark'}
-                  size="md"
-                  circle
-                  hideLabel
-                  data-test={hasNotification ? 'hasUnreadMessages' : 'toggleUserList'}
-                  label={intl.formatMessage(intlMessages.toggleUserListLabel)}
-                  tooltipLabel={intl.formatMessage(intlMessages.toggleUserListLabel)}
-                  aria-label={ariaLabel}
-                  icon="user"
-                  aria-expanded={isExpanded}
-                  accessKey={TOGGLE_USERLIST_AK}
-                  hasNotification={hasNotification}
+            {!HIDE_SIDEBAR_TOGGLE && (
+              <Styled.Left>
+                {shouldShowNavBarToggleButton && isExpanded && document.dir === 'ltr'
+                  && <Styled.ArrowLeft iconName="left_arrow" />}
+                {shouldShowNavBarToggleButton && !isExpanded && document.dir === 'rtl'
+                  && <Styled.ArrowLeft iconName="left_arrow" />}
+                {shouldShowNavBarToggleButton && (
+                  <Styled.NavbarToggleButton
+                    tooltipplacement="right"
+                    onClick={this.handleToggleUserList}
+                    color={isPhone && isExpanded ? 'primary' : 'dark'}
+                    size="md"
+                    circle
+                    hideLabel
+                    data-test={hasNotification ? 'hasUnreadMessages' : 'toggleUserList'}
+                    label={intl.formatMessage(intlMessages.toggleUserListLabel)}
+                    tooltipLabel={intl.formatMessage(intlMessages.toggleUserListLabel)}
+                    aria-label={ariaLabel}
+                    icon="user"
+                    aria-expanded={isExpanded}
+                    accessKey={TOGGLE_USERLIST_AK}
+                    hasNotification={hasNotification}
+                  />
+                )}
+                {shouldShowNavBarToggleButton && !isExpanded && document.dir === 'ltr'
+                  && <Styled.ArrowRight iconName="right_arrow" />}
+                {shouldShowNavBarToggleButton && isExpanded && document.dir === 'rtl'
+                  && <Styled.ArrowRight iconName="right_arrow" />}
+                {renderPluginItems(leftPluginItems)}
+              </Styled.Left>
+            )}
+            {!HIDE_PRESENTATION_TITLE && (
+              <Styled.Center>
+                <Styled.PresentationTitle
+                  data-test="presentationTitle"
+                  id="presentationTitle"
+                  onClick={() => this.setModalIsOpen(true)}
+                >
+                  <Tooltip title={intl.formatMessage(intlMessages.openDetailsTooltip)}>
+                    <span>
+                      {presentationTitle}
+                      <Icon iconName="device_list_selector" />
+                    </span>
+                  </Tooltip>
+                </Styled.PresentationTitle>
+                {this.renderModal(isModalOpen, this.setModalIsOpen, 'low', SessionDetailsModal)}
+                <RecordingIndicator
+                  amIModerator={amIModerator}
+                  currentUserId={currentUserId}
                 />
-              )}
-              {shouldShowNavBarToggleButton && !isExpanded && document.dir === 'ltr'
-                && <Styled.ArrowRight iconName="right_arrow" />}
-              {shouldShowNavBarToggleButton && isExpanded && document.dir === 'rtl'
-                && <Styled.ArrowRight iconName="right_arrow" />}
-              {renderPluginItems(leftPluginItems)}
-            </Styled.Left>
-            <Styled.Center>
-              <Styled.PresentationTitle
-                data-test="presentationTitle"
-                id="presentationTitle"
-                onClick={() => this.setModalIsOpen(true)}
-              >
-                <Tooltip title={intl.formatMessage(intlMessages.openDetailsTooltip)}>
-                  <span>
-                    {presentationTitle}
-                    <Icon iconName="device_list_selector" />
-                  </span>
-                </Tooltip>
-              </Styled.PresentationTitle>
-              {this.renderModal(isModalOpen, this.setModalIsOpen, 'low', SessionDetailsModal)}
-              <RecordingIndicator
-                amIModerator={amIModerator}
-                currentUserId={currentUserId}
-              />
-              {renderPluginItems(centerPluginItems)}
-            </Styled.Center>
-            <Styled.Right>
-              <h2 className="sr-only">{intl.formatMessage(intlMessages.sessionControlLabel)}</h2>
-              {renderPluginItems(rightPluginItems)}
-              {ConnectionStatusService.isEnabled() ? <ConnectionStatusButton /> : null}
-              {ConnectionStatusService.isEnabled() ? <ConnectionStatus /> : null}
-              {isDirectLeaveButtonEnabled && isMeteorConnected
-                ? <LeaveMeetingButtonContainer amIModerator={amIModerator} /> : null}
-              <OptionsDropdownContainer
-                amIModerator={amIModerator}
-                isDirectLeaveButtonEnabled={isDirectLeaveButtonEnabled}
-              />
-            </Styled.Right>
+                {renderPluginItems(centerPluginItems)}
+              </Styled.Center>
+            )}
+            {!HIDE_SESSION_CONTROL_BUTTONS && (
+              <Styled.Right>
+                <h2 className="sr-only">{intl.formatMessage(intlMessages.sessionControlLabel)}</h2>
+                {renderPluginItems(rightPluginItems)}
+                {ConnectionStatusService.isEnabled() ? <ConnectionStatusButton /> : null}
+                {ConnectionStatusService.isEnabled() ? <ConnectionStatus /> : null}
+                {isDirectLeaveButtonEnabled && isMeteorConnected
+                  ? <LeaveMeetingButtonContainer amIModerator={amIModerator} /> : null}
+                <OptionsDropdownContainer
+                  amIModerator={amIModerator}
+                  isDirectLeaveButtonEnabled={isDirectLeaveButtonEnabled}
+                />
+              </Styled.Right>
+            )}
           </Styled.Top>
         )}
-        <Styled.Bottom>
-          <h2 className="sr-only">{intl.formatMessage(intlMessages.speakersListLabel)}</h2>
-          {enableTalkingIndicator ? <TalkingIndicator amIModerator={amIModerator} /> : null}
-          <TimerIndicatorContainer />
-        </Styled.Bottom>
+        {!HIDE_SPEAKERS_LIST && (
+          <Styled.Bottom>
+            <h2 className="sr-only">{intl.formatMessage(intlMessages.speakersListLabel)}</h2>
+            {enableTalkingIndicator ? <TalkingIndicator amIModerator={amIModerator} /> : null}
+            <TimerIndicatorContainer />
+          </Styled.Bottom>
+        )}
       </Styled.Navbar>
     );
   }
