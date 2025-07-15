@@ -428,7 +428,7 @@ const PushLayoutEngineContainer = (props) => {
 
   const presentationVideoRate = calculatePresentationVideoRate(cameraDockOutput);
 
-  const pushLayout = true; //getKeepPushingLayout(); TODO: make this a config option, if it works.
+  const pushLayout = getKeepPushingLayout();
 
   const setLocalSettings = useUserChangedLocalSettings();
   const setPushLayout = usePushLayoutUpdater(pushLayout);
