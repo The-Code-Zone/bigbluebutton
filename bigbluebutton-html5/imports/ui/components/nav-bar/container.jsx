@@ -95,10 +95,13 @@ const NavBarContainer = ({ children, ...props }) => {
     }
   }
 
-  layoutContextDispatch({
-    type: ACTIONS.SET_HAS_NAVBAR,
-    value: !hideNavBar,
-  });
+  useEffect(() => {
+    layoutContextDispatch({
+      type: ACTIONS.SET_HAS_NAVBAR,
+      value: !hideNavBar,
+    });
+  }, [hideNavBar])
+
 
   if (hideNavBar || navBar.display === false) return null;
 
