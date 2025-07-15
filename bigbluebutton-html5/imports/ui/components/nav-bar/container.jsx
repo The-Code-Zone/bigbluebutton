@@ -97,7 +97,7 @@ const NavBarContainer = ({ children, ...props }) => {
 
   layoutContextDispatch({
     type: ACTIONS.SET_HAS_NAVBAR,
-    value: hideNavBar,
+    value: !hideNavBar,
   });
 
   if (hideNavBar || navBar.display === false) return null;
