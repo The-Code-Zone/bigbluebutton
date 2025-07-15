@@ -6,10 +6,13 @@ import {
 } from './enums';
 
 const phoneUpperBoundary = 400;
+const microWidthUpperBoundary = 270;
 const tabletPortraitUpperBoundary = 900;
 const tabletLandscapeUpperBoundary = 1200;
 
 const windowSize = () => window.document.documentElement.clientWidth;
+const windowHeight = () => window.document.documentElement.clientHeight;
+const isMicro = () => windowSize() <= (phoneUpperBoundary - 1) && windowHeight() <= (microWidthUpperBoundary - 1);
 const isMobile = () => windowSize() <= (phoneUpperBoundary - 1);
 const isTabletPortrait = () => windowSize() >= phoneUpperBoundary
   && windowSize() <= (tabletPortraitUpperBoundary - 1);
@@ -20,12 +23,12 @@ const isTablet = () => windowSize() >= phoneUpperBoundary
 const isDesktop = () => windowSize() >= tabletLandscapeUpperBoundary;
 
 const device = {
-  isMobile, isTablet, isTabletPortrait, isTabletLandscape, isDesktop,
+  isMicro, isMobile, isTablet, isTabletPortrait, isTabletLandscape, isDesktop,
 };
 
 export default device;
 export {
-  isMobile, isTablet, isTabletPortrait, isTabletLandscape, isDesktop,
+  isMicro, isMobile, isTablet, isTabletPortrait, isTabletLandscape, isDesktop,
 };
 
 // Array for select component to select different layout
