@@ -73,14 +73,18 @@ const ParticipantsAndChatOnlyLayout = (props) => {
     let maxWidth = 0;
 
     if (isMobile) {
-      minWidth = windowWidth();
-      width = windowWidth();
-      maxWidth = windowWidth();
-    } else {
-      minWidth = windowWidth() - sidebarNavWidth;
-      width = windowWidth() - sidebarNavWidth;
-      maxWidth = windowWidth() - sidebarNavWidth;
+      // If micro, forget the sidebar.
+      return {
+        minWidth: 0,
+        width: 0,
+        maxWidth: 0,
+      };
     }
+
+    minWidth = windowWidth() - sidebarNavWidth;
+    width = windowWidth() - sidebarNavWidth;
+    maxWidth = windowWidth() - sidebarNavWidth;
+
     return {
       minWidth,
       width,

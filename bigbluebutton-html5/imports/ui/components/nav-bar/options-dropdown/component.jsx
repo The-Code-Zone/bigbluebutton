@@ -233,29 +233,29 @@ class OptionsDropdown extends PureComponent {
 
   leaveSession() {
     const { userLeaveMeeting } = this.props;
-    
+
     userLeaveMeeting();
     Session.setItem('codeError', this.LOGOUT_CODE);
   }
 
   setAboutModalIsOpen(value) {
-    this.setState({isAboutModalOpen: value})
+    this.setState({ isAboutModalOpen: value })
   }
-  
+
   setShortcutHelpModalIsOpen(value) {
-    this.setState({isShortcutHelpModalOpen: value})
+    this.setState({ isShortcutHelpModalOpen: value })
   }
-  
+
   setOptionsMenuModalIsOpen(value) {
-    this.setState({isOptionsMenuModalOpen: value})
+    this.setState({ isOptionsMenuModalOpen: value })
   }
-  
+
   setEndMeetingConfirmationModalIsOpen(value) {
-    this.setState({isEndMeetingConfirmationModalOpen: value})
+    this.setState({ isEndMeetingConfirmationModalOpen: value })
   }
-  
+
   setMobileAppModalIsOpen(value) {
-    this.setState({isMobileAppModalOpen: value})
+    this.setState({ isMobileAppModalOpen: value })
   }
 
   setLayoutModalIsOpen(value) {
@@ -466,7 +466,7 @@ class OptionsDropdown extends PureComponent {
   }
 
   renderModal(isOpen, setIsOpen, priority, Component, otherOptions) {
-    return isOpen ? <Component 
+    return isOpen ? <Component
       {...{
         ...otherOptions,
         onRequestClose: () => setIsOpen(false),
@@ -527,13 +527,13 @@ class OptionsDropdown extends PureComponent {
         />
         {this.renderModal(isAboutModalOpen, this.setAboutModalIsOpen, "low",
           AboutContainer)}
-        {this.renderModal(isShortcutHelpModalOpen, this.setShortcutHelpModalIsOpen, 
+        {this.renderModal(isShortcutHelpModalOpen, this.setShortcutHelpModalIsOpen,
           "low", ShortcutHelpComponent)}
-        {this.renderModal(isOptionsMenuModalOpen, this.setOptionsMenuModalIsOpen, 
+        {this.renderModal(isOptionsMenuModalOpen, this.setOptionsMenuModalIsOpen,
           "low", OptionsMenuContainer)}
-        {this.renderModal(isEndMeetingConfirmationModalOpen, this.setEndMeetingConfirmationModalIsOpen, 
+        {this.renderModal(isEndMeetingConfirmationModalOpen, this.setEndMeetingConfirmationModalIsOpen,
           "low", EndMeetingConfirmationContainer)}
-        {this.renderModal(isMobileAppModalOpen, this.setMobileAppModalIsOpen, "low", 
+        {this.renderModal(isMobileAppModalOpen, this.setMobileAppModalIsOpen, "low",
           MobileAppModal)}
         {this.renderModal(
           isLayoutModalOpen,

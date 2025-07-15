@@ -193,20 +193,24 @@ const LayoutEngine = () => {
     let minWidth = 0;
     let width = 0;
     let maxWidth = 0;
+
+    if (isMobile) {
+      // If micro, forget the sidebar.
+      return {
+        minWidth: 0,
+        width: 0,
+        maxWidth: 0,
+      };
+    }
+
     if (isOpen) {
-      if (isMobile) {
-        minWidth = windowWidth();
-        width = windowWidth();
-        maxWidth = windowWidth();
+      if (sidebarNavWidth === 0) {
+        width = min(max((windowWidth() * 0.2), sidebarNavMinWidth), sidebarNavMaxWidth);
       } else {
-        if (sidebarNavWidth === 0) {
-          width = min(max((windowWidth() * 0.2), sidebarNavMinWidth), sidebarNavMaxWidth);
-        } else {
-          width = min(max(sidebarNavWidth, sidebarNavMinWidth), sidebarNavMaxWidth);
-        }
-        minWidth = sidebarNavMinWidth;
-        maxWidth = sidebarNavMaxWidth;
+        width = min(max(sidebarNavWidth, sidebarNavMinWidth), sidebarNavMaxWidth);
       }
+      minWidth = sidebarNavMinWidth;
+      maxWidth = sidebarNavMaxWidth;
     }
     return {
       minWidth,
