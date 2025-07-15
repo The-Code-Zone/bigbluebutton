@@ -14,6 +14,7 @@ import { useIsPresentationEnabled } from '/imports/ui/services/features';
 import Session from '/imports/ui/services/storage/in-memory';
 import MediaOnlyLayout from './mediaOnlyLayout';
 import { usePrevious } from '../../whiteboard/utils';
+import { isMicro } from '../utils';
 
 const LayoutEngine = () => {
   const bannerBarInput = layoutSelectInput((i) => i.bannerBar);
@@ -257,6 +258,15 @@ const LayoutEngine = () => {
     let minWidth = 0;
     let width = 0;
     let maxWidth = 0;
+
+    if (isMicro()) {
+      // If micro, forget the sidebar.
+      return {
+        minWidth: 0,
+        width: 0,
+        maxWidth: 0,
+      };
+    }
 
     if (isOpen) {
       if (isMobile) {
