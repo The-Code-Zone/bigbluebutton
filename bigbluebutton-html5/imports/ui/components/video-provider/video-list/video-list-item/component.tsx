@@ -24,7 +24,7 @@ import PluginButtonContainer from '../../../plugins/plugin-button/container';
 import { UserCameraHelperAreas } from '../../../plugins-engine/extensible-areas/components/user-camera-helper/types';
 import logger from '/imports/startup/client/logger';
 import { useReactiveVar } from '@apollo/client';
-import { isMobile } from '../../../layout/utils';
+import { isMicro } from '../../../layout/utils';
 
 const intlMessages = defineMessages({
   disableDesc: {
@@ -443,7 +443,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
     // @ts-expect-error -> Until everything in Typescript.
     <Styled.Content
       style={
-        isMobile() ? { display: 'none' } : {}
+        isMicro() ? { display: 'none' } : {}
       }
       ref={videoContainer}
       talking={talking}
