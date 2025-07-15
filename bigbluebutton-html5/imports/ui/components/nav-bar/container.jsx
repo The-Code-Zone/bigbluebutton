@@ -99,9 +99,7 @@ const NavBarContainer = ({ children, ...props }) => {
     value: hideNavBar,
   });
 
-  if (hideNavBar)
-
-    if (hideNavBar || navBar.display === false) return null;
+  if (hideNavBar || navBar.display === false) return null;
 
   let pluginNavBarItems = [];
   if (pluginsExtensibleAreasAggregatedState.navBarItems) {
