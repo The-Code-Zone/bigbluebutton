@@ -5,7 +5,7 @@ import {
   SYNC,
 } from './enums';
 
-const phoneUpperBoundary = 600;
+const phoneUpperBoundary = 400;
 const tabletPortraitUpperBoundary = 900;
 const tabletLandscapeUpperBoundary = 1200;
 
