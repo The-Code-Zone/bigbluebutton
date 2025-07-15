@@ -195,6 +195,27 @@ const PushLayoutEngine = (props) => {
   }, [hasMeetingLayout, enforceLayoutResult]);
 
   useEffect(() => {
+    const prevProps = props;
+
+    const presenterAndFocusedCameraChanged = (isPresenter && focusedCamera !== prevProps.focusedCamera);
+    const viewerAndFocusedCameraChanged = (!isPresenter && meetingLayoutFocusedCamera !== prevProps.meetingLayoutFocusedCamera);
+
+    if (presenterAndFocusedCameraChanged) setMeetingLayout();
+    if (viewerAndFocusedCameraChanged) {
+      layoutContextDispatch({
+        type: ACTIONS.SET_FOCUSED_CAMERA_ID,
+        value: meetingLayoutFocusedCamera,
+      });
+    }
+  }, [
+    isPresenter,
+    focusedCamera,
+    meetingLayoutFocusedCamera,
+  ]);
+
+  return null; // FIXME: if this works, remove the rest.
+
+  useEffect(() => {
     if (!selectedLayout) return () => { };
     const meetingLayoutDidChange = meetingLayout !== prevProps.meetingLayout;
     const pushLayoutMeetingDidChange = pushLayoutMeeting !== prevProps.pushLayoutMeeting;
