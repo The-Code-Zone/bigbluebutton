@@ -53,7 +53,7 @@ const NavBarContainer = ({ children, ...props }) => {
 
   const isExpanded = !!sidebarContentPanel || !!sidebarNavPanel;
 
-  const hideNavBar = getFromUserSettings('bbb_hide_nav_bar', false);
+  const hideNavBar = getFromUserSettings('bbb_hide_nav_bar', false) || isMobile();
 
   const PUBLIC_CONFIG = window.meetingClientSettings.public;
   const CLIENT_TITLE = getFromUserSettings('bbb_client_title', PUBLIC_CONFIG.app.clientTitle);
@@ -94,7 +94,14 @@ const NavBarContainer = ({ children, ...props }) => {
     }
   }
 
-  if (hideNavBar || navBar.display === false || isMobile()) return null;
+  layoutContextDispatch({
+    type: ACTIONS.SET_HAS_NAVBAR,
+    value: hideNavBar,
+  });
+
+  if (hideNavBar)
+
+    if (hideNavBar || navBar.display === false) return null;
 
   let pluginNavBarItems = [];
   if (pluginsExtensibleAreasAggregatedState.navBarItems) {
