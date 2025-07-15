@@ -259,7 +259,7 @@ const LayoutEngine = () => {
     let width = 0;
     let maxWidth = 0;
 
-    if (isMicro()) {
+    if (isMobile) {
       // If micro, forget the sidebar.
       return {
         minWidth: 0,
@@ -269,23 +269,18 @@ const LayoutEngine = () => {
     }
 
     if (isOpen) {
-      if (isMobile) {
-        minWidth = windowWidth();
-        width = windowWidth();
-        maxWidth = windowWidth();
+      if (sidebarContentWidth === 0) {
+        width = min(
+          max((windowWidth() * 0.2), sidebarContentMinWidth), sidebarContentMaxWidth,
+        );
       } else {
-        if (sidebarContentWidth === 0) {
-          width = min(
-            max((windowWidth() * 0.2), sidebarContentMinWidth), sidebarContentMaxWidth,
-          );
-        } else {
-          width = min(max(sidebarContentWidth, sidebarContentMinWidth),
-            sidebarContentMaxWidth);
-        }
-        minWidth = sidebarContentMinWidth;
-        maxWidth = sidebarContentMaxWidth;
+        width = min(max(sidebarContentWidth, sidebarContentMinWidth),
+          sidebarContentMaxWidth);
       }
+      minWidth = sidebarContentMinWidth;
+      maxWidth = sidebarContentMaxWidth;
     }
+
     return {
       minWidth,
       width,
