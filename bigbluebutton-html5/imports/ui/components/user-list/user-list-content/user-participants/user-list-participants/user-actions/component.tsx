@@ -593,7 +593,7 @@ const UserActions: React.FC<UserActionsProps> = ({
   ];
 
   const actions = dropdownOptions.filter((key) => key.allowed);
-  if (!(actions.length > 1) || user.bot) {
+  if (user.bot) {
     return (
       <Styled.NoPointerEvents>
         {children}
