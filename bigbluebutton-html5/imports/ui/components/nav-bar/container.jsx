@@ -13,6 +13,7 @@ import { useShortcut } from '../../core/hooks/useShortcut';
 import useMeeting from '../../core/hooks/useMeeting';
 import { registerTitleView } from '/imports/utils/dom-utils';
 import { isMobile } from '../layout/utils';
+import { ACTIONS } from '/imports/ui/components/layout/enums';
 
 const intlMessages = defineMessages({
   defaultViewLabel: {
