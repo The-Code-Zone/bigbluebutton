@@ -195,14 +195,14 @@ const PushLayoutEngine = (props) => {
   }, [hasMeetingLayout, enforceLayoutResult]);
 
   useEffect(() => {
-    if (!selectedLayout) return () => {};
+    if (!selectedLayout) return () => { };
     const meetingLayoutDidChange = meetingLayout !== prevProps.meetingLayout;
     const pushLayoutMeetingDidChange = pushLayoutMeeting !== prevProps.pushLayoutMeeting;
     const enforceLayoutDidChange = enforceLayoutResult !== prevProps.enforceLayoutResult;
     const shouldSwitchLayout = isPresenter
       ? meetingLayoutDidChange || enforceLayoutDidChange
       : ((meetingLayoutDidChange || pushLayoutMeetingDidChange) && pushLayoutMeeting)
-        || enforceLayoutDidChange;
+      || enforceLayoutDidChange;
     const layoutReplicateElements = LAYOUTS_SYNC[selectedLayout][SYNC.REPLICATE_ELEMENTS];
     const layoutPropagateElements = LAYOUTS_SYNC[selectedLayout][SYNC.PROPAGATE_ELEMENTS];
     const Settings = getSettingsSingletonInstance();
@@ -351,7 +351,7 @@ const PushLayoutEngine = (props) => {
     if (selectedLayout !== prevProps.selectedLayout) {
       Session.setItem('isGridEnabled', selectedLayout === LAYOUT_TYPE.VIDEO_FOCUS);
     }
-    return () => {};
+    return () => { };
   });
 
   return null;
@@ -428,7 +428,7 @@ const PushLayoutEngineContainer = (props) => {
 
   const presentationVideoRate = calculatePresentationVideoRate(cameraDockOutput);
 
-  const pushLayout = getKeepPushingLayout();
+  const pushLayout = true; //getKeepPushingLayout(); TODO: make this a config option, if it works.
 
   const setLocalSettings = useUserChangedLocalSettings();
   const setPushLayout = usePushLayoutUpdater(pushLayout);
