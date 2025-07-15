@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import Auth from '/imports/ui/services/auth';
 import getFromUserSettings from '/imports/ui/services/users-settings';
@@ -14,7 +14,6 @@ import useMeeting from '../../core/hooks/useMeeting';
 import { registerTitleView } from '/imports/utils/dom-utils';
 import { isMobile } from '../layout/utils';
 import { ACTIONS } from '/imports/ui/components/layout/enums';
-
 const intlMessages = defineMessages({
   defaultViewLabel: {
     id: 'app.title.defaultViewLabel',
