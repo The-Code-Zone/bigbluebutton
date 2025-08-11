@@ -27,6 +27,7 @@ const Navbar = styled.header`
 const Top = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 `;
 
 const Left = styled.div`
