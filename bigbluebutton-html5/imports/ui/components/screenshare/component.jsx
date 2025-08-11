@@ -80,6 +80,7 @@ class ScreenshareComponent extends React.Component {
       showHoverToolBar: false,
       screenshareRef: null,
       videoTagRef: null,
+      flipped: false,
     };
 
     this.onLoadedData = this.onLoadedData.bind(this);
@@ -89,6 +90,7 @@ class ScreenshareComponent extends React.Component {
     this.handlePlayElementFailed = this.handlePlayElementFailed.bind(this);
     this.failedMediaElements = [];
     this.onSwitched = this.onSwitched.bind(this);
+    this.onFlipped = this.onFlipped.bind(this);
     this.handleOnVolumeChanged = this.handleOnVolumeChanged.bind(this);
     this.dispatchScreenShareSize = this.dispatchScreenShareSize.bind(this);
     this.handleOnMuted = this.handleOnMuted.bind(this);
@@ -309,6 +311,10 @@ class ScreenshareComponent extends React.Component {
     this.setState((prevState) => ({ switched: !prevState.switched }));
   }
 
+  onFlipped() {
+    this.setState((prevState) => ({ flipped: !prevState.flipped }));
+  }
+
   handleOnVolumeChanged(volume) {
     this.volume = volume;
     setVolume(volume);
@@ -377,7 +383,23 @@ class ScreenshareComponent extends React.Component {
     );
   }
 
-  renderMobileVolumeControlOverlay () {
+  renderFlipButton() {
+    const { intl } = this.props;
+
+    return (
+      <Button
+        key="flip-button"
+        onClick={this.onFlipped}
+        style={{}}
+        aria-label="Flip video"
+        title="Flip video"
+      >
+        ↔
+      </Button>
+    )
+  }
+
+  renderMobileVolumeControlOverlay() {
     return (
       <Styled.MobileControlsOverlay
         key="mobile-overlay-screenshare"
@@ -426,16 +448,19 @@ class ScreenshareComponent extends React.Component {
 
   renderVideo(switched) {
     const { isGloballyBroadcasting } = this.props;
-    const { videoTagRef } = this.state;
+    const { videoTagRef, flipped } = this.state;
 
     return (
       <Styled.ScreenshareVideo
         id={SCREENSHARE_MEDIA_ELEMENT_NAME}
         key={SCREENSHARE_MEDIA_ELEMENT_NAME}
         unhealthyStream={!isGloballyBroadcasting}
-        style={switched
-          ? { maxHeight: '100%', width: '100%', height: '100%' }
-          : { maxHeight: '25%', width: '25%', height: '25%' }}
+        style={{
+          ...(switched
+            ? { maxHeight: '100%', width: '100%', height: '100%' }
+            : { maxHeight: '25%', width: '25%', height: '25%' }),
+          transform: flipped ? 'scaleX(-1)' : 'scaleX(1)',
+        }}
         playsInline
         onLoadedData={this.onLoadedData}
         onLoadedMetadata={this.onLoadedMetadata}
@@ -514,7 +539,7 @@ class ScreenshareComponent extends React.Component {
     return (
       <>
         {this.renderVideo(true)}
-        {loaded && enableVolumeControl && this.renderVolumeSlider() }
+        {loaded && enableVolumeControl && this.renderVolumeSlider()}
 
         <Styled.ScreenshareContainerDefault>
           {
@@ -555,6 +580,7 @@ class ScreenshareComponent extends React.Component {
             ? isGloballyBroadcasting && this.renderSwitchButton()
             // Non-presenter button:
             : loaded && this.renderFullscreenButton()}
+          {isPresenter && this.renderFlipButton()}
           {renderPluginItems(topRightPluginItems, false, true)}
         </Styled.ScreenshareButtonsContainterWrapper>
         <Styled.ScreenshareButtonsContainterWrapper
