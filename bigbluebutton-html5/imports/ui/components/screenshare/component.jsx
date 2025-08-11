@@ -391,15 +391,9 @@ class ScreenshareComponent extends React.Component {
       <Button
         key="flip-button"
         onClick={this.onFlipped}
-        style={{
-          height: '2em',
-          border: 'none',
-          backgroundColor: 'transparent',
-          margin: '10px',
-          padding: '0',
-        }}
-        aria-label="Flip video"
-        title="↩️Flip"
+        circle
+        size="sm"
+        label="↩️"
       />
     )
   }
