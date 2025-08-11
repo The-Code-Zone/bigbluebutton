@@ -399,10 +399,8 @@ class ScreenshareComponent extends React.Component {
           padding: '0',
         }}
         aria-label="Flip video"
-        title="↩️"
-      >
-        <p>↩️test</p>
-      </Button>
+        title="↩️Flip"
+      />
     )
   }
 
