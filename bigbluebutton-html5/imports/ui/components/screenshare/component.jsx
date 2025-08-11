@@ -390,10 +390,12 @@ class ScreenshareComponent extends React.Component {
     return (
       <Button
         key="flip-button"
+        label="Flip video"
         onClick={this.onFlipped}
         circle
         size="sm"
-        label="↩️"
+        hideLabel
+        icon="refresh"
       />
     )
   }
