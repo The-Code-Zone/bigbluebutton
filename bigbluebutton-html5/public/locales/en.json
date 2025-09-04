@@ -277,7 +277,7 @@
     "app.meeting.endedByUserMessage": "This session was ended by {0}",
     "app.meeting.endedByNoModeratorMessageSingular": "The session has ended because no moderator has been present for one minute",
     "app.meeting.endedByNoModeratorMessagePlural": "The session has ended because no moderator has been present for {0} minutes",
-    "app.meeting.endedMessage": "Feel free to close this window with the 'X' in the corner!",
+    "app.meeting.endedMessage": "Feel free to close this window with the 'x' in the top right!",
     "app.meeting.alertMeetingEndsUnderMinutesSingular": "Session is closing in one minute.",
     "app.meeting.alertMeetingEndsUnderMinutesPlural": "Session is closing in {0} minutes.",
     "app.meeting.alertBreakoutEndsUnderMinutesPlural": "Breakout is closing in {0} minutes.",
