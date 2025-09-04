@@ -948,7 +948,7 @@
     "app.dropdown.list.item.activeLabel": "Active",
     "app.error.400": "Bad Request",
     "app.error.401": "Unauthorized",
-    "app.error.403": "You have been removed from the session",
+    "app.error.403": "It looks like you've joined this call elsewhere (another tab, or the QR code in the corner), so we've closed this one for you. Feel free to close this window!",
     "app.error.404": "Not found",
     "app.error.408": "Authentication failed",
     "app.error.409": "Conflict",
