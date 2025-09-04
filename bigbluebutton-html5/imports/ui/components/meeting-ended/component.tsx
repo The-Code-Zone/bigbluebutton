@@ -217,7 +217,7 @@ const MeetingEnded: React.FC<MeetingEndedProps> = ({
             {intl.formatMessage(intlMessage.messageEnded)}
           </Styled.Text>
           <Styled.ArrowToClose>
-            <svg viewBox="0 0 230.453 230.453"><path d="M177.169 43.534v15h27.676l-68.949 68.945L92.36 83.947 0 176.312l10.606 10.606 81.755-81.758 43.535 43.531 79.557-79.551v27.644h15v-53.25z" /></svg>
+            <svg viewBox="0 0 230.453 230.453"><path stroke="white" fill="white" d="M177.169 43.534v15h27.676l-68.949 68.945L92.36 83.947 0 176.312l10.606 10.606 81.755-81.758 43.535 43.531 79.557-79.551v27.644h15v-53.25z" /></svg>
           </Styled.ArrowToClose>
         </Styled.Wrapper>
       )

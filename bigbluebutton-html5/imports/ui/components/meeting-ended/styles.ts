@@ -105,8 +105,8 @@ const ArrowToClose = styled.div`
   position: absolute;
   top: 0.5rem;   /* adjust as needed */
   right: 3rem;   /* adjust as needed */
-  width: 24px;
-  height: 24px;
+  width: 64px;
+  height: 64px;
   z-index: 1000;
 
   svg {
