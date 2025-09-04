@@ -926,7 +926,7 @@
     "app.error.meeting.ended": "You have logged out of the conference",
     "app.meeting.logout.duplicateUserEjectReason": "Duplicate user trying to join session",
     "app.meeting.logout.permissionEjectReason": "Ejected due to permission violation",
-    "app.meeting.logout.ejectedFromMeeting": "You have been removed from the session",
+    "app.meeting.logout.ejectedFromMeeting": "It looks like you've joined this call elsewhere (another tab, or the QR code in the corner), so we've closed this one for you. Feel free to close this window!",
     "app.meeting.logout.validateTokenFailedEjectReason": "Failed to validate authorization token",
     "app.meeting.logout.userInactivityEjectReason": "User inactive for too long",
     "app.meeting.logout.maxParticipantsReached": "The maximum number of participants allowed for this session has been reached",
