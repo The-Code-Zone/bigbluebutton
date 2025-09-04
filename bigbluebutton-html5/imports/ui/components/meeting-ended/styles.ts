@@ -101,6 +101,21 @@ const TextArea = styled.textarea`
   }
 `;
 
+const ArrowToClose = styled.div`
+  position: absolute;
+  top: 0.5rem;   /* adjust as needed */
+  right: 3rem;   /* adjust as needed */
+  width: 24px;
+  height: 24px;
+  z-index: 1000;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+`;
+
 export default {
   Parent,
   Modal,
@@ -108,6 +123,7 @@ export default {
   Title,
   Text,
   MeetingEndedButton,
+  ArrowToClose,
   TextArea,
   Wrapper,
 };

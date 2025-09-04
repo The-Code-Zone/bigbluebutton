@@ -210,49 +210,15 @@ const MeetingEnded: React.FC<MeetingEndedProps> = ({
   };
 
   const logoutButton = useMemo(() => {
-    const { locale } = intl;
     return (
       (
         <Styled.Wrapper>
-          {
-            learningDashboardAccessToken && isModerator
-            // Always set cookie in case Dashboard is already opened
-            && setLearningDashboardCookie(learningDashboardAccessToken, meetingId, learningDashboardBase) === true
-              ? (
-                <>
-                  <Styled.Text>
-                    {intl.formatMessage(intlMessage.open_activity_report_btn)}
-                  </Styled.Text>
-
-                  <Styled.MeetingEndedButton
-                    color="default"
-                    onClick={() => openLearningDashboardUrl(learningDashboardAccessToken,
-                      meetingId,
-                      authToken,
-                      learningDashboardBase,
-                      locale)}
-                    aria-details={intl.formatMessage(intlMessage.open_activity_report_btn)}
-                  >
-                    <Icon
-                      iconName="multi_whiteboard"
-                    />
-                  </Styled.MeetingEndedButton>
-                </>
-              ) : null
-          }
           <Styled.Text>
             {intl.formatMessage(intlMessage.messageEnded)}
           </Styled.Text>
-
-          <Styled.MeetingEndedButton
-            color="primary"
-            onClick={() => confirmRedirect(isBreakout, allowRedirect)}
-            /* @eslint-disable-next-line */
-            aria-details={intl.formatMessage(intlMessage.confirmDesc)}
-            data-test="redirectButton"
-          >
-            {intl.formatMessage(intlMessage.buttonOkay)}
-          </Styled.MeetingEndedButton>
+          <Styled.ArrowToClose>
+            <svg viewBox="0 0 230.453 230.453"><path d="M177.169 43.534v15h27.676l-68.949 68.945L92.36 83.947 0 176.312l10.606 10.606 81.755-81.758 43.535 43.531 79.557-79.551v27.644h15v-53.25z" /></svg>
+          </Styled.ArrowToClose>
         </Styled.Wrapper>
       )
     );
