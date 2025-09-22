@@ -391,6 +391,12 @@ export const getUserNamesLink = (docTitle, fnSortedLabel, lnSortedLabel, users, 
   return link;
 };
 
+const getStorageOrDefault = (key, defaultValue) => {
+  const stored = localStorage.getItem(key);
+  if (stored === null) return defaultValue;
+  return stored === 'true';
+};
+
 const UserJoinedMeetingAlert = (obj) => {
   const Settings = getSettingsSingletonInstance();
   const {
@@ -398,15 +404,18 @@ const UserJoinedMeetingAlert = (obj) => {
     userJoinPushAlerts,
   } = Settings.application;
 
-  if (!userJoinAudioAlerts && !userJoinPushAlerts) return;
+  const audioAlert = getStorageOrDefault('userJoinAudioAlerts', userJoinAudioAlerts);
+  const pushAlert = getStorageOrDefault('userJoinPushAlerts', userJoinPushAlerts);
 
-  if (userJoinAudioAlerts) {
+  if (!audioAlert && !pushAlert) return;
+
+  if (audioAlert) {
     AudioService.playAlertSound(`${window.meetingClientSettings.public.app.cdn
       + window.meetingClientSettings.public.app.basename}`
       + '/resources/sounds/userJoin.mp3');
   }
 
-  if (userJoinPushAlerts) {
+  if (pushAlert) {
     notify(
       // eslint-disable-next-line react/jsx-filename-extension
       <FormattedMessage
@@ -427,15 +436,18 @@ const UserLeftMeetingAlert = (obj) => {
     userLeavePushAlerts,
   } = Settings.application;
 
-  if (!userLeaveAudioAlerts && !userLeavePushAlerts) return;
+  const audioAlert = getStorageOrDefault('userLeaveAudioAlerts', userLeaveAudioAlerts);
+  const pushAlert = getStorageOrDefault('userLeavePushAlerts', userLeavePushAlerts);
 
-  if (userLeaveAudioAlerts) {
+  if (!audioAlert && !pushAlert) return;
+
+  if (audioAlert) {
     AudioService.playAlertSound(`${window.meetingClientSettings.public.app.cdn
       + window.meetingClientSettings.public.app.basename}`
       + '/resources/sounds/notify.mp3');
   }
 
-  if (userLeavePushAlerts) {
+  if (pushAlert) {
     notify(
       <FormattedMessage
         id={obj.messageId}
