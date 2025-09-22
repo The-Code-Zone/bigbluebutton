@@ -234,9 +234,9 @@ export const usePageSizeDictionary = () => {
       desktopPageSizes?: DesktopPageSizes,
       mobilePageSizes?: MobilePageSizes,
     } = {
-      desktopPageSizes: DESKTOP_PAGE_SIZES,
-      mobilePageSizes: MOBILE_PAGE_SIZES,
-    },
+        desktopPageSizes: DESKTOP_PAGE_SIZES,
+        mobilePageSizes: MOBILE_PAGE_SIZES,
+      },
   ) => {
     // We don't demand that all page sizes should be set in pagination profiles.
     // That saves us some space because don't necessarily need to scale mobile
@@ -395,6 +395,10 @@ export const useVideoStreams = () => {
   const connectingStream = useConnectingStream(videoStreams);
   const myPageSize = useMyPageSize();
   const isPaginationEnabled = useIsPaginationEnabled();
+  const myVideoEnabled = useHasVideoStream();
+  const myRole = useMyRole();
+  const ROLE_MENTOR = videoService.getRoleModerator();
+  const IS_MENTOR = myRole === ROLE_MENTOR;
   let streams: StreamItem[] = [...videoStreams];
   let totalNumberOfOtherStreams: number | undefined;
 
@@ -405,7 +409,8 @@ export const useVideoStreams = () => {
 
   if (connectingStream) streams.push(connectingStream);
 
-  if (!viewParticipantsWebcams) {
+
+  if (!viewParticipantsWebcams || (!myVideoEnabled && !IS_MENTOR)) {
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream));
   }
 
