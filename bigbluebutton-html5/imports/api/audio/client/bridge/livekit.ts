@@ -339,6 +339,17 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
 
     if ((!stream || this.originalStream?.id === stream.id || streamDeviceId === originalDeviceId)
       && !force) {
+      logger.debug({
+        logCode: 'livekit_audio_set_input_stream_noop',
+        extraInfo: {
+          bridge: this.bridgeName,
+          role: this.role,
+          streamData: MediaStreamUtils.getMediaStreamLogData(stream),
+          originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+          deviceId: options?.deviceId,
+          force: options?.force,
+        },
+      }, 'Livekit: set audio input stream noop');
       return Promise.resolve();
     }
 
@@ -354,6 +365,18 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
 
     this.inputDeviceId = newDeviceId;
     this.originalStream = stream;
+    logger.debug({
+      logCode: 'livekit_audio_set_input_stream',
+      extraInfo: {
+        bridge: this.bridgeName,
+        role: this.role,
+        inputDeviceId: this.inputDeviceId,
+        streamData: MediaStreamUtils.getMediaStreamLogData(stream),
+        originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+        deviceId: options?.deviceId,
+        force: options?.force,
+      },
+    }, 'Livekit: set audio input stream');
 
     if (hasCurrentPub) {
       return this.publish(stream)
@@ -368,6 +391,7 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
               role: this.role,
               inputDeviceId: this.inputDeviceId,
               streamData: MediaStreamUtils.getMediaStreamLogData(stream),
+              originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
             },
           }, 'LiveKit: set audio input stream failed');
           throw error;
@@ -379,6 +403,63 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
   }
 
   async liveChangeInputDevice(deviceId: string): Promise<MediaStream | null> {
+    let newStream: MediaStream | null = null;
+    let backupStream: MediaStream | null = null;
+
+    const backup = () => {
+      backupStream = this.inputStream ? this.inputStream.clone() : null;
+    };
+
+    const cleanup = () => {
+      if (backupStream) {
+        backupStream.getAudioTracks().forEach((track) => track.stop());
+        backupStream = null;
+      }
+    };
+
+    const rollback = () => {
+      logger.warn({
+        logCode: 'livekit_audio_changeinputdevice_rollback',
+        extraInfo: {
+          bridge: this.bridgeName,
+          deviceId,
+          role: this.role,
+          streamData: MediaStreamUtils.getMediaStreamLogData(this.inputStream),
+          originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+          newStreamData: MediaStreamUtils.getMediaStreamLogData(newStream),
+          backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
+        },
+      }, 'Livekit: rolling back to previous audio input stream');
+    }
+
+    if (newStream && typeof newStream.getAudioTracks === 'function') {
+      newStream.getAudioTracks().forEach((t) => t.stop());
+      newStream = null;
+    }
+
+    if (backupStream && backupStream.active) {
+      this.setInputStream(backupStream, { force: true }).catch((rollbackError) => {
+        logger.error({
+          logCode: 'audio_changeinputdevice_rollback_failure',
+          extraInfo: {
+            bridge: this.bridgeName,
+            deviceId,
+            role: this.role,
+            streamData: MediaStreamUtils.getMediaStreamLogData(this.inputStream),
+            originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+            newStreamData: MediaStreamUtils.getMediaStreamLogData(newStream),
+            backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
+            errorName: rollbackError?.name,
+            errorMessage: rollbackError?.message,
+            errorStack: rollbackError?.stack,
+          },
+        }, 'Microphone device change rollback failed - the device may become silent');
+        cleanup();
+      });
+    } else {
+      cleanup();
+    }
+
     // Remove all input audio tracks from the stream
     // This will effectively mute the microphone
     // and keep the audio output working
@@ -399,77 +480,81 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
 
     // We have a published track, use LK's own method to switch the device
     if (hasUnmutedTrack) {
-      await liveKitRoom.switchActiveDevice('audioinput', deviceId, false);
-      if (this.publicationTrackStream) {
-        this.originalStream = this.publicationTrackStream;
+      try {
+        backup();
+        const switched = await liveKitRoom.switchActiveDevice('audioinput', deviceId, true);
+        if (!switched) {
+          logger.warn({
+            logCode: 'livekit_audio_input_device_not_switched',
+            extraInfo: {
+              bridge: this.bridgeName,
+              deviceId,
+              streamData: MediaStreamUtils.getMediaStreamLogData(this.inputStream),
+              originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+              newStreamData: MediaStreamUtils.getMediaStreamLogData(newStream),
+              backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
+            },
+          }, 'LiveKit: audio device not switched');
+          cleanup();
+          throw new Error('LiveKit audio device not switched');
+        }
+
         this.inputDeviceId = deviceId;
-      } else {
-        logger.warn({
-          logCode: 'livekit_audio_switch_pub_stream_missing',
+        if (this.publicationTrackStream) {
+          this.originalStream = this.publicationTrackStream;
+        } else {
+          cleanup();
+          logger.warn({
+            logCode: 'livekit_audio_switch_pub_stream_missing',
+            extraInfo: {
+              bridge: this.bridgeName,
+              role: this.role,
+              deviceId,
+              streamData: MediaStreamUtils.getMediaStreamLogData(this.inputStream),
+              originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+              newStreamData: MediaStreamUtils.getMediaStreamLogData(newStream),
+              backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
+            },
+          }, 'LiveKit: publication stream missing after device switch');
+        }
+        return this.inputStream;
+      } catch (error) {
+        logger.error({
+          logCode: 'livekit_audio_live_change_input_device_error',
           extraInfo: {
-            bridgeName: this.bridgeName,
+            errorMessage: (error as Error)?.message,
+            errorName: (error as Error)?.name,
+            errorStack: (error as Error)?.stack,
+            bridge: this.bridgeName,
             role: this.role,
             deviceId,
             streamData: MediaStreamUtils.getMediaStreamLogData(this.inputStream),
+            originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+            newStreamData: MediaStreamUtils.getMediaStreamLogData(newStream),
+            backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
           },
-        }, 'LiveKit: publication stream missing after device switch');
-      }
-
-      return this.inputStream;
-    }
-
-    let newStream: MediaStream | null = null;
-    let backupStream: MediaStream | null = null;
-
-    try {
-      const constraints = {
-        audio: getAudioConstraints({ deviceId }),
-      };
-
-      // Backup stream (current one) in case the switch fails
-      if (this.inputStream && this.inputStream.active) {
-        backupStream = this.inputStream ? this.inputStream.clone() : null;
-        this.inputStream.getAudioTracks().forEach((track) => track.stop());
-      }
-
-      newStream = await doGUM(constraints);
-      await this.setInputStream(newStream, { deviceId });
-      if (backupStream && backupStream.active) {
-        backupStream.getAudioTracks().forEach((track) => track.stop());
-        backupStream = null;
-      }
-
-      return newStream;
-    } catch (error) {
-      // Device change failed. Clean up the tentative new stream to avoid lingering
-      // stuff, then try to rollback to the previous input stream.
-      if (newStream && typeof newStream.getAudioTracks === 'function') {
-        newStream.getAudioTracks().forEach((t) => t.stop());
-        newStream = null;
-      }
-
-      // Rollback to backup stream
-      if (backupStream && backupStream.active) {
-        this.setInputStream(backupStream).catch((rollbackError) => {
-          logger.error({
-            logCode: 'audio_changeinputdevice_rollback_failure',
-            extraInfo: {
-              bridgeName: this.bridgeName,
-              deviceId,
-              errorName: rollbackError.name,
-              errorMessage: rollbackError.message,
-            },
-          }, 'Microphone device change rollback failed - the device may become silent');
-
-          if (backupStream) {
-            backupStream.getAudioTracks().forEach((track) => track.stop());
-          }
-
-          backupStream = null;
+        }, 'LiveKit: live change inptu device failed');
+        this.unpublish().finally(() => {
+          rollback();
         });
+        throw error;
       }
+    } else {
+      try {
+        const constraints = {
+          audio: getAudioConstraints({ deviceId }),
+        };
 
-      throw error;
+        backup();
+        newStream = await doGUM(constraints);
+        await this.setInputStream(newStream, { deviceId });
+        cleanup();
+
+        return newStream;
+      } catch (error) {
+        rollback();
+        throw error;
+      }
     }
   }
 
