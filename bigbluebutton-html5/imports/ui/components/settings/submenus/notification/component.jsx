@@ -99,7 +99,7 @@ class NotificationMenu extends BaseMenu {
                   {displaySettingsStatus(settings.chatAudioAlerts)}
                   <Toggle
                     icons={false}
-                    defaultChecked={() => this.getStorageOrDefault('chatAudioAlerts', settings.chatAudioAlerts)}
+                    defaultChecked={settings.chatAudioAlerts}
                     onChange={() => this.handleToggle('chatAudioAlerts')}
                     ariaLabel={`${intl.formatMessage(intlMessages.messagesLabel)} ${intl.formatMessage(intlMessages.audioAlertLabel)} - ${displaySettingsStatus(settings.chatAudioAlerts, true)}`}
                     showToggleLabel={showToggleLabel}
@@ -111,7 +111,7 @@ class NotificationMenu extends BaseMenu {
                   {displaySettingsStatus(settings.chatPushAlerts)}
                   <Toggle
                     icons={false}
-                    defaultChecked={() => this.getStorageOrDefault('chatPushAlerts', settings.chatPushAlerts)}
+                    defaultChecked={settings.chatPushAlerts}
                     onChange={() => this.handleToggle('chatPushAlerts')}
                     ariaLabel={`${intl.formatMessage(intlMessages.messagesLabel)} ${intl.formatMessage(intlMessages.pushAlertLabel)} - ${displaySettingsStatus(settings.chatPushAlerts, true)}`}
                     showToggleLabel={showToggleLabel}
@@ -133,7 +133,7 @@ class NotificationMenu extends BaseMenu {
                 {displaySettingsStatus(settings.userJoinAudioAlerts)}
                 <Toggle
                   icons={false}
-                  defaultChecked={() => this.getStorageOrDefault('userJoinAudioAlerts', settings.userJoinAudioAlerts)}
+                  defaultChecked={settings.userJoinAudioAlerts}
                   onChange={() => this.handleToggle('userJoinAudioAlerts')}
                   ariaLabel={`${intl.formatMessage(intlMessages.userJoinLabel)} ${intl.formatMessage(intlMessages.audioAlertLabel)} - ${displaySettingsStatus(settings.userJoinAudioAlerts, true)}`}
                   showToggleLabel={showToggleLabel}
@@ -145,7 +145,7 @@ class NotificationMenu extends BaseMenu {
                 {displaySettingsStatus(settings.userJoinPushAlerts)}
                 <Toggle
                   icons={false}
-                  defaultChecked={() => this.getStorageOrDefault('userJoinPushAlerts', settings.userJoinPushAlerts)}
+                  defaultChecked={settings.userJoinPushAlerts}
                   onChange={() => this.handleToggle('userJoinPushAlerts')}
                   ariaLabel={`${intl.formatMessage(intlMessages.userJoinLabel)} ${intl.formatMessage(intlMessages.pushAlertLabel)} - ${displaySettingsStatus(settings.userJoinPushAlerts, true)}`}
                   showToggleLabel={showToggleLabel}
@@ -166,7 +166,7 @@ class NotificationMenu extends BaseMenu {
                 {displaySettingsStatus(settings.userLeaveAudioAlerts)}
                 <Toggle
                   icons={false}
-                  defaultChecked={() => this.getStorageOrDefault('userLeaveAudioAlerts', settings.userLeaveAudioAlerts)}
+                  defaultChecked={settings.userLeaveAudioAlerts}
                   onChange={() => this.handleToggle('userLeaveAudioAlerts')}
                   ariaLabel={`${intl.formatMessage(intlMessages.userLeaveLabel)} ${intl.formatMessage(intlMessages.audioAlertLabel)} - ${displaySettingsStatus(settings.userLeaveAudioAlerts, true)}`}
                   showToggleLabel={showToggleLabel}
@@ -178,7 +178,7 @@ class NotificationMenu extends BaseMenu {
                 {displaySettingsStatus(settings.userLeavePushAlerts)}
                 <Toggle
                   icons={false}
-                  defaultChecked={() => this.getStorageOrDefault('userLeavePushAlerts', settings.userLeavePushAlerts)}
+                  defaultChecked={settings.userLeavePushAlerts}
                   onChange={() => this.handleToggle('userLeavePushAlerts')}
                   ariaLabel={`${intl.formatMessage(intlMessages.userLeaveLabel)} ${intl.formatMessage(intlMessages.pushAlertLabel)} - ${displaySettingsStatus(settings.userLeavePushAlerts, true)}`}
                   showToggleLabel={showToggleLabel}

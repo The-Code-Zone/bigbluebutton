@@ -7,17 +7,9 @@ export default class BaseMenu extends React.Component {
     this.handleUpdateSettings = props.handleUpdateSettings;
   }
 
-  getStorageOrDefault(key, defaultValue) {
-    const stored = localStorage.getItem(key);
-    if (stored === null) return defaultValue;
-    return stored;
-  }
-
   handleToggle(key) {
     const obj = this.state;
     obj.settings[key] = !this.state.settings[key];
-
-    localStorage.setItem(key, obj.settings[key]);
 
     this.setState(obj, () => {
       this.handleUpdateSettings(this.state.settingsName, this.state.settings);
@@ -28,12 +20,8 @@ export default class BaseMenu extends React.Component {
     const obj = this.state;
     obj.settings[key] = e.target.value;
 
-    localStorage.setItem(key, obj.settings[key]);
-
     this.setState(obj, () => {
       this.handleUpdateSettings(this.state.settingsName, this.state.settings);
     });
   }
-
-
 }
