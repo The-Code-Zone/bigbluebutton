@@ -430,35 +430,45 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
           backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
         },
       }, 'Livekit: rolling back to previous audio input stream');
-    }
 
-    if (newStream && typeof newStream.getAudioTracks === 'function') {
-      newStream.getAudioTracks().forEach((t) => t.stop());
-      newStream = null;
-    }
+      if (newStream && typeof newStream.getAudioTracks === 'function') {
+        newStream.getAudioTracks().forEach((t) => t.stop());
+        newStream = null;
+      }
 
-    if (backupStream && backupStream.active) {
-      this.setInputStream(backupStream, { force: true }).catch((rollbackError) => {
-        logger.error({
-          logCode: 'audio_changeinputdevice_rollback_failure',
-          extraInfo: {
-            bridge: this.bridgeName,
-            deviceId,
-            role: this.role,
-            streamData: MediaStreamUtils.getMediaStreamLogData(this.inputStream),
-            originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
-            newStreamData: MediaStreamUtils.getMediaStreamLogData(newStream),
-            backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
-            errorName: rollbackError?.name,
-            errorMessage: rollbackError?.message,
-            errorStack: rollbackError?.stack,
-          },
-        }, 'Microphone device change rollback failed - the device may become silent');
+      if (backupStream && backupStream.active) {
+        this.setInputStream(backupStream, { force: true }).catch((rollbackError) => {
+          logger.error({
+            logCode: 'audio_changeinputdevice_rollback_failure',
+            extraInfo: {
+              bridge: this.bridgeName,
+              deviceId,
+              role: this.role,
+              streamData: MediaStreamUtils.getMediaStreamLogData(this.inputStream),
+              originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+              newStreamData: MediaStreamUtils.getMediaStreamLogData(newStream),
+              backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
+              errorName: rollbackError?.name,
+              errorMessage: rollbackError?.message,
+              errorStack: rollbackError?.stack,
+            },
+          }, 'Microphone device change rollback failed - the device may become silent');
+          cleanup();
+        });
+      } else {
         cleanup();
-      });
-    } else {
-      cleanup();
-    }
+      }
+    };
+
+    logger.debug({
+      logCode: 'livekit_audio_live_change_input_device',
+      extraInfo: {
+        bridge: this.bridgeName,
+        deviceId,
+        streamData: MediaStreamUtils.getMediaStreamLogData(this.inputStream),
+        originalStreamData: MediaStreamUtils.getMediaStreamLogData(this.originalStream),
+      },
+    }, 'Livekit: live change input device');
 
     // Remove all input audio tracks from the stream
     // This will effectively mute the microphone
@@ -475,6 +485,7 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
 
       return stream;
     }
+
     const trackPubs = this.getLocalMicTrackPubs();
     const hasUnmutedTrack = trackPubs.some((pub) => !pub.isMuted);
 
@@ -498,7 +509,6 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
           cleanup();
           throw new Error('LiveKit audio device not switched');
         }
-
         this.inputDeviceId = deviceId;
         if (this.publicationTrackStream) {
           this.originalStream = this.publicationTrackStream;
@@ -533,7 +543,7 @@ export default class LiveKitAudioBridge extends BaseAudioBridge {
             newStreamData: MediaStreamUtils.getMediaStreamLogData(newStream),
             backupStreamData: MediaStreamUtils.getMediaStreamLogData(backupStream),
           },
-        }, 'LiveKit: live change inptu device failed');
+        }, 'LiveKit: live change input device failed');
         this.unpublish().finally(() => {
           rollback();
         });
