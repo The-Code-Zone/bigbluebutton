@@ -811,7 +811,7 @@
     "app.audioManager.mediaError": "Error: There was an issue getting your media devices",
     "app.audio.joinAudio": "Join audio",
     "app.audio.joinAudioAndSetActive": "Join audio and set yourself as active",
-    "app.audio.leaveAudio": "Leave audio",
+    "app.audio.leaveAudio": "Deafen audio",
     "app.audio.changeAudioDevice": "Change audio device",
     "app.audio.enterSessionLabel": "Enter session",
     "app.audio.playSoundLabel": "Play sound",
