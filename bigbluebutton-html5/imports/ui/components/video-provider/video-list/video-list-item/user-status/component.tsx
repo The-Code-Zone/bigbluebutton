@@ -9,6 +9,7 @@ interface UserStatusProps {
     muted: boolean;
     listenOnly: boolean;
     joined: boolean;
+    deafened: boolean;
   };
 }
 
@@ -19,15 +20,20 @@ const UserStatus: React.FC<UserStatusProps> = (props) => {
   const listenOnly = voiceUser?.listenOnly;
   const muted = voiceUser?.muted;
   const voiceUserJoined = voiceUser?.joined;
+  const deafened = voiceUser?.deafened;
   const emoji = data?.reactionEmoji;
   const away = data?.away;
   return (
     <div>
       {away && <span>⏰</span>}
       {(emoji && emoji !== 'none' && !away) && <span>{emoji}</span>}
-      {(muted && !listenOnly) && <Styled.Muted iconName="unmute_filled" />}
-      {listenOnly && <Styled.Voice iconName="listen" /> }
-      {(voiceUserJoined && !muted) && <Styled.Voice iconName="unmute" />}
+      {!deafened && (
+        <>
+          {(muted && !listenOnly) && <Styled.Muted iconName="unmute_filled" />}
+          {listenOnly && <Styled.Voice iconName="listen" /> }
+          {(voiceUserJoined && !muted) && <Styled.Voice iconName="unmute" />}
+        </>
+      )}
     </div>
   );
 };

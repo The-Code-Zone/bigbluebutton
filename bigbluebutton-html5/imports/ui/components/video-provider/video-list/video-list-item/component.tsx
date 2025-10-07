@@ -64,6 +64,7 @@ interface VideoListItemProps {
     listenOnly: boolean;
     talking: boolean;
     joined: boolean;
+    deafened: boolean;
   };
 }
 
