@@ -4,7 +4,7 @@ Microservices built on top of BBB.
 
 Each service folder contains an `install.sh` script for installation/updating. For services with a secret, a secret will be generated if an `.env` file isn't already present.
 
-Currently deployed to `/srv/bbb-microservices` on the box.
+Currently deployed to `/opt/bbb-microservices` on the box. Per-service config lives at `/etc/<service>/env`.
 
 ## Services
 
