@@ -10,5 +10,8 @@ Currently deployed to `/opt/bbb-microservices` on the box. Per-service config li
 
 - `bbb-mp4` converts a published recording into a single `.mp4` file on-demand or post-publish.
 - `bbb-mp4-api/` is the API which controls `bbb-mp4`.
-  - `POST /convert/:recordId` to request MP4 conversion of a recording.
+  - `GET /health` for liveness, uptime, version, queue size. Unauthenticated.
+  - `GET /queue` to list every tracked record ID with its current status.
   - `GET /statuses?ids=a,b,c` to get conversion status (`None` / `Queued` / `Converting` / `Available`).
+  - `POST /convert/:recordId` to request MP4 conversion of a recording.
+  - `DELETE /convert/:recordId` to cancel a queued conversion. `?force=true` aborts an in-progress one.
