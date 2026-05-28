@@ -7,8 +7,11 @@ REPO_DIR="/opt/bbb-microservices"
 API_DIR="$REPO_DIR/bbb-mp4-api"
 ETC_DIR="/etc/bbb-mp4-api"
 ENV_FILE="$ETC_DIR/env"
+STATE_DIR="/var/lib/bbb-mp4-api"
 
 sudo mkdir -p "$ETC_DIR"
+sudo mkdir -p "$STATE_DIR"
+sudo chown bigbluebutton:bigbluebutton "$STATE_DIR"
 
 if [ ! -f "$ENV_FILE" ]; then
   echo "Generating config at $ENV_FILE"
@@ -17,6 +20,7 @@ if [ ! -f "$ENV_FILE" ]; then
 API_SECRET=$SECRET
 MP4_DIR=/mnt/raw/bbb/recording/mp4
 BBB_MP4_SCRIPT=/mnt/raw/bbb-mp4/bbb-mp4.sh
+QUEUE_FILE=/var/lib/bbb-mp4-api/queue.json
 EOF
   sudo chmod 600 "$ENV_FILE"
   sudo chown bigbluebutton:bigbluebutton "$ENV_FILE"
@@ -24,6 +28,11 @@ EOF
   echo "Generated API_SECRET: $SECRET"
   echo "Paste into TCZ Settings.BigBlueButton.OnDemandApiSecret."
   echo
+fi
+
+if [ -f "$ENV_FILE" ] && ! grep -q '^QUEUE_FILE=' "$ENV_FILE"; then
+  echo "Migrating $ENV_FILE to add QUEUE_FILE"
+  echo 'QUEUE_FILE=/var/lib/bbb-mp4-api/queue.json' | sudo tee -a "$ENV_FILE" >/dev/null
 fi
 
 echo "Installing npm deps"
