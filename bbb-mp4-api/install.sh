@@ -45,4 +45,4 @@ sudo systemctl restart bbb-mp4-api
 
 echo
 echo "Done. Service status:"
-sudo systemctl status bbb-mp4-api --no-pager -l | head -10
+sudo systemctl status bbb-mp4-api --no-pager -l | head -10 || true
