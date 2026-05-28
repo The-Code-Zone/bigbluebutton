@@ -14,6 +14,13 @@ list_services() {
   done
 }
 
+service_description() {
+  local service="$1"
+  local unit="$SERVICES_DIR/$service/$service.service"
+  [ -f "$unit" ] || return
+  grep -m 1 '^Description=' "$unit" | sed 's/^Description=//'
+}
+
 # Config files used by `tcz bbb edit`
 declare -A CONFIG_FILES=(
   ["web"]="/etc/bigbluebutton/bbb-web.properties"
@@ -34,12 +41,12 @@ usage() {
   echo "usage: tcz <service> <command> [args]"
   echo
   echo "services:"
-  echo "  bbb        manage the BigBlueButton install"
+  printf "  %-14s %s\n" "bbb" "BigBlueButton"
   for s in $(list_services); do
-    printf "  %-10s restart\n" "$s"
+    printf "  %-14s %s\n" "$s" "$(service_description "$s")"
   done
   echo
-  echo "  --help     displays this help text"
+  echo "  --help         displays this help text"
 }
 
 service_usage() {
