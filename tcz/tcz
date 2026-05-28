@@ -1,0 +1,153 @@
+#!/bin/bash
+
+DEV_DIR="/mnt/raw/bigbluebutton/dev/bigbluebutton"
+declare -A CONFIG_FILES=(
+  ["web"]="/etc/bigbluebutton/bbb-web.properties"
+  ["html5"]="/etc/bigbluebutton/bbb-html5.yml"
+  ["production"]="/etc/bigbluebutton/bbb-webrtc-sfu/production.yml"
+  ["recording"]="/etc/bigbluebutton/recording/recording.yml"
+  ["presentation"]="/etc/bigbluebutton/recording/presentation.yml"
+  ["cron"]="/etc/default/bigbluebutton-cron-config"
+  ["me"]="$(readlink -f "$0")"
+)
+
+declare -A COMPONENTS_WITH_DEPLOY_SCRIPTS=(
+  ["html5"]="/mnt/raw/bigbluebutton/dev/bigbluebutton/bigbluebutton-html5/deploy.sh"
+)
+
+usage() {
+  echo "usage: tcz [option]"
+  echo "options:"
+  echo "  --pull	pull changes from github (does not deploy)"
+  echo "  --deploy      deploys changes from $DEV_DIR to live site"
+  echo "  --restart     restarts bbb components"
+  echo "  --status      displays bbb component statuses"
+  echo "  --edit        list/edit bbb config files"
+  echo "  --api		shows secrets & a link to API-MATE for testing"
+  echo "  --help        displays this help text"
+}
+
+pull() {
+  local branch="$1"
+  if [ -z "$branch" ]; then
+    read -p "enter branch name: " branch
+  fi
+
+  if [ -z "$branch" ]; then
+    echo "branch name is required"
+    exit 1
+  fi
+
+  read -p "pulling $branch will discard local changes. are you sure? (y/N) " confirm
+  if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    echo "aborted"
+    exit 1
+  fi
+  cd "$DEV_DIR" || exit
+  git fetch origin
+  git reset --hard
+  git checkout "$branch"
+  git pull origin "$branch"
+  cd - >/dev/null
+}
+
+deploy() {
+  local choice="$1"
+
+  if [ -z "$choice" ]; then
+    echo "components w/ deploy scripts available:"
+    for key in "${!COMPONENTS_WITH_DEPLOY_SCRIPTS[@]}"; do
+      printf " %-15s %s\n" "$key" "${COMPONENTS_WITH_DEPLOY_SCRIPTS[$key]}"
+    done
+    echo
+    read -p "deploy which? " choice
+  fi
+  local file="${COMPONENTS_WITH_DEPLOY_SCRIPTS[$choice]}"
+  if [ -z "$file" ]; then
+    echo "unknown component: $choice"
+    echo "run 'tcz --deploy' with no arguments to see available components to deploy"
+    exit 1
+  fi
+  if [ ! -f "$file" ]; then
+    echo "file not found: $file"
+    exit 1
+  fi
+  read -p "deploying $choice will restart bigbluebutton. are you sure? [y/N]" confirm
+  if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    echo "aborted"
+    exit 1
+  fi
+  echo "deploying $choice component to live"
+  sudo "$file"
+}
+
+restart() {
+  sudo bbb-conf --restart
+}
+
+status() {
+  bbb-conf --status
+}
+
+api() {
+  bbb-conf --secret
+}
+
+edit_config() {
+  local editor="${EDITOR:-vim}"
+  local choice="$1"
+
+  if [ -z "$choice" ]; then
+    echo "config files:"
+    for key in "${!CONFIG_FILES[@]}"; do
+      printf " %-15s %s\n" "$key" "${CONFIG_FILES[$key]}"
+    done
+    echo
+    read -p "edit which? " choice
+  fi
+  local file="${CONFIG_FILES[$choice]}"
+  if [ -z "$file" ]; then
+    echo "unknown config: $choice"
+    echo "run 'tcz --edit' with no arguments to see available configs to override"
+    exit 1
+  fi
+  if [ ! -f "$file" ]; then
+    echo "file not found: $file"
+    exit 1
+  fi
+  sudo "$editor" "$file"
+}
+
+# === MAIN ===
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+case "$1" in
+  --p|--pull)
+    pull "$2"
+    ;;
+  --d|--deploy)
+    deploy "$2"
+    ;;
+  --r|--restart)
+    restart
+    ;;
+  --s|--status)
+    status
+    ;;
+  --a|--api)
+    api
+    ;;
+  --h|--help|--usage)
+    usage
+    ;;
+  --e|--edit)
+    edit_config "$2"
+    ;;
+  *)
+    echo "unknown option: $1"
+    usage
+    ;;
+esac
