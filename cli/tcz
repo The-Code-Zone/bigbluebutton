@@ -1,6 +1,8 @@
 #!/bin/bash
 
 DEV_DIR="/mnt/raw/bigbluebutton/dev/bigbluebutton"
+
+# Config files used by `tcz bbb edit`
 declare -A CONFIG_FILES=(
   ["web"]="/etc/bigbluebutton/bbb-web.properties"
   ["html5"]="/etc/bigbluebutton/bbb-html5.yml"
@@ -11,33 +13,40 @@ declare -A CONFIG_FILES=(
   ["me"]="$(readlink -f "$0")"
 )
 
+# Components with deploy scripts used by `tcz bbb deploy`
 declare -A COMPONENTS_WITH_DEPLOY_SCRIPTS=(
   ["html5"]="/mnt/raw/bigbluebutton/dev/bigbluebutton/bigbluebutton-html5/deploy.sh"
 )
 
 usage() {
-  echo "usage: tcz [option]"
-  echo "options:"
-  echo "  --pull	pull changes from github (does not deploy)"
-  echo "  --deploy      deploys changes from $DEV_DIR to live site"
-  echo "  --restart     restarts bbb components"
-  echo "  --status      displays bbb component statuses"
-  echo "  --edit        list/edit bbb config files"
-  echo "  --api		shows secrets & a link to API-MATE for testing"
-  echo "  --help        displays this help text"
+  echo "usage: tcz <service> <command> [args]"
+  echo
+  echo "services:"
+  echo "  bbb       manage the BigBlueButton install"
+  echo
+  echo "  --help    displays this help text"
 }
 
-pull() {
+bbb_usage() {
+  echo "usage: tcz bbb <command> [args]"
+  echo "commands:"
+  echo "  pull [branch]     pull changes from github (does not deploy)"
+  echo "  deploy [comp]     deploy changes from $DEV_DIR to live site"
+  echo "  restart           restart bbb components"
+  echo "  status            display bbb component statuses"
+  echo "  edit [config]     list/edit bbb config files"
+  echo "  api               show secrets & a link to API-MATE for testing"
+}
+
+bbb_pull() {
   local branch="$1"
   if [ -z "$branch" ]; then
     read -p "enter branch name: " branch
   fi
-
   if [ -z "$branch" ]; then
     echo "branch name is required"
     exit 1
   fi
-
   read -p "pulling $branch will discard local changes. are you sure? (y/N) " confirm
   if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
     echo "aborted"
@@ -51,9 +60,8 @@ pull() {
   cd - >/dev/null
 }
 
-deploy() {
+bbb_deploy() {
   local choice="$1"
-
   if [ -z "$choice" ]; then
     echo "components w/ deploy scripts available:"
     for key in "${!COMPONENTS_WITH_DEPLOY_SCRIPTS[@]}"; do
@@ -65,7 +73,7 @@ deploy() {
   local file="${COMPONENTS_WITH_DEPLOY_SCRIPTS[$choice]}"
   if [ -z "$file" ]; then
     echo "unknown component: $choice"
-    echo "run 'tcz --deploy' with no arguments to see available components to deploy"
+    echo "run 'tcz bbb deploy' with no arguments to see available components"
     exit 1
   fi
   if [ ! -f "$file" ]; then
@@ -81,22 +89,21 @@ deploy() {
   sudo "$file"
 }
 
-restart() {
+bbb_restart() {
   sudo bbb-conf --restart
 }
 
-status() {
+bbb_status() {
   bbb-conf --status
 }
 
-api() {
+bbb_api() {
   bbb-conf --secret
 }
 
-edit_config() {
+bbb_edit() {
   local editor="${EDITOR:-vim}"
   local choice="$1"
-
   if [ -z "$choice" ]; then
     echo "config files:"
     for key in "${!CONFIG_FILES[@]}"; do
@@ -108,7 +115,7 @@ edit_config() {
   local file="${CONFIG_FILES[$choice]}"
   if [ -z "$file" ]; then
     echo "unknown config: $choice"
-    echo "run 'tcz --edit' with no arguments to see available configs to override"
+    echo "run 'tcz bbb edit' with no arguments to see available configs"
     exit 1
   fi
   if [ ! -f "$file" ]; then
@@ -118,6 +125,23 @@ edit_config() {
   sudo "$editor" "$file"
 }
 
+bbb() {
+  case "$1" in
+    p|pull)    shift; bbb_pull "$@" ;;
+    d|deploy)  shift; bbb_deploy "$@" ;;
+    r|restart) bbb_restart ;;
+    s|status)  bbb_status ;;
+    e|edit)    shift; bbb_edit "$@" ;;
+    a|api)     bbb_api ;;
+    ""|help|--help|-h) bbb_usage ;;
+    *)
+      echo "unknown bbb command: $1"
+      bbb_usage
+      exit 1
+      ;;
+  esac
+}
+
 # === MAIN ===
 if [ $# -eq 0 ]; then
   usage
@@ -125,29 +149,16 @@ if [ $# -eq 0 ]; then
 fi
 
 case "$1" in
-  --p|--pull)
-    pull "$2"
+  bbb)
+    shift
+    bbb "$@"
     ;;
-  --d|--deploy)
-    deploy "$2"
-    ;;
-  --r|--restart)
-    restart
-    ;;
-  --s|--status)
-    status
-    ;;
-  --a|--api)
-    api
-    ;;
-  --h|--help|--usage)
+  --h|--help|-h|help)
     usage
-    ;;
-  --e|--edit)
-    edit_config "$2"
     ;;
   *)
-    echo "unknown option: $1"
+    echo "unknown service: $1"
     usage
+    exit 1
     ;;
 esac

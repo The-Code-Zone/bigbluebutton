@@ -15,12 +15,6 @@ Currently deployed to `/opt/bbb-microservices` on the box. Per-service config li
   - `GET /statuses?ids=a,b,c` to get conversion status (`None` / `Queued` / `Converting` / `Available`).
   - `POST /convert/:recordId` to request MP4 conversion of a recording.
   - `DELETE /convert/:recordId` to cancel a queued conversion. `?force=true` aborts an in-progress one.
-
-## Tools
-
-- `tcz/` is the operator CLI for the BBB box. Symlinked into `/usr/local/bin/tcz` by its `install.sh`.
-  - `tcz --status` shows BBB component statuses.
-  - `tcz --restart` restarts BBB components.
-  - `tcz --pull` / `--deploy` manage the BBB fork checkout.
-  - `tcz --edit` opens a BBB config file in `$EDITOR`.
-  - `tcz --api` shows BBB API secrets + an API-MATE link.
+- `cli/` contains the `tcz` CLI tool for managing these services and BBB itself.
+  - `tcz <service> <command>`
+  - Run `tcz` for usage text.

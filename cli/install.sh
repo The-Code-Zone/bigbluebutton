@@ -4,7 +4,7 @@
 set -euo pipefail
 
 REPO_DIR="/opt/bbb-microservices"
-TCZ_PATH="$REPO_DIR/tcz/tcz"
+TCZ_PATH="$REPO_DIR/cli/tcz"
 LINK_PATH="/usr/local/bin/tcz"
 
 if [ ! -x "$TCZ_PATH" ]; then
