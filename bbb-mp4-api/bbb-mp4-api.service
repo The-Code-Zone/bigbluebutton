@@ -1,0 +1,15 @@
+[Unit]
+Description=BBB MP4 on-demand API
+After=network.target docker.service
+
+[Service]
+Type=simple
+User=bigbluebutton
+WorkingDirectory=/opt/bbb-microservices/bbb-mp4-api
+EnvironmentFile=/etc/bbb-mp4-api/env
+ExecStart=/usr/bin/node /opt/bbb-microservices/bbb-mp4-api/server.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
