@@ -1,6 +1,18 @@
 #!/bin/bash
 
 DEV_DIR="/mnt/raw/bigbluebutton/dev/bigbluebutton"
+SERVICES_DIR="/opt/bbb-microservices"
+
+list_services() {
+  [ -d "$SERVICES_DIR" ] || return
+  for d in "$SERVICES_DIR"/*/; do
+    [ -d "$d" ] || continue
+    local name
+    name=$(basename "$d")
+    [ "$name" = "cli" ] && continue
+    [ -x "$d/install.sh" ] && echo "$name"
+  done
+}
 
 # Config files used by `tcz bbb edit`
 declare -A CONFIG_FILES=(
@@ -22,9 +34,39 @@ usage() {
   echo "usage: tcz <service> <command> [args]"
   echo
   echo "services:"
-  echo "  bbb       manage the BigBlueButton install"
+  echo "  bbb        manage the BigBlueButton install"
+  for s in $(list_services); do
+    printf "  %-10s restart\n" "$s"
+  done
   echo
-  echo "  --help    displays this help text"
+  echo "  --help     displays this help text"
+}
+
+service_usage() {
+  local service="$1"
+  echo "usage: tcz $service <command>"
+  echo "commands:"
+  echo "  restart  systemctl restart $service"
+}
+
+service_restart() {
+  local service="$1"
+  sudo systemctl restart "$service"
+  sudo systemctl status "$service" --no-pager -l | head -5 || true
+}
+
+service_dispatch() {
+  local service="$1"
+  shift
+  case "$1" in
+    r|restart) service_restart "$service" ;;
+    ""|help|--help|-h) service_usage "$service" ;;
+    *)
+      echo "unknown command: $1"
+      service_usage "$service"
+      exit 1
+      ;;
+  esac
 }
 
 bbb_usage() {
@@ -157,8 +199,14 @@ case "$1" in
     usage
     ;;
   *)
-    echo "unknown service: $1"
-    usage
-    exit 1
+    service="$1"
+    if [ -d "$SERVICES_DIR/$service" ] && [ -x "$SERVICES_DIR/$service/install.sh" ] && [ "$service" != "cli" ]; then
+      shift
+      service_dispatch "$service" "$@"
+    else
+      echo "unknown service: $service"
+      usage
+      exit 1
+    fi
     ;;
 esac
