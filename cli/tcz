@@ -53,7 +53,8 @@ service_usage() {
   local service="$1"
   echo "usage: tcz $service <command>"
   echo "commands:"
-  echo "  restart  systemctl restart $service"
+  echo "  restart  Restarts the service."
+  echo "  status   Shows the service status."
 }
 
 service_restart() {
@@ -62,11 +63,17 @@ service_restart() {
   sudo systemctl status "$service" --no-pager -l | head -5 || true
 }
 
+service_status() {
+  local service="$1"
+  sudo systemctl status "$service" --no-pager -l || true
+}
+
 service_dispatch() {
   local service="$1"
   shift
   case "$1" in
     r|restart) service_restart "$service" ;;
+    s|status)  service_status "$service" ;;
     ""|help|--help|-h) service_usage "$service" ;;
     *)
       echo "unknown command: $1"
