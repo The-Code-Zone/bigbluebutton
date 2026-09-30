@@ -1,0 +1,226 @@
+#!/bin/bash
+
+DEV_DIR="/mnt/raw/bigbluebutton/dev/bigbluebutton"
+SERVICES_DIR="/opt/bbb-microservices"
+
+list_services() {
+  [ -d "$SERVICES_DIR" ] || return
+  for d in "$SERVICES_DIR"/*/; do
+    [ -d "$d" ] || continue
+    local name
+    name=$(basename "$d")
+    [ "$name" = "cli" ] && continue
+    [ -x "$d/install.sh" ] && echo "$name"
+  done
+}
+
+service_description() {
+  local service="$1"
+  local unit="$SERVICES_DIR/$service/$service.service"
+  [ -f "$unit" ] || return
+  grep -m 1 '^Description=' "$unit" | sed 's/^Description=//'
+}
+
+# Config files used by `tcz bbb edit`
+declare -A CONFIG_FILES=(
+  ["web"]="/etc/bigbluebutton/bbb-web.properties"
+  ["html5"]="/etc/bigbluebutton/bbb-html5.yml"
+  ["production"]="/etc/bigbluebutton/bbb-webrtc-sfu/production.yml"
+  ["recording"]="/etc/bigbluebutton/recording/recording.yml"
+  ["presentation"]="/etc/bigbluebutton/recording/presentation.yml"
+  ["cron"]="/etc/default/bigbluebutton-cron-config"
+  ["me"]="$(readlink -f "$0")"
+)
+
+# Components with deploy scripts used by `tcz bbb deploy`
+declare -A COMPONENTS_WITH_DEPLOY_SCRIPTS=(
+  ["html5"]="/mnt/raw/bigbluebutton/dev/bigbluebutton/bigbluebutton-html5/deploy.sh"
+)
+
+usage() {
+  echo "usage: tcz <service> <command> [args]"
+  echo
+  echo "services:"
+  printf "  %-14s %s\n" "bbb" "BigBlueButton"
+  for s in $(list_services); do
+    printf "  %-14s %s\n" "$s" "$(service_description "$s")"
+  done
+  echo
+  echo "  --help         displays this help text"
+}
+
+service_usage() {
+  local service="$1"
+  echo "usage: tcz $service <command>"
+  echo "commands:"
+  echo "  restart  Restarts the service."
+  echo "  status   Shows the service status."
+}
+
+service_restart() {
+  local service="$1"
+  sudo systemctl restart "$service"
+  sudo systemctl status "$service" --no-pager -l | head -5 || true
+}
+
+service_status() {
+  local service="$1"
+  sudo systemctl status "$service" --no-pager -l || true
+}
+
+service_dispatch() {
+  local service="$1"
+  shift
+  case "$1" in
+    r|restart) service_restart "$service" ;;
+    s|status)  service_status "$service" ;;
+    ""|help|--help|-h) service_usage "$service" ;;
+    *)
+      echo "unknown command: $1"
+      service_usage "$service"
+      exit 1
+      ;;
+  esac
+}
+
+bbb_usage() {
+  echo "usage: tcz bbb <command> [args]"
+  echo "commands:"
+  echo "  pull [branch]     pull changes from github (does not deploy)"
+  echo "  deploy [comp]     deploy changes from $DEV_DIR to live site"
+  echo "  restart           restart bbb components"
+  echo "  status            display bbb component statuses"
+  echo "  edit [config]     list/edit bbb config files"
+  echo "  api               show secrets & a link to API-MATE for testing"
+}
+
+bbb_pull() {
+  local branch="$1"
+  if [ -z "$branch" ]; then
+    read -p "enter branch name: " branch
+  fi
+  if [ -z "$branch" ]; then
+    echo "branch name is required"
+    exit 1
+  fi
+  read -p "pulling $branch will discard local changes. are you sure? (y/N) " confirm
+  if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    echo "aborted"
+    exit 1
+  fi
+  cd "$DEV_DIR" || exit
+  git fetch origin
+  git reset --hard
+  git checkout "$branch"
+  git pull origin "$branch"
+  cd - >/dev/null
+}
+
+bbb_deploy() {
+  local choice="$1"
+  if [ -z "$choice" ]; then
+    echo "components w/ deploy scripts available:"
+    for key in "${!COMPONENTS_WITH_DEPLOY_SCRIPTS[@]}"; do
+      printf " %-15s %s\n" "$key" "${COMPONENTS_WITH_DEPLOY_SCRIPTS[$key]}"
+    done
+    echo
+    read -p "deploy which? " choice
+  fi
+  local file="${COMPONENTS_WITH_DEPLOY_SCRIPTS[$choice]}"
+  if [ -z "$file" ]; then
+    echo "unknown component: $choice"
+    echo "run 'tcz bbb deploy' with no arguments to see available components"
+    exit 1
+  fi
+  if [ ! -f "$file" ]; then
+    echo "file not found: $file"
+    exit 1
+  fi
+  read -p "deploying $choice will restart bigbluebutton. are you sure? [y/N]" confirm
+  if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    echo "aborted"
+    exit 1
+  fi
+  echo "deploying $choice component to live"
+  sudo "$file"
+}
+
+bbb_restart() {
+  sudo bbb-conf --restart
+}
+
+bbb_status() {
+  bbb-conf --status
+}
+
+bbb_api() {
+  bbb-conf --secret
+}
+
+bbb_edit() {
+  local editor="${EDITOR:-vim}"
+  local choice="$1"
+  if [ -z "$choice" ]; then
+    echo "config files:"
+    for key in "${!CONFIG_FILES[@]}"; do
+      printf " %-15s %s\n" "$key" "${CONFIG_FILES[$key]}"
+    done
+    echo
+    read -p "edit which? " choice
+  fi
+  local file="${CONFIG_FILES[$choice]}"
+  if [ -z "$file" ]; then
+    echo "unknown config: $choice"
+    echo "run 'tcz bbb edit' with no arguments to see available configs"
+    exit 1
+  fi
+  if [ ! -f "$file" ]; then
+    echo "file not found: $file"
+    exit 1
+  fi
+  sudo "$editor" "$file"
+}
+
+bbb() {
+  case "$1" in
+    p|pull)    shift; bbb_pull "$@" ;;
+    d|deploy)  shift; bbb_deploy "$@" ;;
+    r|restart) bbb_restart ;;
+    s|status)  bbb_status ;;
+    e|edit)    shift; bbb_edit "$@" ;;
+    a|api)     bbb_api ;;
+    ""|help|--help|-h) bbb_usage ;;
+    *)
+      echo "unknown bbb command: $1"
+      bbb_usage
+      exit 1
+      ;;
+  esac
+}
+
+# === MAIN ===
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+case "$1" in
+  bbb)
+    shift
+    bbb "$@"
+    ;;
+  --h|--help|-h|help)
+    usage
+    ;;
+  *)
+    service="$1"
+    if [ -d "$SERVICES_DIR/$service" ] && [ -x "$SERVICES_DIR/$service/install.sh" ] && [ "$service" != "cli" ]; then
+      shift
+      service_dispatch "$service" "$@"
+    else
+      echo "unknown service: $service"
+      usage
+      exit 1
+    fi
+    ;;
+esac
