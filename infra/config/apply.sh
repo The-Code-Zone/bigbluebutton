@@ -42,6 +42,8 @@ TURN_SECRET=$(sudo grep -oP '^static-auth-secret=\K.+' /etc/turnserver.conf)
 sudo install -m 640 -o root -g bigbluebutton /tmp/bbb-config/turn-stun-servers.xml /etc/bigbluebutton/turn-stun-servers.xml
 sudo sed -i "s|\${TURN_SECRET}|$TURN_SECRET|g" /etc/bigbluebutton/turn-stun-servers.xml
 
+sudo install -m 644 /tmp/bbb-config/base_worker.rb /usr/local/bigbluebutton/core/lib/recordandplayback/workers/base_worker.rb
+
 sudo mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
 sudo install -m 644 /tmp/bbb-config/systemd-bbb-rap-resque-worker-override.conf /etc/systemd/system/bbb-rap-resque-worker.service.d/tcz.conf
 sudo systemctl daemon-reload
