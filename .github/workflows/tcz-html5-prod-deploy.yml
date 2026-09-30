@@ -1,0 +1,56 @@
+name: TCZ html5 prod deploy
+
+on:
+  push:
+    tags:
+      - 'prod-*'
+
+concurrency:
+  group: deploy-prod
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      PROD_HOST: bigbluebutton.thecode.zone
+      PROD_USER: thecodezone
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Resolve tag and locate the stage-soaked build
+        id: build
+        run: |
+          SHA=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_REF_NAME" -q .sha)
+          RUN_ID=$(gh run list -R "$GITHUB_REPOSITORY" --workflow tcz-html5-build.yml --commit "$SHA" \
+            --status success --limit 1 --json databaseId -q '.[0].databaseId')
+          if [ -z "$RUN_ID" ]; then
+            echo "no successful tcz-html5-build.yml run for $SHA - its artifact may have expired (90-day retention); re-run the build workflow for this sha, then re-push the tag" >&2
+            exit 1
+          fi
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v4
+        with:
+          name: html5-client-${{ steps.build.outputs.sha }}
+          run-id: ${{ steps.build.outputs.run_id }}
+          github-token: ${{ github.token }}
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PROD_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$PROD_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+      - name: Deploy to prod
+        run: |
+          scp html5-client.tar.gz "$PROD_USER@$PROD_HOST:/tmp/html5-client-${{ steps.build.outputs.sha }}.tar.gz"
+          ssh "$PROD_USER@$PROD_HOST" "SHA=${{ steps.build.outputs.sha }} TAG=$GITHUB_REF_NAME bash -s" <<'REMOTE'
+          set -euo pipefail
+          STAGE=$(mktemp -d)
+          tar -xzf "/tmp/html5-client-$SHA.tar.gz" -C "$STAGE"
+          test -f "$STAGE/index.html"
+          sudo cp -rf "$STAGE"/. /usr/share/bigbluebutton/html5-client/
+          sudo ln -sf /usr/share/bigbluebutton/nginx/bbb-html5.nginx.static /usr/share/bigbluebutton/nginx/bbb-html5.nginx
+          sudo systemctl reload nginx
+          echo "$(date -u +%FT%TZ) $SHA github-actions $TAG" | sudo tee -a /etc/bigbluebutton/tcz-html5-deploys >/dev/null
+          rm -rf "$STAGE" "/tmp/html5-client-$SHA.tar.gz"
+          REMOTE
