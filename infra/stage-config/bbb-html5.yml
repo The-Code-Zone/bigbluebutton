@@ -1,0 +1,107 @@
+public:
+  app:
+    mobileFontSize: 20px
+    desktopFontSize: 20px
+    clientTitle: The Code Zone
+    enableMultipleCameras: false
+    enableCameraBrightness: false
+    reactionsButton:
+      enabled: true
+    emojiRain:
+      enabled: true
+      intervalEmojis: 1000
+      numberOfEmojis: 1
+      emojiSize: 4
+    userSettingsStorage: local
+    defaultSettings:
+      application:
+        autoCloseReactionsBar: true
+      layout:
+        pushLayout: true
+      branding:
+        displayBrandingArea: false
+  kurento:
+    wsUrl: wss://bbb-stage.thecode.zone/bbb-webrtc-sfu
+    screenshare:
+      showButtonForNonPresenters: false
+      enableVolumeControl: true
+      subscriberOffering: false
+      bitrate: 2000
+      constraints:
+        video:
+          frameRate:
+            ideal: 10
+            max: 30
+          width:
+            max: 1920
+          height:
+            max: 1080
+        audio: true
+    cameraProfiles:
+      - id: lowend
+        name: Super Low
+        default: true
+        bitrate: 100
+        hidden: false
+        constraints:
+          width: 320
+          height: 240
+          frameRate: 10
+      - id: low
+        name: Low
+        default: false
+        bitrate: 200
+        hidden: true
+        constraints:
+          width: 640
+          height: 480
+          frameRate: 10
+      - id: medium
+        name: Medium
+        default: false
+        bitrate: 500
+        hidden: true
+        constraints:
+          width: 1280
+          height: 720
+          frameRate: 20
+      - id: high
+        name: High
+        default: false
+        bitrate: 800
+        hidden: true
+        constraints:
+          width: 1280
+          height: 720
+          frameRate: 20
+      - id: fhd
+        name: Camera as content
+        hidden: true
+        default: false
+        bitrate: 1500
+        constraints:
+          width: 1280
+          height: 720
+          frameRate: 20
+  userReaction:
+    enabled: true
+    expire: 10
+    reactions:
+      - id: '+1'
+        native: "\U0001F44D"
+      - id: '-1'
+        native: "\U0001F44E"
+      - id: 'clap'
+        native: "\U0001F44F"
+      - id: 'wave'
+        native: "\U0001F44B"
+      - id: 'party'
+        native: "\U0001F389"
+      - id: 'heart_eyes'
+        native: "\U0001F60D"
+      - id: 'open_mouth'
+        native: "\U0001F62E"
+      - id: 'crying_laughing'
+        native: "\U0001F602"
+  pads:
+    url: https://bbb-stage.thecode.zone/pad
