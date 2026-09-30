@@ -8,6 +8,11 @@ set -a
 source "$DIR/hosts/$HOST_KEY.env"
 set +a
 
+if [ -z "${SSH_TARGET:-}" ]; then
+  echo "hosts/$HOST_KEY.env has no SSH_TARGET - that box is not provisioned yet" >&2
+  exit 1
+fi
+
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 for f in "$DIR"/files/*; do
