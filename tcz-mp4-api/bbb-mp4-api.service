@@ -5,9 +5,9 @@ After=network.target docker.service
 [Service]
 Type=simple
 User=bigbluebutton
-WorkingDirectory=/opt/bbb-microservices/bbb-mp4-api
+WorkingDirectory=/opt/tcz/bbb-mp4-api
 EnvironmentFile=/etc/bbb-mp4-api/env
-ExecStart=/usr/bin/node /opt/bbb-microservices/bbb-mp4-api/server.js
+ExecStart=/usr/bin/node /opt/tcz/bbb-mp4-api/server.js
 Restart=on-failure
 RestartSec=5
 
