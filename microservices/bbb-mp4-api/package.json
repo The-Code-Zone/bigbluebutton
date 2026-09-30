@@ -1,0 +1,8 @@
+{
+  "name": "bbb-mp4-api",
+  "private": true,
+  "version": "0.1.0",
+  "main": "server.js",
+  "scripts": { "start": "node server.js", "test": "node --test" },
+  "dependencies": { "express": "^4.19.0", "dotenv": "^16.4.0" }
+}

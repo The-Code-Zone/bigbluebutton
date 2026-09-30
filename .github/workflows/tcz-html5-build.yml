@@ -1,0 +1,72 @@
+name: TCZ html5 client build
+
+on:
+  push:
+    branches:
+      - tcz/**
+    paths:
+      - bigbluebutton-html5/**
+      - scripts/tcz/**
+      - .github/workflows/tcz-html5-build.yml
+  workflow_dispatch:
+
+concurrency:
+  group: tcz-html5-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.3
+          cache: npm
+          cache-dependency-path: bigbluebutton-html5/package-lock.json
+      - name: Build client
+        run: bash scripts/tcz/build-html5.sh
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+      - name: Package dist
+        run: tar -C bigbluebutton-html5/dist -czf html5-client.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: html5-client-${{ github.sha }}
+          path: html5-client.tar.gz
+          retention-days: 90
+          compression-level: 0
+
+  deploy-stage:
+    needs: build
+    if: github.ref == 'refs/heads/tcz/4.0'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-stage
+    env:
+      STAGE_HOST: bbb-stage.thecode.zone
+      STAGE_USER: thecodezone
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: html5-client-${{ github.sha }}
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STAGE_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$STAGE_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+      - name: Deploy to stage
+        run: |
+          scp html5-client.tar.gz "$STAGE_USER@$STAGE_HOST:/tmp/html5-client-${{ github.sha }}.tar.gz"
+          ssh "$STAGE_USER@$STAGE_HOST" "SHA=${{ github.sha }} bash -s" <<'REMOTE'
+          set -euo pipefail
+          STAGE=$(mktemp -d)
+          tar -xzf "/tmp/html5-client-$SHA.tar.gz" -C "$STAGE"
+          test -f "$STAGE/index.html"
+          sudo cp -rf "$STAGE"/. /usr/share/bigbluebutton/html5-client/
+          sudo ln -sf /usr/share/bigbluebutton/nginx/bbb-html5.nginx.static /usr/share/bigbluebutton/nginx/bbb-html5.nginx
+          sudo systemctl reload nginx
+          echo "$(date -u +%FT%TZ) $SHA github-actions" | sudo tee -a /etc/bigbluebutton/tcz-html5-deploys >/dev/null
+          rm -rf "$STAGE" "/tmp/html5-client-$SHA.tar.gz"
+          REMOTE

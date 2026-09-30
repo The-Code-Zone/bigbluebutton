@@ -1,0 +1,4 @@
+location /mp4-api/ {
+    proxy_pass http://127.0.0.1:8479/;
+    proxy_set_header Host $host;
+}
