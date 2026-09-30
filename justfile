@@ -4,11 +4,12 @@
 #   1. install: az (Azure CLI), gh (GitHub CLI), just, ssh
 #   2. az login          (The Code Zone Subscription)
 #   3. gh auth login     (github.com, The-Code-Zone org)
-#   4. ask an existing dev to run:  just add-dev your-key.pub
-#   5. just stage-up && just meeting
+#   4. ask an existing dev to run:  just stage-add-dev your-key.pub
+#   5. just stage-up && just stage-meeting
 #
 # Workflow: branch off tcz/4.0, push, CI builds the client and deploys it
-# to stage automatically. Test with `just meeting`. Never build on a box.
+# to stage automatically. Test with `just stage-meeting`. Never build on a box.
+# Every recipe below targets STAGE - none of them touch production.
 
 set shell := ["bash", "-cu"]
 
@@ -37,8 +38,8 @@ stage-status:
 stage-ssh:
     ssh {{stage}}
 
-# create a meeting on stage, print a moderator join link
-meeting name="Dev Test":
+# create a meeting ON STAGE, print a moderator join link
+stage-meeting name="Dev Test":
     #!/usr/bin/env bash
     set -euo pipefail
     SECRET=$(ssh {{stage}} 'sudo bbb-conf --secret 2>/dev/null' | grep -oP 'Secret: \K\S+')
@@ -50,8 +51,8 @@ meeting name="Dev Test":
     JC=$(printf 'join%s%s' "$JQ" "$SECRET" | sha256sum | cut -d' ' -f1)
     echo "https://{{stage_host}}/bigbluebutton/api/join?$JQ&checksum=$JC"
 
-# like `meeting`, but with the production club lockdown (disabledFeatures) applied
-club-meeting name="Club Test":
+# stage meeting with the production club lockdown (disabledFeatures) applied
+stage-club-meeting name="Club Test":
     #!/usr/bin/env bash
     set -euo pipefail
     SECRET=$(ssh {{stage}} 'sudo bbb-conf --secret 2>/dev/null' | grep -oP 'Secret: \K\S+')
@@ -76,6 +77,6 @@ runs:
 build:
     bash scripts/tcz/build-html5.sh
 
-# grant a dev SSH access to stage: just add-dev path/to/their-key.pub
-add-dev pubkey:
+# grant a dev SSH access to stage: just stage-add-dev path/to/their-key.pub
+stage-add-dev pubkey:
     ssh {{stage}} "echo '$(cat {{pubkey}})' >> ~/.ssh/authorized_keys && echo access granted"
