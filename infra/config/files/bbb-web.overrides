@@ -1,0 +1,3 @@
+maxUserConcurrentAccesses=1
+allowRequestsWithoutSession=true
+audioBridge=livekit

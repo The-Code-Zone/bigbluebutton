@@ -29,12 +29,23 @@ ssh "$SSH_TARGET" bash -s <<'REMOTE'
 set -euo pipefail
 sudo cp /tmp/bbb-config/bbb-html5.yml /etc/bigbluebutton/bbb-html5.yml
 sudo install -m 755 /tmp/bbb-config/cron.daily-bigbluebutton-published-deletion /etc/cron.daily/bigbluebutton-published-deletion
-for kv in "maxUserConcurrentAccesses=1" "allowRequestsWithoutSession=true" "audioBridge=livekit"; do
+
+while IFS= read -r kv; do
+  [ -z "$kv" ] && continue
   k="${kv%%=*}"
   sudo grep -q "^$k=" /etc/bigbluebutton/bbb-web.properties \
     && sudo sed -i "s/^$k=.*/$kv/" /etc/bigbluebutton/bbb-web.properties \
     || echo "$kv" | sudo tee -a /etc/bigbluebutton/bbb-web.properties >/dev/null
-done
+done < /tmp/bbb-config/bbb-web.overrides
+
+TURN_SECRET=$(sudo grep -oP '^static-auth-secret=\K.+' /etc/turnserver.conf)
+sudo install -m 640 -o root -g bigbluebutton /tmp/bbb-config/turn-stun-servers.xml /etc/bigbluebutton/turn-stun-servers.xml
+sudo sed -i "s|\${TURN_SECRET}|$TURN_SECRET|g" /etc/bigbluebutton/turn-stun-servers.xml
+
+sudo mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
+sudo install -m 644 /tmp/bbb-config/systemd-bbb-rap-resque-worker-override.conf /etc/systemd/system/bbb-rap-resque-worker.service.d/tcz.conf
+sudo systemctl daemon-reload
+
 rm -rf /tmp/bbb-config
 sudo bbb-conf --restart >/dev/null 2>&1
 sudo bbb-conf --status | head -4
