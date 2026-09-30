@@ -1,0 +1,40 @@
+name: TCZ html5 client build
+
+on:
+  push:
+    branches:
+      - v3.0.x-release
+      - unstable
+      - tcz/**
+    paths:
+      - bigbluebutton-html5/**
+      - scripts/tcz/**
+      - .github/workflows/tcz-html5-build.yml
+  workflow_dispatch:
+
+concurrency:
+  group: tcz-html5-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+          cache: npm
+          cache-dependency-path: bigbluebutton-html5/package-lock.json
+      - name: Build client
+        run: bash scripts/tcz/build-html5.sh
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+      - name: Package dist
+        run: tar -C bigbluebutton-html5/dist -czf html5-client.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: html5-client-${{ github.sha }}
+          path: html5-client.tar.gz
+          retention-days: 90
+          compression-level: 0
