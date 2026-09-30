@@ -21,7 +21,7 @@ public:
       branding:
         displayBrandingArea: false
   kurento:
-    wsUrl: wss://bbb-stage.thecode.zone/bbb-webrtc-sfu
+    wsUrl: wss://${BBB_HOST}/bbb-webrtc-sfu
     screenshare:
       showButtonForNonPresenters: false
       enableVolumeControl: true
@@ -104,4 +104,4 @@ public:
       - id: 'crying_laughing'
         native: "\U0001F602"
   pads:
-    url: https://bbb-stage.thecode.zone/pad
+    url: https://${BBB_HOST}/pad

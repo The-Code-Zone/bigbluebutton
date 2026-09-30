@@ -18,7 +18,9 @@ The Code Zone's fork of BigBlueButton. Runs club video calls for the live site. 
 
 - `.github/workflows/tcz-html5-build.yml` — builds the client on push to our branches, uploads `html5-client-<sha>` artifact, deploys to stage on `tcz/4.0` pushes.
 - `scripts/tcz/` — `build-html5.sh` (canonical client build), `deploy-html5.sh <host> <ref>` (workstation deploy of a CI artifact).
-- `infra/` — Azure provisioning.
+- `infra/provision/` — create Azure resources (rare; `stage.sh` now, `prod.sh` at cutover).
+- `infra/config/` — desired state of any TCZ BBB box: `files/` (config files with `${BBB_HOST}`-style placeholders), `hosts/*.env` (the only per-box differences), `apply.sh <host>` (renders + applies + restarts; `just stage-config`). This becomes the Ansible playbook's content when that's written.
+- `infra/capture/` — pristine as-taken-from-prod evidence, pending adoption into `config/` or a decision (e.g. the base_worker.rb patch awaiting a 4.0-still-needed check). Read-only; never applied.
 - `microservices/` — bbb-mp4-api + tcz CLI (subtree-imported from the superseded The-Code-Zone/bbb-microservices repo), deployed at `/opt/bbb-microservices` on boxes.
 
 ## Rules

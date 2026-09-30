@@ -73,6 +73,10 @@ stage-deploys:
 runs:
     gh run list -R The-Code-Zone/bigbluebutton --workflow tcz-html5-build.yml --limit 5
 
+# apply the repo's box config to stage (restarts BBB there - drops stage meetings)
+stage-config:
+    bash infra/config/apply.sh stage
+
 # build the client locally (rarely needed - CI builds on every push)
 build:
     bash scripts/tcz/build-html5.sh
