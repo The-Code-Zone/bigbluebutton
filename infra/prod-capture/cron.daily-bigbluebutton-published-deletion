@@ -1,0 +1,48 @@
+#!/bin/bash
+
+MAXAGE=14
+
+LOGFILE=/mnt/raw/bbb/logs/bigbluebutton-published-deletion-crondaily
+
+shopt -s nullglob
+
+NOW=$(date +%s)
+
+echo "$(date --rfc-3339=seconds) Deleting recordings older than ${MAXAGE} days" >>"${LOGFILE}"
+
+for donefile in /mnt/raw/bbb/recording/status/published/*-presentation.done ; do
+        MTIME=$(stat -c %Y "${donefile}")
+        # Check the age of the recording
+        if [ $(( ( $NOW - $MTIME ) / 86400 )) -gt $MAXAGE ]; then
+                MEETING_ID=$(basename "${donefile}")
+                MEETING_ID=${MEETING_ID%-presentation.done}
+                echo "${MEETING_ID}" >> "${LOGFILE}"
+
+                bbb-record --delete "${MEETING_ID}" >>"${LOGFILE}"
+
+		MP4_FILE="/mnt/raw/bbb/recording/mp4/${MEETING_ID}.mp4"
+                if [ -f "$MP4_FILE" ]; then
+                        echo "$(date --rfc-3339=seconds) Deleting MP4: $MP4_FILE" >> "${LOGFILE}"
+                        rm -f "$MP4_FILE"
+                fi
+        fi
+done
+
+for eventsfile in /mnt/raw/bbb/recording/raw/*/events.xml ; do
+        MTIME=$(stat -c %Y "${eventsfile}")
+        # Check the age of the recording
+        if [ $(( ( $NOW - $MTIME ) / 86400 )) -gt $MAXAGE ]; then
+                MEETING_ID="${eventsfile%/events.xml}"
+                MEETING_ID="${MEETING_ID##*/}"
+                echo "${MEETING_ID}" >> "${LOGFILE}"
+
+                bbb-record --delete "${MEETING_ID}" >>"${LOGFILE}"
+
+		MP4_FILE="/mnt/raw/bbb/recording/mp4/${MEETING_ID}.mp4"
+		if [ -f "$MP4_FILE" ]; then
+			echo "$(date --rfc-3339=seconds) Deleting MP4: $MP4_FILE" >> "${LOGFILE}"
+			rm -f "$MP4_FILE"
+		fi
+        fi
+done
+
