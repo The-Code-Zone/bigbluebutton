@@ -21,7 +21,7 @@ The Code Zone's fork of BigBlueButton. Runs club video calls for the live site. 
 - `infra/provision/` — create Azure resources (rare; `stage.sh` now, `prod.sh` at cutover).
 - `infra/config/` — desired state of any TCZ BBB box: `files/` (config files with `${BBB_HOST}`-style placeholders), `hosts/*.env` (the only per-box differences), `apply.sh <host>` (renders + applies + restarts; `just stage-config`). This becomes the Ansible playbook's content when that's written.
 - `infra/capture/` — pristine as-taken-from-prod evidence, pending adoption into `config/` or a decision (e.g. the base_worker.rb patch awaiting a 4.0-still-needed check). Read-only; never applied.
-- `microservices/` — bbb-mp4-api + tcz CLI (subtree-imported from the superseded The-Code-Zone/bbb-microservices repo), deployed at `/opt/bbb-microservices` on boxes.
+- `tcz-mp4-api/`, `tcz-cli/` — our services as top-level dirs, matching upstream's component-per-dir idiom (the `tcz-` prefix marks ours and can never collide with upstream). Subtree-imported from the superseded The-Code-Zone/bbb-microservices repo; prod deploys them at `/opt/bbb-microservices` (legacy path — the 4.0 box install path gets decided when the mp4 stack lands on stage). The `tcz-cli` on-box CLI is legacy and may not survive to 4.0.
 
 ## Rules
 
