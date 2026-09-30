@@ -4,10 +4,10 @@ The Code Zone's fork of BigBlueButton. Runs club video calls for the live site. 
 
 ## Branches
 
-- `tcz/4.0` — **the trunk.** Based on upstream `v4.0.x-release`. All 4.0 work lands here via squash-merged feature branches; every push builds the client in CI and auto-deploys it to the stage box. Production promotion = a tag on a stage-soaked sha (not yet live — prod still runs the 3.0 line until cutover).
+- `master` — **the permanent trunk** (default branch). Currently based on upstream `v4.0.x-release`; stays `master` across future version jumps. Branch off it, squash-merge back via PR; every push to it builds the client in CI and auto-deploys to the stage box; PRs into it get a build check. Production promotion = a tag on a stage-soaked sha (not yet live — prod still runs the 3.0 line until cutover).
 - `v3.0.x-release` — the current-production line (BBB 3.0.8 era + our ~134 client commits). Emergency fixes only until cutover.
 - `unstable` — legacy 3.0 trial branch; prod's live client was last deployed from it.
-- `tcz/deploy-pipeline` — pending merge into the 3.0 line; its tooling is already carried onto `tcz/4.0`.
+- `tcz/deploy-pipeline` — the 3.0-era tooling branch; everything on it is already carried onto `master`.
 
 ## Boxes
 

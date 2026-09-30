@@ -7,8 +7,8 @@
 #   4. ask an existing dev to run:  just stage-add-dev your-key.pub
 #   5. just stage-up && just stage-meeting
 #
-# Workflow: branch off tcz/4.0, push, CI builds the client and deploys it
-# to stage automatically. Test with `just stage-meeting`. Never build on a box.
+# Workflow: branch off master, PR/merge into master - CI builds the client and
+# deploys it to stage automatically. Test with `just stage-meeting`. Never build on a box.
 # Every recipe below targets STAGE - none of them touch production.
 
 set shell := ["bash", "-cu"]
