@@ -5,6 +5,8 @@ public:
     clientTitle: The Code Zone
     enableMultipleCameras: false
     enableCameraBrightness: false
+    enableCameraQuality: false
+    enableAdvancedVideo: false
     enableAvatars: true
     reactionsButton:
       enabled: true
