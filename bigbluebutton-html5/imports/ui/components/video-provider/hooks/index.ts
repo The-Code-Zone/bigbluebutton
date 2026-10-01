@@ -751,6 +751,7 @@ export const useVideoStreams = () => {
   const myPageSize = useMyPageSize();
   const isPaginationEnabled = useIsPaginationEnabled();
   const { senderIds, senderIdsInGroups, inAnyGroup } = useVideoSenders();
+  const myVideoEnabled = useHasVideoStream();
   let streams: StreamItem[] = [...videoStreams];
   let totalNumberOfOtherStreams: number | undefined;
 
@@ -769,7 +770,7 @@ export const useVideoStreams = () => {
 
   if (connectingStream) streams.push(connectingStream);
 
-  if (!viewParticipantsWebcams) {
+  if (!viewParticipantsWebcams || (!myVideoEnabled && !currentUser?.isModerator)) {
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream));
   } else if (inAnyGroup) {
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream)
