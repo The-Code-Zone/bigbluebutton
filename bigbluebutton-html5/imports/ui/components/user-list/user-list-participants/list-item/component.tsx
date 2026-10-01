@@ -142,6 +142,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
 
   const Settings = getSettingsSingletonInstance();
   const animations = Settings?.application?.animations;
+  const ENABLE_AVATARS = window.meetingClientSettings.public.app.enableAvatars;
 
   return (
     <Styled.UserItemContents
@@ -166,24 +167,26 @@ const UserListItem: React.FC<UserListItemProps> = ({
           isOpen={modal.isOpen}
         />
       )}
-      <Styled.Avatar
-        data-test-presenter={user.presenter ? '' : undefined}
-        data-test-avatar="userAvatar"
-        moderator={user.isModerator}
-        presenter={user.presenter}
-        talking={isTalking}
-        muted={isMuted}
-        color={user.color}
-        animations={animations}
-        avatar={userAvatarFiltered}
-        you={user.userId === Auth.userID}
-      >
-        {/* @ts-ignore */}
-        <AvatarContent
-          data-test={user.isModerator ? 'moderatorAvatar' : 'viewerAvatar'}
-          user={user}
-        />
-      </Styled.Avatar>
+      {ENABLE_AVATARS && (
+        <Styled.Avatar
+          data-test-presenter={user.presenter ? '' : undefined}
+          data-test-avatar="userAvatar"
+          moderator={user.isModerator}
+          presenter={user.presenter}
+          talking={isTalking}
+          muted={isMuted}
+          color={user.color}
+          animations={animations}
+          avatar={userAvatarFiltered}
+          you={user.userId === Auth.userID}
+        >
+          {/* @ts-ignore */}
+          <AvatarContent
+            data-test={user.isModerator ? 'moderatorAvatar' : 'viewerAvatar'}
+            user={user}
+          />
+        </Styled.Avatar>
+      )}
       <UserNameWithSubs
         subjectUser={user}
         lockSettings={lockSettings}
