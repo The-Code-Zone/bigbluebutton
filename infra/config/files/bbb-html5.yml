@@ -5,6 +5,7 @@ public:
     clientTitle: The Code Zone
     enableMultipleCameras: false
     enableCameraBrightness: false
+    requireOwnWebcamToViewWebcams: true
     reactionsButton:
       enabled: true
     emojiRain:

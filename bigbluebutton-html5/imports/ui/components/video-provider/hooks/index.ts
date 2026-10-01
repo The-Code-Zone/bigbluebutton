@@ -770,7 +770,9 @@ export const useVideoStreams = () => {
 
   if (connectingStream) streams.push(connectingStream);
 
-  if (!viewParticipantsWebcams || (!myVideoEnabled && !currentUser?.isModerator)) {
+  const requireOwnWebcam = window.meetingClientSettings.public.app.requireOwnWebcamToViewWebcams;
+
+  if (!viewParticipantsWebcams || (requireOwnWebcam && !myVideoEnabled && !currentUser?.isModerator)) {
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream));
   } else if (inAnyGroup) {
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream)
