@@ -259,6 +259,7 @@
     "app.userList.menu.muteUserAudio.label": "Mute user",
     "app.userList.menu.unmuteUserAudio.label": "Unmute user",
     "app.userList.menu.listenOnly": "Listen Mode User",
+    "app.userList.userVolumeLabel": "Adjust volume for {0}",
     "app.userList.menu.microphoneOpen": "User Microphone Open",
     "app.userList.menu.microphoneClosed": "User Microphone Closed",
     "app.userList.menu.webcamPin.label": "Pin user's webcam",
