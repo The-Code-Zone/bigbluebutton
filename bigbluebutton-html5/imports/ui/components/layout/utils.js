@@ -9,7 +9,7 @@ import {
 } from './enums';
 import getFromUserSettings from '/imports/ui/services/users-settings';
 
-const phoneUpperBoundary = 400;
+const phoneUpperBoundary = 600;
 const tabletPortraitUpperBoundary = 900;
 const tabletLandscapeUpperBoundary = 1200;
 const WAIT_LAYOUT_PARAMETER = 'waitLayout';
