@@ -18,6 +18,7 @@ import SessionDetailsModal from '/imports/ui/components/session-details/componen
 import Icon from '/imports/ui/components/common/icon/icon-ts/component';
 import { PluginButtonIcon } from '/imports/ui/components/plugins/plugin-icon/styles';
 import SessionStorage from '../../services/storage/session';
+import getFromUserSettings from '/imports/ui/services/users-settings';
 import { ModalRegistration } from '../../core/singletons/modalController';
 import browserInfo from '/imports/utils/browserInfo';
 import deviceInfo from '/imports/utils/deviceInfo';
@@ -265,6 +266,10 @@ class NavBar extends Component {
     const APP_CONFIG = window.meetingClientSettings?.public?.app;
     const enableTalkingIndicator = APP_CONFIG?.enableTalkingIndicator;
 
+    const hidePresentationTitle = getFromUserSettings('bbb_nav_hide_presentation_title', false);
+    const hideSessionControls = getFromUserSettings('bbb_nav_hide_session_control_buttons', false);
+    const hideSpeakers = getFromUserSettings('bbb_nav_hide_speakers', false);
+
     return (
       <Styled.Navbar
         id="Navbar"
@@ -290,20 +295,22 @@ class NavBar extends Component {
               {renderPluginItems(leftPluginItems)}
             </Styled.Left>
             <Styled.Center>
-              <Styled.PresentationTitle
-                data-test="presentationTitle"
-                id="presentationTitle"
-              >
-                <Tooltip title={intl.formatMessage(intlMessages.openDetailsTooltip)}>
-                  <Styled.TitleButton
-                    aria-haspopup="dialog"
-                    onClick={() => this.setModalIsOpen(true)}
-                  >
-                    <Styled.TitleText>{presentationTitle}</Styled.TitleText>
-                    <Icon iconName="device_list_selector" rotate />
-                  </Styled.TitleButton>
-                </Tooltip>
-              </Styled.PresentationTitle>
+              {!hidePresentationTitle && (
+                <Styled.PresentationTitle
+                  data-test="presentationTitle"
+                  id="presentationTitle"
+                >
+                  <Tooltip title={intl.formatMessage(intlMessages.openDetailsTooltip)}>
+                    <Styled.TitleButton
+                      aria-haspopup="dialog"
+                      onClick={() => this.setModalIsOpen(true)}
+                    >
+                      <Styled.TitleText>{presentationTitle}</Styled.TitleText>
+                      <Icon iconName="device_list_selector" rotate />
+                    </Styled.TitleButton>
+                  </Tooltip>
+                </Styled.PresentationTitle>
+              )}
               <ModalRegistration id="SessionDetailsModal" priority="low">
                 {
                   ({
@@ -326,29 +333,33 @@ class NavBar extends Component {
               </ModalRegistration>
               {renderPluginItems(centerPluginItems)}
             </Styled.Center>
-            <Styled.Right>
-              <h2 className="sr-only">{intl.formatMessage(intlMessages.sessionControlLabel)}</h2>
-              <RecordingIndicator
-                amIModerator={amIModerator}
-                currentUserId={currentUserId}
-              />
-              {renderPluginItems(rightPluginItems)}
-              {ConnectionStatusService.isEnabled() ? <ConnectionStatusButton /> : null}
-              {ConnectionStatusService.isEnabled() ? <ConnectionStatus /> : null}
-              {isDirectLeaveButtonEnabled && isConnected
-                ? <LeaveMeetingButtonContainer amIModerator={amIModerator} /> : null}
-              <OptionsDropdownContainer
-                amIModerator={amIModerator}
-                isDirectLeaveButtonEnabled={isDirectLeaveButtonEnabled}
-              />
-            </Styled.Right>
+            {!hideSessionControls && (
+              <Styled.Right>
+                <h2 className="sr-only">{intl.formatMessage(intlMessages.sessionControlLabel)}</h2>
+                <RecordingIndicator
+                  amIModerator={amIModerator}
+                  currentUserId={currentUserId}
+                />
+                {renderPluginItems(rightPluginItems)}
+                {ConnectionStatusService.isEnabled() ? <ConnectionStatusButton /> : null}
+                {ConnectionStatusService.isEnabled() ? <ConnectionStatus /> : null}
+                {isDirectLeaveButtonEnabled && isConnected
+                  ? <LeaveMeetingButtonContainer amIModerator={amIModerator} /> : null}
+                <OptionsDropdownContainer
+                  amIModerator={amIModerator}
+                  isDirectLeaveButtonEnabled={isDirectLeaveButtonEnabled}
+                />
+              </Styled.Right>
+            )}
           </Styled.Top>
         )}
-        <Styled.Bottom>
-          <h2 className="sr-only">{intl.formatMessage(intlMessages.speakersListLabel)}</h2>
-          {enableTalkingIndicator ? <TalkingIndicator amIModerator={amIModerator} /> : null}
-          <TimerIndicatorContainer />
-        </Styled.Bottom>
+        {!hideSpeakers && (
+          <Styled.Bottom>
+            <h2 className="sr-only">{intl.formatMessage(intlMessages.speakersListLabel)}</h2>
+            {enableTalkingIndicator ? <TalkingIndicator amIModerator={amIModerator} /> : null}
+            <TimerIndicatorContainer />
+          </Styled.Bottom>
+        )}
       </Styled.Navbar>
     );
   }
