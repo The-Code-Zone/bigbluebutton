@@ -108,6 +108,11 @@ const ConnectingAnimation = styled.span`
 const AudioModal = styled(ModalSimple)`
   padding: 1rem;
   min-height: 20rem;
+
+  @media (max-height: 340px) {
+    min-height: 0;
+    padding: 0.5rem;
+  }
 `;
 
 const BrowserWarning = styled.p`
