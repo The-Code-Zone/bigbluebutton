@@ -60,12 +60,6 @@ html[data-darkreader-scheme="dark"] body {
   background-image: none !important;
 }
 
-:root {
-  --sidebar-content-bg: rgba(22, 24, 30, 0.72);
-  --user-list-bg: transparent;
-  --user-list-text: #F2F2F4;
-}
-
 section[id="ActionsBar"],
 [data-test="navigationSidebarContainer"] {
   --list-item-bg-hover: rgba(86, 92, 106, 0.85);
