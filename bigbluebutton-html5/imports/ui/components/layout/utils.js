@@ -14,6 +14,11 @@ const tabletPortraitUpperBoundary = 900;
 const tabletLandscapeUpperBoundary = 1200;
 const WAIT_LAYOUT_PARAMETER = 'waitLayout';
 
+const isSidebarNavigationHidden = () => getFromUserSettings(
+  'bbb_hide_sidebar_navigation',
+  window.meetingClientSettings?.public?.app?.floatingNavigation ?? false,
+);
+
 const windowSize = () => window.document.documentElement.clientWidth;
 const isMobile = () => windowSize() <= (phoneUpperBoundary - 1);
 const isTabletPortrait = () => windowSize() >= phoneUpperBoundary
@@ -212,5 +217,5 @@ const getDeviceType = () => {
 export {
   suportedLayouts, LAYOUTS_SYNC, getSupportedLayouts, isLayoutSupported, layoutAllowedInSettings,
   getWaitLayout, getDeviceType, getInitialSidebarContentPanel,
-  isValidSynchronizationLayout,
+  isValidSynchronizationLayout, isSidebarNavigationHidden,
 };

@@ -18,7 +18,7 @@ import MediaOnlyLayout from './mediaOnlyLayout';
 import MicroLayout from './microLayout';
 import useIsMicroViewport from '/imports/ui/components/layout/hooks/useIsMicroViewport';
 import { usePrevious } from '../../whiteboard/utils';
-import { getWaitLayout } from '../utils';
+import { getWaitLayout, isSidebarNavigationHidden } from '../utils';
 
 const LayoutEngine = () => {
   const bannerBarInput = layoutSelectInput((i) => i.bannerBar);
@@ -211,7 +211,7 @@ const LayoutEngine = () => {
 
     let width = 0;
     let horizontalSpaceOccupied = 0;
-    if (isOpen) {
+    if (isOpen && !isSidebarNavigationHidden()) {
       if (isMobile) {
         width = sidebarNavWidthMobile;
         // The navigation sidebar is a floating window on mobile. We say it does not

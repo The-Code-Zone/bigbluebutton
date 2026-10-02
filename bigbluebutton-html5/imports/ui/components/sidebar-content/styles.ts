@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import {
   colorWhite,
+  sidebarContentBg,
   colorPrimary,
   colorBorder,
   appsPanelTextColor,
@@ -69,7 +70,7 @@ const Poll = styled.div`
 `;
 
 export const SidebarContentPanel = styled.div<SidebarContentPanelProps>`
-  background-color: ${colorWhite};
+  background-color: ${sidebarContentBg};
   display: flex;
   flex-grow: 1;
   flex-direction: column;
