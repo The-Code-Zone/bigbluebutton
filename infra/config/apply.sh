@@ -50,7 +50,7 @@ sudo systemctl daemon-reload
 
 rm -rf /tmp/bbb-config
 sudo bbb-conf --restart >/dev/null 2>&1
-sudo bbb-conf --status | head -4
+sudo bbb-conf --status | sed -n '1,4p'
 REMOTE
 
 echo "config applied to $HOST_KEY ($BBB_HOST)"
