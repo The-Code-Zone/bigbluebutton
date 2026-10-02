@@ -44,6 +44,10 @@ const intlMessages = defineMessages({
     id: 'app.audioManager.leftAudio',
     description: 'Left audio toast message',
   },
+  undeafenedAudio: {
+    id: 'app.audioManager.undeafenedAudio',
+    description: 'Undeafened (rejoined after deafen) toast message',
+  },
   reconnectingAudio: {
     id: 'app.audioManager.reconnectingAudio',
     description: 'Reconnecting audio toast message',
@@ -96,6 +100,7 @@ const messages = {
     JOINED_AUDIO: intlMessages.joinedAudio,
     JOINED_ECHO: intlMessages.joinedEcho,
     LEFT_AUDIO: intlMessages.leftAudio,
+    UNDEAFENED_AUDIO: intlMessages.undeafenedAudio,
     RECONNECTING_AUDIO: intlMessages.reconnectingAudio,
   },
   error: {
