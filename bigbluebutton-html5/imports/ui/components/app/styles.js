@@ -160,6 +160,7 @@ const DtfAvatars = `
 `;
 
 const DtfImages = `
+  body,
   svg,
   [data-test="selectDefaultBackground"],
   [data-test="selectCustomBackground"],
