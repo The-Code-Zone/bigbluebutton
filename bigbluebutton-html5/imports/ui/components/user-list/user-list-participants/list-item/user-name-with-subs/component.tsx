@@ -42,6 +42,10 @@ const intlMessages = defineMessages({
     id: 'app.userList.sharingWebcam',
     description: 'Text for identifying who is sharing webcam',
   },
+  deafened: {
+    id: 'app.userList.deafened',
+    description: 'Text for identifying deafened user',
+  },
   you: {
     id: 'app.userList.you',
     description: 'Text for identifying your user',
@@ -115,6 +119,15 @@ const UserNameWithSubs: React.FC<UserNameWithSubsProps> = ({
         <Icon iconName="lock" />
         &nbsp;
         {intl.formatMessage(intlMessages.locked)}
+      </span>,
+    );
+  }
+  if (subjectUser.voice?.deafened) {
+    subs.push(
+      <span key={uniqueId('deafened-')} data-test="userDeafenedLabel">
+        <Icon iconName="volume_off" />
+        &nbsp;
+        {intl.formatMessage(intlMessages.deafened)}
       </span>,
     );
   }
