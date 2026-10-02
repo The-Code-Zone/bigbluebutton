@@ -8,6 +8,8 @@ public:
     enableCameraQuality: false
     enableAdvancedVideo: false
     enableAvatars: true
+    showMediaAreaButton: false
+    presenterCameraAsContent: true
     requireOwnWebcamToViewWebcams: true
     reactionsButton:
       enabled: true
@@ -24,6 +26,14 @@ public:
         pushLayout: true
       branding:
         displayBrandingArea: false
+  sidebarNavigation:
+    buttons:
+      top:
+        - profile
+        - user-list
+      center: []
+      bottom:
+        - settings
   kurento:
     wsUrl: wss://${BBB_HOST}/bbb-webrtc-sfu
     screenshare:

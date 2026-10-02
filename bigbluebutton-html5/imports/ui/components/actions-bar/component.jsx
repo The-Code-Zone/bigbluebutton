@@ -170,6 +170,8 @@ class ActionsBar extends PureComponent {
     const shouldShowOptionsButton = (isPresentationEnabled && isThereCurrentPresentation)
       || isSharingVideo || hasScreenshare || isSharedNotesPinned;
 
+    const { showMediaAreaButton } = window.meetingClientSettings.public.app;
+
     return shouldRenderActionBar && (
       <Styled.ActionsBarWrapper
         id="ActionsBar"
@@ -239,7 +241,8 @@ class ActionsBar extends PureComponent {
                   />
                 )}
               {((amIPresenter || amIModerator)
-                && shouldShowOptionsButton) && (<Styled.Divider />)}
+                && shouldShowOptionsButton && showMediaAreaButton) && (<Styled.Divider />)}
+              {showMediaAreaButton && (
               <MediaAreaContainer {...{
                 amIPresenter,
                 amIModerator,
@@ -257,6 +260,7 @@ class ActionsBar extends PureComponent {
                 hasPresentation: isThereCurrentPresentation,
               }}
               />
+              )}
             </Styled.PresentationButtonsWrapper>
             <Styled.Gap>
               {

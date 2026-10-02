@@ -85,6 +85,8 @@ public:
     enableCameraQuality: true
     enableAdvancedVideo: true
     enableAvatars: true
+    showMediaAreaButton: true
+    presenterCameraAsContent: false
     requireOwnWebcamToViewWebcams: false
     mirrorOwnWebcam: true
     viewersInWebcam: 8
