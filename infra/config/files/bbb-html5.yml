@@ -3,6 +3,7 @@ public:
     mobileFontSize: 20px
     desktopFontSize: 20px
     clientTitle: The Code Zone
+    customStyleUrl: https://${BBB_HOST}/tcz-theme/tcz-theme.css?v=${THEME_VERSION}
     enableMultipleCameras: false
     enableCameraBrightness: false
     enableCameraQuality: false

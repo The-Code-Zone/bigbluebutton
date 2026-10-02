@@ -1,0 +1,64 @@
+@font-face {
+  font-family: 'Lunchbox';
+  src: url('LunchBoxLight.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lunchbox';
+  src: url('LunchBoxLight.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lunchbox';
+  src: url('LunchBoxBold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --tcz-font: 'Lunchbox', 'Source Sans Pro', Arial, sans-serif;
+
+  --color-rich-purple: #4B006F;
+  --color-sage-green: #13A89E;
+  --color-orangey-yellow: #FFC022;
+  --color-lime-green: #A0CB61;
+  --color-blush-red: #DF5972;
+  --color-settled-blue: #5587C6;
+
+  --color-background: transparent;
+}
+
+body,
+.toastBodyClass,
+.MuiPaper-root,
+.MuiPaper-root * {
+  font-family: var(--tcz-font) !important;
+}
+
+body {
+  background-color: #06172A !important;
+  background-image: url('background.jpg');
+}
+
+html[data-darkreader-scheme="dark"] body {
+  background-color: #181A23 !important;
+  background-image: linear-gradient(rgba(24, 26, 35, 0.35), rgba(24, 26, 35, 0.35)), url('background.jpg');
+}
+
+html[data-darkreader-scheme="dark"] #Navbar,
+html[data-darkreader-scheme="dark"] #ActionsBar {
+  background-color: transparent !important;
+}
+
+[id^="scroll-box"],
+[id^="chat-list"],
+[id^="breakoutBox"] {
+  background-image: none !important;
+}

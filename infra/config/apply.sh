@@ -15,13 +15,17 @@ fi
 
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
+THEME_VERSION=$(md5sum "$DIR/files/theme/tcz-theme.css" | cut -c1-8)
 for f in "$DIR"/files/*; do
+  [ -d "$f" ] && continue
   sed -e "s|\${BBB_HOST}|$BBB_HOST|g" \
       -e "s|\${RECORDING_ROOT}|$RECORDING_ROOT|g" \
       -e "s|\${MP4_DIR}|$MP4_DIR|g" \
       -e "s|\${LOG_FILE}|$LOG_FILE|g" \
+      -e "s|\${THEME_VERSION}|$THEME_VERSION|g" \
       "$f" > "$TMP/$(basename "$f")"
 done
+cp -r "$DIR/files/theme" "$TMP/theme"
 
 tar -C "$TMP" -cf - . | ssh "$SSH_TARGET" 'rm -rf /tmp/bbb-config && mkdir -p /tmp/bbb-config && tar -xf - -C /tmp/bbb-config'
 
@@ -43,6 +47,10 @@ sudo install -m 640 -o root -g bigbluebutton /tmp/bbb-config/turn-stun-servers.x
 sudo sed -i "s|\${TURN_SECRET}|$TURN_SECRET|g" /etc/bigbluebutton/turn-stun-servers.xml
 
 sudo install -m 644 /tmp/bbb-config/base_worker.rb /usr/local/bigbluebutton/core/lib/recordandplayback/workers/base_worker.rb
+
+sudo mkdir -p /opt/tcz/theme
+sudo cp -rf /tmp/bbb-config/theme/. /opt/tcz/theme/
+sudo install -m 644 /tmp/bbb-config/nginx-tcz-theme.nginx /usr/share/bigbluebutton/nginx/tcz-theme.nginx
 
 sudo mkdir -p /etc/systemd/system/bbb-rap-resque-worker.service.d
 sudo install -m 644 /tmp/bbb-config/systemd-bbb-rap-resque-worker-override.conf /etc/systemd/system/bbb-rap-resque-worker.service.d/tcz.conf
