@@ -23,6 +23,7 @@ import {
 } from './service';
 import { UserListItemProps } from './types';
 import UserNameWithSubs from './user-name-with-subs/component';
+import UserVolumeControl from './user-volume-control/component';
 import { PluginsContext } from '/imports/ui/components/components-data/plugin-context/context';
 import { useUserOperations } from '/imports/ui/components/user-list/hooks/useUserOperations';
 
@@ -190,6 +191,9 @@ const UserListItem: React.FC<UserListItemProps> = ({
         intl={intl}
         userItemsFromPlugin={userItemsFromPlugin}
       />
+      {!isMe(user.userId) && user.voice?.joined && !user.voice?.listenOnly && (
+        <UserVolumeControl userId={user.userId} userName={user.name} />
+      )}
       {renderUserListItemIconsFromPlugin(userItemsFromPlugin)}
       <UserItemToolbar
         subjectUser={user}

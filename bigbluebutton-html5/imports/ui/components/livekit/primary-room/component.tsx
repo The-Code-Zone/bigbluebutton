@@ -6,7 +6,6 @@ import { defineMessages, useIntl } from 'react-intl';
 import { toast } from 'react-toastify';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import {
-  RoomAudioRenderer,
   useLocalParticipant,
   useIsSpeaking,
   useConnectionState,
@@ -36,6 +35,7 @@ import {
   USER_SET_TALKING,
 } from '/imports/ui/components/livekit/mutations';
 import LKAutoplayModalContainer from '/imports/ui/components/livekit/autoplay-modal/container';
+import PerUserAudioRenderer from '/imports/ui/components/livekit/user-volume/audio-renderer';
 import { notify } from '/imports/ui/services/notification';
 import connectionStatus, { MetricStatus } from '/imports/ui/core/graphql/singletons/connectionStatus';
 import SelectiveSubscription from '/imports/ui/components/livekit/selective-subscription/component';
@@ -270,7 +270,7 @@ const PrimaryLiveKitRoom: React.FC<PrimaryLiveKitRoomProps> = ({ membership }) =
     >
       <PrimaryObserver room={room} url={url} usingAudio={usingAudio} />
       {withAudioPlayback && (!hasActiveSecondary || !canPlayAudio) && <LKAutoplayModalContainer />}
-      {withAudioPlayback && <RoomAudioRenderer volume={speakerLevel} />}
+      {withAudioPlayback && <PerUserAudioRenderer volume={speakerLevel} />}
       {usingAudio && withSelectiveSubscription && <SelectiveSubscription />}
     </BaseLiveKitRoom>
   );

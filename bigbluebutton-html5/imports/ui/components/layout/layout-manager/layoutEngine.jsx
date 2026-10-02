@@ -15,6 +15,8 @@ import PluginsOnlyLayout from '/imports/ui/components/layout/layout-manager/plug
 import { useIsPresentationEnabled } from '/imports/ui/services/features';
 import Session from '/imports/ui/services/storage/in-memory';
 import MediaOnlyLayout from './mediaOnlyLayout';
+import MicroLayout from './microLayout';
+import useIsMicroViewport from '/imports/ui/components/layout/hooks/useIsMicroViewport';
 import { usePrevious } from '../../whiteboard/utils';
 import { getWaitLayout } from '../utils';
 
@@ -45,6 +47,7 @@ const LayoutEngine = () => {
   const selectedLayout = layoutSelect((i) => i.layoutType);
   const isPresentationEnabled = useIsPresentationEnabled();
   const prevLayout = usePrevious(selectedLayout);
+  const isMicroActive = useIsMicroViewport();
 
   const isMobile = deviceType === DEVICE_TYPE.MOBILE;
   const isTablet = deviceType === DEVICE_TYPE.TABLET;
@@ -386,6 +389,10 @@ const LayoutEngine = () => {
 
   const layout = document.getElementById('layout');
   if (skipLayoutEngineRender) return null;
+  if (isMicroActive) {
+    layout?.setAttribute('data-layout', LAYOUT_TYPE.MICRO);
+    return <MicroLayout {...common} isPresentationEnabled={isPresentationEnabled} />;
+  }
   switch (selectedLayout) {
     case LAYOUT_TYPE.UNIFIED_LAYOUT:
       layout?.setAttribute('data-layout', LAYOUT_TYPE.UNIFIED_LAYOUT);
