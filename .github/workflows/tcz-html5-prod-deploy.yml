@@ -54,3 +54,8 @@ jobs:
           echo "$(date -u +%FT%TZ) $SHA github-actions $TAG" | sudo tee -a /etc/bigbluebutton/tcz-html5-deploys >/dev/null
           rm -rf "$STAGE" "/tmp/html5-client-$SHA.tar.gz"
           REMOTE
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.build.outputs.sha }}
+      - name: Apply config to prod
+        run: bash infra/config/apply.sh prod
