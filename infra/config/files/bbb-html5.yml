@@ -30,7 +30,6 @@ public:
   sidebarNavigation:
     buttons:
       top:
-        - profile
         - user-list
       center: []
       bottom:

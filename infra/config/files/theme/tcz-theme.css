@@ -33,7 +33,8 @@
   --color-settled-blue: #5587C6;
 
   --color-background: transparent;
-  --btn-default-bg: rgba(255, 255, 255, 0.82);
+  --btn-default-bg: rgba(22, 24, 30, 0.72);
+  --btn-default-color: #FFFFFF;
 }
 
 body,
@@ -51,13 +52,6 @@ body {
 html[data-darkreader-scheme="dark"] body {
   background-color: #181A23 !important;
   background-image: none;
-}
-
-html:not([data-darkreader-scheme="dark"]) [data-test="navigationSidebarContainer"],
-html:not([data-darkreader-scheme="dark"]) [data-test="sidebarContentMain"] > div:not(.resizeSidebarContentWrapper) {
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
 [id^="scroll-box"],
