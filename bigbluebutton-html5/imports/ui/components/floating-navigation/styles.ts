@@ -5,15 +5,18 @@ const islandBg = 'rgba(22, 24, 30, 0.72)';
 
 const FloatingButton = styled.button`
   position: fixed;
+  top: 4px;
   z-index: 5;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 34px;
   border: none;
   cursor: pointer;
   background-color: ${islandBg};
   color: ${colorWhite};
   font-family: inherit;
+  font-size: 15px;
 
   &:hover {
     filter: brightness(1.3);
@@ -26,17 +29,15 @@ const FloatingButton = styled.button`
 
   i {
     color: inherit;
+    font-size: 15px;
   }
 `;
 
 const ParticipantsPill = styled(FloatingButton)`
-  top: 0.75rem;
-  left: 0.75rem;
-  height: 2.6rem;
-  padding: 0 1rem;
-  gap: 0.45rem;
-  border-radius: 1.3rem;
-  font-size: 1rem;
+  left: 8px;
+  padding: 0 14px;
+  gap: 7px;
+  border-radius: 17px;
 
   &[aria-expanded='true'] {
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
@@ -44,12 +45,9 @@ const ParticipantsPill = styled(FloatingButton)`
 `;
 
 const SettingsDot = styled(FloatingButton)`
-  top: 0.75rem;
-  right: 0.75rem;
-  width: 2.6rem;
-  height: 2.6rem;
+  right: 8px;
+  width: 34px;
   border-radius: 50%;
-  font-size: 1rem;
 `;
 
 export default {

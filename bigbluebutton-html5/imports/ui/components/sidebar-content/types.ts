@@ -32,6 +32,7 @@ interface SidebarContentProps {
 interface SidebarContentPanelProps {
   isRTL: boolean;
   isChrome: boolean;
+  isTransparent?: boolean;
 }
 
 export {

@@ -6,9 +6,11 @@ import ProfileSettings from '/imports/ui/components/profile-settings/component';
 import NotesContainer from '/imports/ui/components/notes/component';
 import PollContainer from '/imports/ui/components/poll/container';
 import UserListComponent from '/imports/ui/components/user-list/component';
+import FloatingUserList from '/imports/ui/components/floating-navigation/user-list/component';
 import BreakoutRoomContainer from '../breakout-room/breakout-room/component';
 import TimerContainer from '/imports/ui/components/timer/panel/component';
 import Styled from './styles';
+
 import ErrorBoundary from '/imports/ui/components/common/error-boundary/component';
 import FallbackView from '/imports/ui/components/common/fallback-errors/fallback-view/component';
 import AppsGallery from '../apps-gallery/container';
@@ -25,6 +27,7 @@ import AudioCaptionsPanel from '../audio-captions/panel/component';
 import NotesRenderMode from '/imports/ui/components/notes/constants';
 
 const SidebarContent = (props: SidebarContentProps) => {
+  const FLOATING_NAVIGATION = window.meetingClientSettings.public.app.floatingNavigation;
   const {
     top,
     left = undefined,
@@ -162,7 +165,11 @@ const SidebarContent = (props: SidebarContentProps) => {
           },
         }}
       >
-        <Styled.SidebarContentPanel isRTL={isRTL} isChrome={isChrome}>
+        <Styled.SidebarContentPanel
+          isRTL={isRTL}
+          isChrome={isChrome}
+          isTransparent={FLOATING_NAVIGATION && sidebarContentPanel === PANELS.USERLIST}
+        >
           {sidebarContentPanel === PANELS.CHAT
             && (
               <ErrorBoundary
@@ -178,7 +185,9 @@ const SidebarContent = (props: SidebarContentProps) => {
             />
           )}
           {sidebarContentPanel === PANELS.PROFILE && <ProfileSettings />}
-          {sidebarContentPanel === PANELS.USERLIST && <UserListComponent />}
+          {sidebarContentPanel === PANELS.USERLIST && (
+            FLOATING_NAVIGATION ? <FloatingUserList /> : <UserListComponent />
+          )}
           {sidebarContentPanel === PANELS.BREAKOUT && <BreakoutRoomContainer />}
           {sidebarContentPanel === PANELS.TIMER && <TimerContainer />}
           {sidebarContentPanel === PANELS.POLL && <PollContainer />}

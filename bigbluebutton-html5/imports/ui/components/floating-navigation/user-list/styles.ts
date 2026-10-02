@@ -2,15 +2,13 @@ import styled from 'styled-components';
 import { colorWhite } from '/imports/ui/stylesheets/styled-components/palette';
 
 const Stack = styled.div`
-  position: fixed;
-  top: 4rem;
-  left: 0.75rem;
-  z-index: 5;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  width: 16rem;
-  max-height: calc(100vh - 10rem);
+  gap: 8px;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 46px 8px 8px 8px;
   overflow-y: auto;
   overflow-x: hidden;
 `;
@@ -18,30 +16,31 @@ const Stack = styled.div`
 const Bubble = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.45rem 0.8rem;
-  border-radius: 1.4rem;
+  gap: 10px;
+  max-width: 100%;
+  padding: 7px 14px 7px 8px;
+  border-radius: 24px;
   background-color: rgba(22, 24, 30, 0.72);
   color: ${colorWhite};
 `;
 
 const AvatarInitials = styled.span`
   flex: none;
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: ${colorWhite};
-  font-size: 0.85rem;
+  font-size: 14px;
   text-transform: capitalize;
 `;
 
 const AvatarImage = styled.img`
   flex: none;
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   object-fit: cover;
 `;
@@ -49,28 +48,27 @@ const AvatarImage = styled.img`
 const Text = styled.span`
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 1px;
   min-width: 0;
-  flex: 1;
 `;
 
 const Name = styled.span`
-  font-size: 0.95rem;
+  font-size: 15px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 const Sub = styled.span`
-  font-size: 0.75rem;
+  font-size: 12px;
   color: #7addd5;
 `;
 
 const DeafenedBadge = styled.span`
   flex: none;
-  font-size: 0.7rem;
-  padding: 0.15rem 0.55rem;
-  border-radius: 0.7rem;
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 11px;
   background-color: rgba(223, 89, 114, 0.35);
   color: #ffb9c7;
 `;
