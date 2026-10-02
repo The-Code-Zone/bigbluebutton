@@ -501,7 +501,7 @@ class AudioManager {
             logCode: 'audiomanager_join_echotest',
             extraInfo: { logType: 'user_action' },
           },
-          'User requested to join audio conference with mic'
+          'User requested to join audio conference with mic',
         );
         return this.joinAudio(callOptions, this.callStateCallback);
       });
@@ -782,7 +782,11 @@ class AudioManager {
     if (!this.isEchoTest) {
       const secondsToActivateAudio = this._calculateAudioJoinTime();
 
-      this.notify(this.intl.formatMessage(this.messages.info.JOINED_AUDIO));
+      const joinMessage = this.hasEverJoinedAudio && this.messages.info.UNDEAFENED_AUDIO
+        ? this.messages.info.UNDEAFENED_AUDIO
+        : this.messages.info.JOINED_AUDIO;
+      this.hasEverJoinedAudio = true;
+      this.notify(this.intl.formatMessage(joinMessage));
       this.getStats().then((stats) => {
         logger.info({
           logCode: 'audio_joined',
@@ -823,7 +827,9 @@ class AudioManager {
           'no_audio',
         );
       }
-    } catch {}
+    } catch {
+      // toast failures on exit are inconsequential
+    }
   }
 
   onAudioExit() {
@@ -1287,9 +1293,9 @@ class AudioManager {
   playHangUpSound() {
     this.playAlertSound(
       `${
-        window.meetingClientSettings.public.app.cdn +
-        window.meetingClientSettings.public.app.basename
-      }` + '/resources/sounds/LeftCall.mp3'
+        window.meetingClientSettings.public.app.cdn
+        + window.meetingClientSettings.public.app.basename
+      }/resources/sounds/LeftCall.mp3`,
     );
   }
 
