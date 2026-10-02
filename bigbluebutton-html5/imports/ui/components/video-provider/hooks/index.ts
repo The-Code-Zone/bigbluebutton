@@ -49,6 +49,7 @@ import { SETTINGS } from '/imports/ui/services/settings/enums';
 import { useStorageKey } from '/imports/ui/services/storage/hooks';
 import ConnectionStatus from '/imports/ui/core/graphql/singletons/connectionStatus';
 import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
+import useIsMicroViewport from '/imports/ui/components/layout/hooks/useIsMicroViewport';
 import { layoutSelect } from '/imports/ui/components/layout/context';
 import { Layout } from '/imports/ui/components/layout/layoutTypes';
 import { LAYOUT_TYPE } from '/imports/ui/components/layout/enums';
@@ -751,6 +752,8 @@ export const useVideoStreams = () => {
   const myPageSize = useMyPageSize();
   const isPaginationEnabled = useIsPaginationEnabled();
   const { senderIds, senderIdsInGroups, inAnyGroup } = useVideoSenders();
+  const myVideoEnabled = useHasVideoStream();
+  const isMicro = useIsMicroViewport();
   let streams: StreamItem[] = [...videoStreams];
   let totalNumberOfOtherStreams: number | undefined;
 
@@ -769,7 +772,9 @@ export const useVideoStreams = () => {
 
   if (connectingStream) streams.push(connectingStream);
 
-  if (!viewParticipantsWebcams) {
+  const requireOwnWebcam = window.meetingClientSettings.public.app.requireOwnWebcamToViewWebcams;
+
+  if (!viewParticipantsWebcams || (requireOwnWebcam && !myVideoEnabled && !currentUser?.isModerator)) {
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream));
   } else if (inAnyGroup) {
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream)
@@ -864,6 +869,25 @@ export const useVideoStreams = () => {
     }
   }
 
+  if (isMicro) {
+    const candidates = streams.filter(
+      (s) => s.type === VIDEO_TYPES.STREAM && (!('render' in s) || s.render !== false),
+    );
+    const microPriority = (s: StreamItem) => {
+      let priority = 3;
+      if (s.type === VIDEO_TYPES.STREAM) {
+        if (s.user?.pinned) priority = 0;
+        else if (s.user?.isModerator) priority = 1;
+        else if (s.voice?.floor) priority = 2;
+      }
+      if (videoService.isLocalStream(s.stream)) priority += 4;
+      return priority;
+    };
+    const microStream = candidates.sort((a, b) => microPriority(a) - microPriority(b))[0];
+    streams = microStream ? [microStream] : [];
+    totalNumberOfOtherStreams = 0;
+  }
+
   // Off-page local cameras stay in the array with render: false. Count only
   // what actually renders on this page. Slots are tiles (stream count); the
   // hidden math is per-user (distinct userIds).
@@ -907,9 +931,9 @@ export const useVideoStreams = () => {
 
   return {
     streams,
-    gridUsers: gridUsers.filter((u) => !streams.find((s) => s.userId === u.userId)),
-    overflowCount,
-    overflowUsers: overflowPreviewUsers,
+    gridUsers: isMicro ? [] : gridUsers.filter((u) => !streams.find((s) => s.userId === u.userId)),
+    overflowCount: isMicro ? 0 : overflowCount,
+    overflowUsers: isMicro ? [] : overflowPreviewUsers,
     totalNumberOfStreams: streams.length,
     totalNumberOfOtherStreams,
   };

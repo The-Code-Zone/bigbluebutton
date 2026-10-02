@@ -78,6 +78,7 @@ export interface App {
   enableCameraQuality: boolean
   enableAdvancedVideo: boolean
   enableAvatars: boolean
+  requireOwnWebcamToViewWebcams: boolean
   mirrorOwnWebcam: boolean
   viewersInWebcam: number
   allowLogout: boolean

@@ -239,6 +239,11 @@ const VideoPreviewModal = styled(ModalSimple)<{
     min-height: 22.5rem;
   }
 
+  @media (max-height: 340px) {
+    min-height: 0;
+    padding: 0.5rem;
+  }
+
   ${({ isPhone }) => isPhone && `
     min-height: 100%;
     min-width: 100%;
