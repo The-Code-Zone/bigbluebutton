@@ -305,6 +305,10 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
   }, [intl]);
 
   const renderQualitySelector = () => {
+    // @ts-ignore
+    const ENABLE_CAMERA_QUALITY = window.meetingClientSettings.public.app.enableCameraQuality;
+    if (!ENABLE_CAMERA_QUALITY) return null;
+
     const shared = isAlreadyShared(webcamDeviceId);
 
     if (shared) {

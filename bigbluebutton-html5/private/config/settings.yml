@@ -82,6 +82,9 @@ public:
     enableWebcamSelectorButton: true
     enableTalkingIndicator: true
     enableCameraBrightness: true
+    enableCameraQuality: true
+    enableAdvancedVideo: true
+    enableAvatars: true
     requireOwnWebcamToViewWebcams: false
     mirrorOwnWebcam: true
     viewersInWebcam: 8

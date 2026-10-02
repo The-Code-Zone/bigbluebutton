@@ -231,6 +231,8 @@ const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
     );
   };
 
+  const ENABLE_ADVANCED_VIDEO = window.meetingClientSettings.public.app.enableAdvancedVideo;
+
   return (
     <>
       <Styled.OffsetBottom>
@@ -247,7 +249,7 @@ const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
           loading={videoConnecting}
           hoverColor={listItemBgHover}
         />
-        {renderUserActions()}
+        {ENABLE_ADVANCED_VIDEO && renderUserActions()}
       </Styled.OffsetBottom>
       {isVideoPreviewModalOpen ? (
         <VideoPreviewContainer
