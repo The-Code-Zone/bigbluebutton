@@ -38,6 +38,8 @@ const FloatingNavigation: React.FC = () => {
   );
   const usersCount = usersCountData?.user_aggregate?.aggregate?.count ?? 0;
 
+  const isSidebarContentOpen = sidebarContent.isOpen;
+
   if (isMicro) return null;
 
   const toggleUserList = () => {
@@ -54,24 +56,28 @@ const FloatingNavigation: React.FC = () => {
 
   return (
     <>
-      <Styled.ParticipantsPill
-        type="button"
-        data-test="floatingParticipants"
-        aria-label={intl.formatMessage(intlMessages.usersListLabel)}
-        aria-expanded={isUserListOpen}
-        onClick={toggleUserList}
-      >
-        <Icon iconName="user_list" />
-        {usersCount}
-      </Styled.ParticipantsPill>
-      <Styled.SettingsButton
-        type="button"
-        data-test="floatingSettings"
-        aria-label={intl.formatMessage(intlMessages.settingsLabel)}
-        onClick={() => setIsSettingsModalOpen(true)}
-      >
-        <Icon iconName="settings" />
-      </Styled.SettingsButton>
+      {!isSidebarContentOpen && (
+      <>
+        <Styled.ParticipantsPill
+          type="button"
+          data-test="floatingParticipants"
+          aria-label={intl.formatMessage(intlMessages.usersListLabel)}
+          aria-expanded={isUserListOpen}
+          onClick={toggleUserList}
+        >
+          <Icon iconName="user_list" />
+          {usersCount}
+        </Styled.ParticipantsPill>
+        <Styled.SettingsButton
+          type="button"
+          data-test="floatingSettings"
+          aria-label={intl.formatMessage(intlMessages.settingsLabel)}
+          onClick={() => setIsSettingsModalOpen(true)}
+        >
+          <Icon iconName="settings" />
+        </Styled.SettingsButton>
+      </>
+      )}
       {isSettingsModalOpen && (
         <SettingsContainer
           isOpen={isSettingsModalOpen}
