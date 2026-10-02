@@ -345,10 +345,12 @@ class NavBar extends Component {
                 {ConnectionStatusService.isEnabled() ? <ConnectionStatus /> : null}
                 {isDirectLeaveButtonEnabled && isConnected
                   ? <LeaveMeetingButtonContainer amIModerator={amIModerator} /> : null}
-                <OptionsDropdownContainer
-                  amIModerator={amIModerator}
-                  isDirectLeaveButtonEnabled={isDirectLeaveButtonEnabled}
-                />
+                {!window.meetingClientSettings.public.app.floatingNavigation && (
+                  <OptionsDropdownContainer
+                    amIModerator={amIModerator}
+                    isDirectLeaveButtonEnabled={isDirectLeaveButtonEnabled}
+                  />
+                )}
               </Styled.Right>
             )}
           </Styled.Top>

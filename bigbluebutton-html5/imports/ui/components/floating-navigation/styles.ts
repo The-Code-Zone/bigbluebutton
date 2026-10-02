@@ -1,9 +1,7 @@
 import styled from 'styled-components';
-import {
-  btnDefaultBg,
-  btnDefaultColor,
-  colorPrimary,
-} from '/imports/ui/stylesheets/styled-components/palette';
+import { colorPrimary, colorWhite } from '/imports/ui/stylesheets/styled-components/palette';
+
+const islandBg = 'rgba(22, 24, 30, 0.72)';
 
 const FloatingButton = styled.button`
   position: fixed;
@@ -13,8 +11,8 @@ const FloatingButton = styled.button`
   justify-content: center;
   border: none;
   cursor: pointer;
-  background-color: ${btnDefaultBg};
-  color: ${btnDefaultColor};
+  background-color: ${islandBg};
+  color: ${colorWhite};
   font-family: inherit;
 
   &:hover {
@@ -39,18 +37,22 @@ const ParticipantsPill = styled(FloatingButton)`
   gap: 0.45rem;
   border-radius: 1.3rem;
   font-size: 1rem;
+
+  &[aria-expanded='true'] {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
+  }
 `;
 
-const SettingsButton = styled(FloatingButton)`
-  bottom: 0.9rem;
-  left: 0.9rem;
-  width: 2.8rem;
-  height: 2.8rem;
+const SettingsDot = styled(FloatingButton)`
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.6rem;
+  height: 2.6rem;
   border-radius: 50%;
-  font-size: 1.1rem;
+  font-size: 1rem;
 `;
 
 export default {
   ParticipantsPill,
-  SettingsButton,
+  SettingsDot,
 };
