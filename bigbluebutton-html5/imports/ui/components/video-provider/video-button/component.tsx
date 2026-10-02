@@ -14,6 +14,8 @@ import { listItemBgHover } from '/imports/ui/stylesheets/styled-components/palet
 import VideoService from '../service';
 import Styled from './styles';
 import { useModalRegistration } from '/imports/ui/core/singletons/modalController';
+import { screenshareHasEnded } from '/imports/ui/components/screenshare/service';
+import SpotlightModal from './spotlight-modal/component';
 
 const intlMessages = defineMessages({
   videoSettings: {
@@ -52,6 +54,14 @@ const intlMessages = defineMessages({
     id: 'app.video.clientDisconnected',
     description: 'Client disconnected label',
   },
+  startSpotlight: {
+    id: 'app.actionsBar.actionsDropdown.shareCameraAsContent',
+    description: 'Start sharing camera as content label',
+  },
+  stopSpotlight: {
+    id: 'app.actionsBar.actionsDropdown.unshareCameraAsContent',
+    description: 'Stop sharing camera as content label',
+  },
 });
 
 const JOIN_VIDEO_DELAY_MILLISECONDS = 500;
@@ -71,6 +81,9 @@ interface JoinVideoButtonProps {
   stopVideo: (cameraId?: string | undefined) => void;
   intl: IntlShape;
   videoConnecting: boolean;
+  amIPresenter: boolean;
+  hasCameraAsContent: boolean;
+  stopExternalVideoShare: () => void;
 }
 
 const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
@@ -84,6 +97,9 @@ const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
   exitVideo: exit,
   stopVideo,
   videoConnecting,
+  amIPresenter,
+  hasCameraAsContent,
+  stopExternalVideoShare,
 }) => {
   const { isMobile } = deviceInfo;
   const isMobileSharingCamera = hasVideoStream && isMobile;
@@ -109,6 +125,18 @@ const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
     priority: 'low',
   });
 
+  const PRESENTER_CAMERA_AS_CONTENT = window.meetingClientSettings.public.app.presenterCameraAsContent;
+  const spotlightMode = PRESENTER_CAMERA_AS_CONTENT && amIPresenter && !hasVideoStream;
+
+  const {
+    isOpen: isSpotlightModalOpen,
+    open: openSpotlightModal,
+    close: closeSpotlightModal,
+  } = useModalRegistration({
+    id: 'spotlightModal',
+    priority: 'low',
+  });
+
   const setIsVideoPreviewModalOpen = (isOpen: boolean) => {
     if (isOpen) openVideoPreviewModal();
     else closeVideoPreviewModal();
@@ -129,6 +157,15 @@ const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
   }, [isVideoPreviewModalOpen]);
 
   const handleOnClick = debounce(() => {
+    if (spotlightMode) {
+      if (hasCameraAsContent) {
+        screenshareHasEnded();
+      } else {
+        openSpotlightModal();
+      }
+      return;
+    }
+
     switch (status) {
       case 'videoConnecting':
         stopVideo();
@@ -159,9 +196,14 @@ const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
     return statusMessage;
   };
 
-  const label = disableReason
+  let label = disableReason
     ? intl.formatMessage(intlMessages[disableReason as keyof typeof intlMessages])
     : intl.formatMessage(intlMessages[getMessageFromStatus() as keyof typeof intlMessages]);
+  if (spotlightMode && !disableReason) {
+    label = intl.formatMessage(hasCameraAsContent
+      ? intlMessages.stopSpotlight
+      : intlMessages.startSpotlight);
+  }
 
   const renderUserActions = () => {
     const actions = [];
@@ -233,16 +275,21 @@ const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
 
   const ENABLE_ADVANCED_VIDEO = window.meetingClientSettings.public.app.enableAdvancedVideo;
 
+  let dataTest = hasVideoStream ? 'leaveVideo' : 'joinVideo';
+  if (spotlightMode) {
+    dataTest = hasCameraAsContent ? 'stopSpotlight' : 'startSpotlight';
+  }
+
   return (
     <>
       <Styled.OffsetBottom>
         <Button
           label={label}
-          data-test={hasVideoStream ? 'leaveVideo' : 'joinVideo'}
+          data-test={dataTest}
           onClick={handleOnClick}
           hideLabel
-          color={hasVideoStream ? 'primary' : 'default'}
-          icon={hasVideoStream ? 'video' : 'video_off'}
+          color={(hasVideoStream || (spotlightMode && hasCameraAsContent)) ? 'primary' : 'default'}
+          icon={(hasVideoStream || (spotlightMode && hasCameraAsContent)) ? 'video' : 'video_off'}
           size={deviceInfo.isMobile ? 'md' : 'lg'}
           circle
           disabled={!!disableReason}
@@ -277,6 +324,15 @@ const JoinVideoButton: React.FC<JoinVideoButtonProps> = ({
             isOpen: isVideoPreviewModalOpen,
           }}
           isVisualEffects={propsToPassModal.isVisualEffects}
+        />
+      ) : null}
+      {isSpotlightModalOpen ? (
+        <SpotlightModal
+          isOpen={isSpotlightModalOpen}
+          onRequestClose={() => closeSpotlightModal()}
+          priority="low"
+          hasCameraAsContent={hasCameraAsContent}
+          stopExternalVideoShare={stopExternalVideoShare}
         />
       ) : null}
     </>

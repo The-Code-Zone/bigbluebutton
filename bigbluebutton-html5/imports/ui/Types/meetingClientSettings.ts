@@ -78,6 +78,8 @@ export interface App {
   enableCameraQuality: boolean
   enableAdvancedVideo: boolean
   enableAvatars: boolean
+  showMediaAreaButton: boolean
+  presenterCameraAsContent: boolean
   requireOwnWebcamToViewWebcams: boolean
   mirrorOwnWebcam: boolean
   viewersInWebcam: number
