@@ -59,3 +59,16 @@ html[data-darkreader-scheme="dark"] body {
 [id^="breakoutBox"] {
   background-image: none !important;
 }
+
+section[id="ActionsBar"],
+[data-test="navigationSidebarContainer"] {
+  --list-item-bg-hover: rgba(86, 92, 106, 0.85);
+}
+
+[data-test="navigationSidebarContainer"] {
+  background-color: rgba(22, 24, 30, 0.72) !important;
+}
+
+[data-test="navigationSidebarContainer"] * {
+  color: #FFFFFF !important;
+}
