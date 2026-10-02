@@ -70,7 +70,7 @@ const Poll = styled.div`
 `;
 
 export const SidebarContentPanel = styled.div<SidebarContentPanelProps>`
-  background-color: ${sidebarContentBg};
+  background-color: ${({ isTransparent }) => (isTransparent ? 'transparent' : sidebarContentBg)};
   display: flex;
   flex-grow: 1;
   flex-direction: column;
