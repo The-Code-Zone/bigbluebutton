@@ -61,6 +61,7 @@ const UnifiedLayout = (props) => {
   const prevIsResizing = usePrevious(isResizing);
   const { isPresentationEnabled } = props;
 
+  // eslint-disable-next-line no-use-before-define
   const throttledCalculatesLayout = throttle(() => calculatesLayout(),
     50, { trailing: true, leading: true });
 
@@ -82,10 +83,12 @@ const UnifiedLayout = (props) => {
     if (deviceType !== prevDeviceType) {
       // reset layout if deviceType changed
       // not all options is supported in all devices
+      // eslint-disable-next-line no-use-before-define
       init();
     } else {
       throttledCalculatesLayout();
     }
+    return undefined;
   }, [input, deviceType, isRTL, fontSize, fullscreen, isPresentationEnabled]);
 
   const calculatesDropAreas = (sidebarNavWidth, sidebarContentWidth, cameraDockBounds) => {
@@ -163,9 +166,9 @@ const UnifiedLayout = (props) => {
             externalVideo, genericMainContent, screenShare, sharedNotes,
           } = prevInput;
           const { sidebarContentPanel } = sidebarContent;
-          const overrideOpenSidebarPanel = !getFromUserSettings('bbb_hide_sidebar_navigation', false)
+          const overrideOpenSidebarPanel = !getFromUserSettings('bbb_hide_sidebar_navigation', window.meetingClientSettings.public.app.floatingNavigation)
             && sidebarContentPanel !== PANELS.NONE;
-          const overrideOpenSidebarNavigation = !getFromUserSettings('bbb_hide_sidebar_navigation', false)
+          const overrideOpenSidebarNavigation = !getFromUserSettings('bbb_hide_sidebar_navigation', window.meetingClientSettings.public.app.floatingNavigation)
             && (sidebarNavigation.isOpen || sidebarContentPanel !== PANELS.NONE || false);
           const { registeredApps, pinnedApps } = sidebarNavigation;
           return defaultsDeep(

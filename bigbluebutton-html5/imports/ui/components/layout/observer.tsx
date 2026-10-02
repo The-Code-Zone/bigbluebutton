@@ -244,7 +244,7 @@ const LayoutObserver: React.FC = () => {
       && deviceType !== DEVICE_TYPE.MOBILE && deviceType !== DEVICE_TYPE.TABLET_LANDSCAPE
       && numCameras > 0
       && presentationIsOpen
-      && !getFromUserSettings('bbb_hide_sidebar_navigation', false)
+      && !getFromUserSettings('bbb_hide_sidebar_navigation', window.meetingClientSettings.public.app.floatingNavigation)
     ) {
       setTimeout(() => {
         layoutContextDispatch({
@@ -370,7 +370,7 @@ const LayoutObserver: React.FC = () => {
           });
         }
 
-        if (getFromUserSettings('bbb_hide_sidebar_navigation', false)) {
+        if (getFromUserSettings('bbb_hide_sidebar_navigation', window.meetingClientSettings.public.app.floatingNavigation)) {
           layoutContextDispatch({
             type: ACTIONS.SET_SIDEBAR_NAVIGATION_IS_OPEN,
             value: false,

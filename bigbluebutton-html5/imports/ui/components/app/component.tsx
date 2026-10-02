@@ -23,6 +23,7 @@ import Styled from './styles';
 import LayoutEngine from '../layout/layout-manager/layoutEngine';
 import NavBarContainer from '../nav-bar/container';
 import SidebarNavigationContainer from '../sidebar-navigation/container';
+import FloatingNavigation from '../floating-navigation/component';
 import SidebarContentContainer from '../sidebar-content/container';
 import SidebarContentAuxiliaryContainer from '/imports/ui/components/sidebar-content/sidebar-content-auxiliary/container';
 import PluginsEngineManager from '../plugins-engine/manager';
@@ -154,7 +155,9 @@ const App: React.FC<AppProps> = ({
           <ScreenReaderAlertContainer />
           <BannerBarContainer />
           <NotificationsBarContainer />
-          <SidebarNavigationContainer />
+          {window.meetingClientSettings.public.app.floatingNavigation
+            ? <FloatingNavigation />
+            : <SidebarNavigationContainer />}
           <SidebarContentContainer isSharedNotesPinned={isSharedNotesPinned} />
           <SidebarContentAuxiliaryContainer />
           <NavBarContainer main="new" />
