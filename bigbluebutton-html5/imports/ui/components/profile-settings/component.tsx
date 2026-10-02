@@ -832,13 +832,17 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
                     )
                     : <span>{formatMessage(intlMessages.webcamNotFoundLabel)}</span>}
                 </Styled.DeviceContainer>
-                <Styled.DeviceContainer extraPadding={cameraSections.length > 1}>
-                  <Styled.WbSunnyIcon />
-                  {renderBrightnessInput(sectionIndex, section.brightness)}
-                </Styled.DeviceContainer>
-                <Styled.DeviceContainer extraPadding={cameraSections.length > 1}>
-                  {renderQualitySelector(sectionIndex)}
-                </Styled.DeviceContainer>
+                {window.meetingClientSettings.public.app.enableCameraBrightness && (
+                  <Styled.DeviceContainer extraPadding={cameraSections.length > 1}>
+                    <Styled.WbSunnyIcon />
+                    {renderBrightnessInput(sectionIndex, section.brightness)}
+                  </Styled.DeviceContainer>
+                )}
+                {window.meetingClientSettings.public.app.enableCameraQuality && (
+                  <Styled.DeviceContainer extraPadding={cameraSections.length > 1}>
+                    {renderQualitySelector(sectionIndex)}
+                  </Styled.DeviceContainer>
+                )}
               </Styled.DevicesSettingsContainer>
               <Styled.VirtualBackgroundContainer extraPadding={cameraSections.length > 1}>
                 {isVirtualBackgroundsEnabled && renderVirtualBgSelector(sectionIndex)}
