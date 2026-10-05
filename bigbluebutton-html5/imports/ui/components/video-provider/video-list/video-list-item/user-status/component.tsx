@@ -1,6 +1,7 @@
 import React from 'react';
 import Styled from './styles';
 import { User, VideoItem } from '/imports/ui/components/video-provider/types';
+import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
 
 interface UserStatusProps {
   user: Partial<User>;
@@ -24,11 +25,14 @@ const UserStatus: React.FC<UserStatusProps> = (props) => {
   const emoji = data?.reactionEmoji;
   const away = data?.away;
 
+  const cameraMasked = stream.type === VIDEO_TYPES.GRID && !!stream.cameraMasked;
+
   return (
     <div data-test="webcamUserStatus">
       {away && <span>⏰</span>}
       {(emoji && emoji !== 'none' && !away) && <span>{emoji}</span>}
 
+      {cameraMasked && <Styled.Voice iconName="video" data-test="webcamMaskedCameraOn" />}
       {voiceUserJoined && (
         <>
           {(muted && !listenOnly) && <Styled.Muted iconName="unmute_filled" />}

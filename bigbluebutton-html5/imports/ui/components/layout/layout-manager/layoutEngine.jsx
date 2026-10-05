@@ -19,6 +19,7 @@ import SimplifiedMobileLayout from './simplifiedMobileLayout';
 import useIsSimplifiedMobileView from '/imports/ui/components/layout/hooks/useIsSimplifiedMobileView';
 import { usePrevious } from '../../whiteboard/utils';
 import { getWaitLayout, isSidebarNavigationHidden } from '../utils';
+import useCurrentUser from '/imports/ui/core/hooks/useCurrentUser';
 
 const LayoutEngine = () => {
   const bannerBarInput = layoutSelectInput((i) => i.bannerBar);
@@ -48,6 +49,10 @@ const LayoutEngine = () => {
   const isPresentationEnabled = useIsPresentationEnabled();
   const prevLayout = usePrevious(selectedLayout);
   const isSimplifiedMobileActive = useIsSimplifiedMobileView();
+  const { data: currentUserData } = useCurrentUser((u) => ({ isModerator: u.isModerator }));
+  const sidebarsHiddenForViewer = (
+    window.meetingClientSettings?.public?.app?.hideSidebarNavigationForViewers ?? false
+  ) && !!currentUserData && !currentUserData.isModerator;
 
   const isMobile = deviceType === DEVICE_TYPE.MOBILE;
   const isTablet = deviceType === DEVICE_TYPE.TABLET;
@@ -211,7 +216,7 @@ const LayoutEngine = () => {
 
     let width = 0;
     let horizontalSpaceOccupied = 0;
-    if (isOpen && !isSidebarNavigationHidden()) {
+    if (isOpen && !isSidebarNavigationHidden() && !sidebarsHiddenForViewer) {
       if (isMobile) {
         width = sidebarNavWidthMobile;
         // The navigation sidebar is a floating window on mobile. We say it does not
@@ -292,7 +297,7 @@ const LayoutEngine = () => {
     let width = 0;
     let maxWidth = 0;
 
-    if (isOpen) {
+    if (isOpen && !sidebarsHiddenForViewer) {
       if (isMobile) {
         minWidth = windowWidth();
         width = windowWidth();
