@@ -3,7 +3,8 @@ body {
   background-image: url('background.jpg');
 }
 
-div:has(> div[data-test="navigationSidebarContainer"]) {
+div:has(> div[data-test="navigationSidebarContainer"]),
+div:has(> div[data-test="sidebarContentMain"]) {
   background-color: transparent !important;
 }
 
