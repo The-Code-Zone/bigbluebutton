@@ -85,6 +85,7 @@ export interface App {
   hideSidebarNavigationForViewers: boolean
   hideSidebarNavigation: boolean
   allowPromoteToModerator: boolean
+  liveAudioLevelIndicators: boolean
   requireOwnWebcamToViewWebcams: boolean
   mirrorOwnWebcam: boolean
   viewersInWebcam: number

@@ -92,6 +92,7 @@ public:
     hideSidebarNavigationForViewers: false
     hideSidebarNavigation: false
     allowPromoteToModerator: true
+    liveAudioLevelIndicators: false
     requireOwnWebcamToViewWebcams: false
     mirrorOwnWebcam: true
     viewersInWebcam: 8

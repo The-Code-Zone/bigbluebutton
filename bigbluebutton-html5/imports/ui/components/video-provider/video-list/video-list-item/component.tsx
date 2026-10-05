@@ -24,6 +24,11 @@ import PluginButtonContainer from '../../../plugins/plugin-button/container';
 import { UserCameraHelperAreas } from '../../../plugins-engine/extensible-areas/components/user-camera-helper/types';
 import PluginMenuActions from './plugin-menu-actions/component';
 import UserVolumeControl from '/imports/ui/components/user-list/user-list-participants/list-item/user-volume-control/component';
+import {
+  useUserAudioLevel,
+  useSustainedLoud,
+  useLiveAudioLevelIndicators,
+} from '/imports/ui/components/livekit/user-volume/service';
 
 const intlMessages = defineMessages({
   disableDesc: {
@@ -169,6 +174,14 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   const Settings = getSettingsSingletonInstance();
   const { animations, webcamBorderHighlightColor } = Settings.application;
   const talking = voiceUser?.talking;
+  const liveLevelIndicators = useLiveAudioLevelIndicators();
+  const audioLevel = useUserAudioLevel(stream.userId);
+  const sustainedLoud = useSustainedLoud(stream.userId);
+  const levelGlow = liveLevelIndicators ? Math.round(Math.sqrt(audioLevel) * 100) / 100 : 0;
+  const glowStyle = liveLevelIndicators && levelGlow > 0.05 ? {
+    '--level-glow': levelGlow,
+    '--level-glow-color': sustainedLoud ? 'rgba(232, 161, 61, 0.9)' : 'rgba(47, 179, 128, 0.75)',
+  } as React.CSSProperties : undefined;
   const raiseHand = (stream.type === VIDEO_TYPES.GRID && stream?.raiseHand)
     || (stream.type === VIDEO_TYPES.STREAM && stream.user?.raiseHand)
     || (stream.type === VIDEO_TYPES.AUDIO_ONLY && stream.user?.raiseHand);
@@ -485,6 +498,8 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
       ref={videoContainer}
       talking={talking}
       customHighlight={webcamBorderHighlightColor}
+      $sustainedLoud={sustainedLoud && liveLevelIndicators}
+      style={glowStyle}
       fullscreen={isFullscreenContext}
       data-test={talking ? 'webcamItemTalkingUser' : 'webcamItem'}
       animations={animations}

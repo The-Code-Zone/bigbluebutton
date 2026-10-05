@@ -22,6 +22,11 @@ import {
 } from '/imports/ui/components/audio/audio-graphql/audio-controls/input-stream-live-selector/service';
 import { listItemBgHover } from '/imports/ui/stylesheets/styled-components/palette';
 import MutedAlert from '/imports/ui/components/muted-alert/component';
+import Auth from '/imports/ui/services/auth';
+import {
+  useUserAudioLevel,
+  useLiveAudioLevelIndicators,
+} from '/imports/ui/components/livekit/user-volume/service';
 
 const intlMessages = defineMessages({
   muteAudio: {
@@ -72,6 +77,9 @@ export const MuteToggle: React.FC<MuteToggleProps> = ({
   useMuteSoundAlert();
 
   const intl = useIntl();
+  const liveLevelIndicators = useLiveAudioLevelIndicators();
+  const ownLevel = useUserAudioLevel(typeof Auth.userID === 'string' ? Auth.userID : '');
+  const ownLevelFill = Math.round(Math.sqrt(ownLevel) * 100);
   const toggleMuteShourtcut = useShortcut('toggleMute');
   const toggleVoice = useToggleVoice();
   const [setAway] = useMutation(SET_AWAY);
@@ -202,6 +210,11 @@ export const MuteToggle: React.FC<MuteToggleProps> = ({
         data-test={muted ? 'unmuteMicButton' : 'muteMicButton'}
         hoverColor={listItemBgHover}
       />
+      {liveLevelIndicators && !muted && !mediaInterrupted && (
+        <Styled.SelfLevelClip aria-hidden="true">
+          <Styled.SelfLevelFill style={{ height: `${ownLevelFill}%` }} />
+        </Styled.SelfLevelClip>
+      )}
     </Styled.RelativePositioningContainer>
   );
 };

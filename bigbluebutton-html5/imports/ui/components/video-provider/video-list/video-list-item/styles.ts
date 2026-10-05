@@ -39,6 +39,7 @@ const Content = styled.div<{
   dragging: boolean;
   draggingOver: boolean;
   fullscreen: boolean;
+  $sustainedLoud?: boolean;
 }>`
   position: relative;
   display: flex;
@@ -65,6 +66,12 @@ const Content = styled.div<{
 
     ${({ talking, customHighlight }) => talking && customHighlight && customHighlight.length > 0 && `
       border: 2px solid rgb(${customHighlight[0]}, ${customHighlight[1]}, ${customHighlight[2]});
+    `}
+
+    box-shadow: 0 0 calc(var(--level-glow, 0) * 16px) calc(var(--level-glow, 0) * 4px) var(--level-glow-color, transparent);
+
+    ${({ $sustainedLoud }) => $sustainedLoud && `
+      border: 2px solid rgb(232, 161, 61);
     `}
 
     ${({ animations }) => animations && `
