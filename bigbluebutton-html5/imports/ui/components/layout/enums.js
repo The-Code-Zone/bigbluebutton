@@ -5,7 +5,7 @@ export const LAYOUT_TYPE = {
   PARTICIPANTS_AND_CHAT_ONLY: 'participantsAndChatOnly',
   PLUGINS_ONLY: 'pluginsOnly',
   MEDIA_ONLY: 'mediaOnly',
-  MICRO: 'micro',
+  SIMPLIFIED_MOBILE: 'simplifiedMobile',
 };
 
 export const DEVICE_TYPE = {

@@ -155,6 +155,7 @@ class ActionsBar extends PureComponent {
       ariaHidden,
       isDarkThemeEnabled,
       isMobile,
+      isSimplifiedMobileView,
       showScreenshareQuickSwapButton,
       isReactionsButtonEnabled,
       isRaiseHandEnabled,
@@ -171,6 +172,47 @@ class ActionsBar extends PureComponent {
       || isSharingVideo || hasScreenshare || isSharedNotesPinned;
 
     const { showMediaAreaButton } = window.meetingClientSettings.public.app;
+
+    if (isSimplifiedMobileView) {
+      return shouldRenderActionBar && (
+        <Styled.ActionsBarWrapper
+          id="ActionsBar"
+          role="region"
+          aria-label={intl.formatMessage(intlMessages.actionsBarLabel)}
+          aria-hidden={ariaHidden}
+          style={
+            {
+              position: 'absolute',
+              top: actionsBarStyle.top,
+              left: actionsBarStyle.left,
+              height: actionsBarStyle.height,
+              width: actionsBarStyle.width,
+              padding: actionsBarStyle.padding,
+            }
+          }
+        >
+          <h2 className="sr-only">{intl.formatMessage(intlMessages.actionsBarLabel)}</h2>
+          <Styled.ActionsBar
+            ref={this.actionsBarRef}
+            style={
+              {
+                height: actionsBarStyle.innerHeight,
+              }
+            }
+          >
+            <Styled.Center>
+              <AudioControlsContainer />
+              {shouldShowVideoButton && enableVideo
+                ? (
+                  <JoinVideoOptionsContainer />
+                )
+                : null}
+              {isReactionsButtonEnabled && this.renderReactionsButton()}
+            </Styled.Center>
+          </Styled.ActionsBar>
+        </Styled.ActionsBarWrapper>
+      );
+    }
 
     return shouldRenderActionBar && (
       <Styled.ActionsBarWrapper

@@ -39,6 +39,7 @@ import connectionStatus from '../../core/graphql/singletons/connectionStatus';
 import useSettings from '/imports/ui/services/settings/hooks/useSettings';
 import { SETTINGS } from '/imports/ui/services/settings/enums';
 import deviceInfo from '/imports/utils/deviceInfo';
+import useIsSimplifiedMobileView from '/imports/ui/components/layout/hooks/useIsSimplifiedMobileView';
 
 const isLayeredView = window.matchMedia(`(max-width: ${SMALL_VIEWPORT_BREAKPOINT}px)`);
 
@@ -89,6 +90,7 @@ const ActionsBarContainer = (props) => {
   const amIModerator = currentUserData?.isModerator;
 
   const isMobile = layoutSelect((i) => i.deviceType === DEVICE_TYPE.MOBILE);
+  const isSimplifiedMobileView = useIsSimplifiedMobileView();
 
   const allowExternalVideo = useIsExternalVideoEnabled();
   const connected = useReactiveVar(connectionStatus.getConnectedStatusVar());
@@ -160,6 +162,7 @@ const ActionsBarContainer = (props) => {
         ariaHidden,
         isDarkThemeEnabled: darkModeIsEnabled,
         isMobile,
+        isSimplifiedMobileView,
         selectedLayout,
       }
     }

@@ -9,7 +9,7 @@ import { USER_AGGREGATE_COUNT_SUBSCRIPTION } from '/imports/ui/core/graphql/quer
 import { UserAggregateCountSubscriptionResponse } from '/imports/ui/components/user-list/types';
 import SettingsContainer from '/imports/ui/components/settings/container';
 import Icon from '/imports/ui/components/common/icon/component';
-import useIsMicroViewport from '/imports/ui/components/layout/hooks/useIsMicroViewport';
+import useIsSimplifiedMobileView from '/imports/ui/components/layout/hooks/useIsSimplifiedMobileView';
 import Styled from './styles';
 
 const intlMessages = defineMessages({
@@ -30,7 +30,7 @@ const FloatingNavigation: React.FC = () => {
   const isUserListOpen = sidebarContent.isOpen
     && sidebarContent.sidebarContentPanel === PANELS.USERLIST;
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const isMicro = useIsMicroViewport();
+  const isSimplifiedMobile = useIsSimplifiedMobileView();
 
   const {
     data: usersCountData,
@@ -56,7 +56,7 @@ const FloatingNavigation: React.FC = () => {
     }
   }, []);
 
-  if (isMicro) return null;
+  if (isSimplifiedMobile) return null;
 
   return (
     <>
