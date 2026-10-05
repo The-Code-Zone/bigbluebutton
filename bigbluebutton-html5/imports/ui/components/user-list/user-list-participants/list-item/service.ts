@@ -166,6 +166,7 @@ export const generateActionsPermissions = (
     && !isDialInUser)
     || currentUserIsModerator;
   const allowedToChatPrivately = preventSelfChat
+    && isChatEnabled && isPrivateChatEnabled
     && (moderatorOverride || viewerToModeratorOverride || regularUserCondition || !userChatIsLocked)
     && type === 'participant';
 
