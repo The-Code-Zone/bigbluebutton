@@ -83,7 +83,15 @@ export const useLiveAudioLevelIndicators = (): boolean => (
   window.meetingClientSettings?.public?.app?.liveAudioLevelIndicators ?? false
 );
 
-const SUSTAINED_LOUD_LEVEL = 0.35;
+const LEVEL_REFERENCE_MAX = 0.32;
+const LEVEL_DISPLAY_EXPONENT = 1.2;
+
+export const levelToFill = (level: number): number => {
+  const normalized = Math.min(1, level / LEVEL_REFERENCE_MAX);
+  return Math.round((normalized ** LEVEL_DISPLAY_EXPONENT) * 100);
+};
+
+const SUSTAINED_LOUD_FILL = 65;
 const SUSTAINED_LOUD_HOLD_MS = 10000;
 const SUSTAINED_LOUD_RELEASE_MS = 5000;
 const SUSTAINED_LOUD_TICK_MS = 1000;
@@ -99,7 +107,7 @@ export const useSustainedLoud = (userId: string): boolean => {
   useEffect(() => {
     const tick = setInterval(() => {
       const now = Date.now();
-      if (levelRef.current >= SUSTAINED_LOUD_LEVEL) {
+      if (levelToFill(levelRef.current) >= SUSTAINED_LOUD_FILL) {
         quietSinceRef.current = null;
         if (loudSinceRef.current == null) loudSinceRef.current = now;
         if (now - loudSinceRef.current >= SUSTAINED_LOUD_HOLD_MS) setSustained(true);
@@ -115,7 +123,7 @@ export const useSustainedLoud = (userId: string): boolean => {
   return sustained;
 };
 
-const LEVEL_QUANTUM = 0.05;
+const LEVEL_QUANTUM = 0.01;
 const sampledRooms = new WeakSet<Room>();
 
 export const trackAudioLevels = (room: Room) => {
