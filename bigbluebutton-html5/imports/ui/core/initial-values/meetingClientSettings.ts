@@ -61,6 +61,7 @@ export const meetingClientSettingsInitialValues: MeetingClientSettings = {
       simplifiedMobileLayout: false,
       hideSidebarNavigationForViewers: false,
       hideSidebarNavigation: false,
+      allowPromoteToModerator: true,
       requireOwnWebcamToViewWebcams: false,
       mirrorOwnWebcam: false,
       viewersInWebcam: 8,

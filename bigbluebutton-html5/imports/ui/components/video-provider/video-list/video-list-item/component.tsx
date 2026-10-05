@@ -402,7 +402,8 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
           isFullscreenContext={isFullscreenContext}
           layoutContextDispatch={layoutContextDispatch}
         />
-        {stream.userId !== Auth.userID && voiceUser?.joined && !voiceUser?.listenOnly && (
+        {stream.userId !== Auth.userID && voiceUser?.joined && !voiceUser?.listenOnly
+          && (amIModerator || !user?.isModerator) && (
           <Styled.TileVolume>
             <UserVolumeControl userId={stream.userId} userName={name} />
           </Styled.TileVolume>

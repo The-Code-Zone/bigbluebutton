@@ -84,6 +84,7 @@ export interface App {
   simplifiedMobileLayout: boolean
   hideSidebarNavigationForViewers: boolean
   hideSidebarNavigation: boolean
+  allowPromoteToModerator: boolean
   requireOwnWebcamToViewWebcams: boolean
   mirrorOwnWebcam: boolean
   viewersInWebcam: number
