@@ -49,7 +49,7 @@ import { SETTINGS } from '/imports/ui/services/settings/enums';
 import { useStorageKey } from '/imports/ui/services/storage/hooks';
 import ConnectionStatus from '/imports/ui/core/graphql/singletons/connectionStatus';
 import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
-import useIsMicroViewport from '/imports/ui/components/layout/hooks/useIsMicroViewport';
+import useIsSimplifiedMobileView from '/imports/ui/components/layout/hooks/useIsSimplifiedMobileView';
 import { layoutSelect } from '/imports/ui/components/layout/context';
 import { Layout } from '/imports/ui/components/layout/layoutTypes';
 import { LAYOUT_TYPE } from '/imports/ui/components/layout/enums';
@@ -753,7 +753,7 @@ export const useVideoStreams = () => {
   const isPaginationEnabled = useIsPaginationEnabled();
   const { senderIds, senderIdsInGroups, inAnyGroup } = useVideoSenders();
   const myVideoEnabled = useHasVideoStream();
-  const isMicro = useIsMicroViewport();
+  const isSimplifiedMobile = useIsSimplifiedMobileView();
   let streams: StreamItem[] = [...videoStreams];
   let totalNumberOfOtherStreams: number | undefined;
 
@@ -869,11 +869,11 @@ export const useVideoStreams = () => {
     }
   }
 
-  if (isMicro) {
+  if (isSimplifiedMobile) {
     const candidates = streams.filter(
       (s) => s.type === VIDEO_TYPES.STREAM && (!('render' in s) || s.render !== false),
     );
-    const microPriority = (s: StreamItem) => {
+    const singleTilePriority = (s: StreamItem) => {
       let priority = 3;
       if (s.type === VIDEO_TYPES.STREAM) {
         if (s.user?.pinned) priority = 0;
@@ -883,8 +883,8 @@ export const useVideoStreams = () => {
       if (videoService.isLocalStream(s.stream)) priority += 4;
       return priority;
     };
-    const microStream = candidates.sort((a, b) => microPriority(a) - microPriority(b))[0];
-    streams = microStream ? [microStream] : [];
+    const singleStream = candidates.sort((a, b) => singleTilePriority(a) - singleTilePriority(b))[0];
+    streams = singleStream ? [singleStream] : [];
     totalNumberOfOtherStreams = 0;
   }
 
@@ -931,9 +931,9 @@ export const useVideoStreams = () => {
 
   return {
     streams,
-    gridUsers: isMicro ? [] : gridUsers.filter((u) => !streams.find((s) => s.userId === u.userId)),
-    overflowCount: isMicro ? 0 : overflowCount,
-    overflowUsers: isMicro ? [] : overflowPreviewUsers,
+    gridUsers: isSimplifiedMobile ? [] : gridUsers.filter((u) => !streams.find((s) => s.userId === u.userId)),
+    overflowCount: isSimplifiedMobile ? 0 : overflowCount,
+    overflowUsers: isSimplifiedMobile ? [] : overflowPreviewUsers,
     totalNumberOfStreams: streams.length,
     totalNumberOfOtherStreams,
   };

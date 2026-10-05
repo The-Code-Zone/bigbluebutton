@@ -8,7 +8,7 @@ import Session from '/imports/ui/services/storage/in-memory';
 const windowWidth = () => window.document.documentElement.clientWidth;
 const windowHeight = () => window.document.documentElement.clientHeight;
 
-const MicroLayout = (props) => {
+const SimplifiedMobileLayout = (props) => {
   const { isPresentationEnabled } = props;
 
   function usePrevious(value) {
@@ -257,4 +257,4 @@ const MicroLayout = (props) => {
   return null;
 };
 
-export default MicroLayout;
+export default SimplifiedMobileLayout;

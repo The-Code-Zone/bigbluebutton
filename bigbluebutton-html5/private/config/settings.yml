@@ -88,6 +88,7 @@ public:
     showMediaAreaButton: true
     floatingNavigation: false
     presenterCameraAsContent: false
+    simplifiedMobileLayout: false
     requireOwnWebcamToViewWebcams: false
     mirrorOwnWebcam: true
     viewersInWebcam: 8

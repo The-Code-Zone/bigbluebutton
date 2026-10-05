@@ -81,6 +81,7 @@ export interface App {
   showMediaAreaButton: boolean
   floatingNavigation: boolean
   presenterCameraAsContent: boolean
+  simplifiedMobileLayout: boolean
   requireOwnWebcamToViewWebcams: boolean
   mirrorOwnWebcam: boolean
   viewersInWebcam: number
