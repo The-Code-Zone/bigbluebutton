@@ -16,7 +16,8 @@ const WAIT_LAYOUT_PARAMETER = 'waitLayout';
 
 const isSidebarNavigationHidden = () => getFromUserSettings(
   'bbb_hide_sidebar_navigation',
-  window.meetingClientSettings?.public?.app?.floatingNavigation ?? false,
+  (window.meetingClientSettings?.public?.app?.floatingNavigation ?? false)
+    || (window.meetingClientSettings?.public?.app?.hideSidebarNavigation ?? false),
 );
 
 const windowSize = () => window.document.documentElement.clientWidth;

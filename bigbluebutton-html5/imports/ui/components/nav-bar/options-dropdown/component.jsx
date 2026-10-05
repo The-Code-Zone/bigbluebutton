@@ -3,6 +3,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import EndMeetingConfirmationContainer from '/imports/ui/components/end-meeting-confirmation/container';
 import MobileAppModal from '/imports/ui/components/mobile-app-modal/mobile-app-modal-graphql/component';
+import SettingsContainer from '/imports/ui/components/settings/container';
 import BBBMenu from '/imports/ui/components/common/menu/component';
 import FullscreenService from '/imports/ui/components/common/fullscreen-button/service';
 import { colorDanger, colorWhite } from '/imports/ui/stylesheets/styled-components/palette';
@@ -212,6 +213,15 @@ class OptionsDropdown extends PureComponent {
 
     this.getFullscreenItem(this.menuItems);
 
+    this.menuItems.push({
+      key: 'list-item-settings',
+      icon: 'settings',
+      dataTest: 'optionsDropdownSettings',
+      label: intl.formatMessage(intlMessages.settingsLabel),
+      description: intl.formatMessage(intlMessages.settingsDesc),
+      onClick: () => this.setSettingsModalIsOpen(true),
+    });
+
     const BBB_TABLET_APP_CONFIG = window.meetingClientSettings.public.app.bbbTabletApp;
 
     if (isIos
@@ -346,6 +356,20 @@ class OptionsDropdown extends PureComponent {
             this.setEndMeetingConfirmationModalIsOpen = isOpen ? close : open;
             return isOpen && (
               <EndMeetingConfirmationContainer onRequestClose={close} priority="low" isOpen={isOpen} id={id} setIsOpen={isOpen ? close : open} />
+            );
+          }}
+        </ModalRegistration>
+
+        {/* Settings Modal */}
+        <ModalRegistration id="optionsDropdownSettingsModal" priority="low">
+          {({
+            isOpen,
+            open,
+            close,
+          }) => {
+            this.setSettingsModalIsOpen = isOpen ? close : open;
+            return isOpen && (
+              <SettingsContainer isOpen={isOpen} setIsOpen={isOpen ? close : open} />
             );
           }}
         </ModalRegistration>

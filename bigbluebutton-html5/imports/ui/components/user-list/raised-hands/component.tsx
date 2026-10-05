@@ -87,6 +87,7 @@ const RaisedHandsContainer: React.FC<{ searchQuery?: string }> = ({ searchQuery 
   }
 
   const { isModerator, presenter: isPresenter } = currentUser;
+  if (!isModerator) return null;
   const canLowerAll = isModerator || isPresenter;
 
   const lowerUserHands = (userId: string) => {

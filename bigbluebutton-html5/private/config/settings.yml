@@ -90,6 +90,7 @@ public:
     presenterCameraAsContent: false
     simplifiedMobileLayout: false
     hideSidebarNavigationForViewers: false
+    hideSidebarNavigation: false
     requireOwnWebcamToViewWebcams: false
     mirrorOwnWebcam: true
     viewersInWebcam: 8
