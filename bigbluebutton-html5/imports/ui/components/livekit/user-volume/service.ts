@@ -91,7 +91,7 @@ export const levelToFill = (level: number): number => {
   return Math.round((normalized ** LEVEL_DISPLAY_EXPONENT) * 100);
 };
 
-const SUSTAINED_LOUD_FILL = 65;
+const SUSTAINED_LOUD_FILL = 85;
 const SUSTAINED_LOUD_HOLD_MS = 10000;
 const SUSTAINED_LOUD_RELEASE_MS = 5000;
 const SUSTAINED_LOUD_TICK_MS = 1000;

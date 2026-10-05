@@ -112,7 +112,7 @@ export const SelfLevelFill = styled.span`
   right: 0;
   bottom: 0;
   background-color: rgba(47, 179, 128, 0.55);
-  transition: height 0.1s linear;
+  transition: height 0.3s ease-out;
 `;
 
 export default {

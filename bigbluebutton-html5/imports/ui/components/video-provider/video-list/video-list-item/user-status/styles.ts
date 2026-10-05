@@ -49,7 +49,7 @@ const VoiceMeterFill = styled.span`
   right: 0;
   bottom: 0;
   background-color: ${colorSuccess};
-  transition: height 0.1s linear;
+  transition: height 0.3s ease-out;
 `;
 
 const VoiceMeterIcon = styled(Icon)`

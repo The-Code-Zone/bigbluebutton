@@ -45,6 +45,8 @@ const Content = styled.div<{
   display: flex;
   min-width: 100%;
   border-radius: 10px;
+  box-shadow: 0 0 calc(var(--level-glow, 0) * 48px) calc(var(--level-glow, 0) * 10px) var(--level-glow-color, transparent);
+  transition: box-shadow 0.3s ease-out;
   &::after {
     content: "";
     position: absolute;
@@ -67,8 +69,6 @@ const Content = styled.div<{
     ${({ talking, customHighlight }) => talking && customHighlight && customHighlight.length > 0 && `
       border: 2px solid rgb(${customHighlight[0]}, ${customHighlight[1]}, ${customHighlight[2]});
     `}
-
-    box-shadow: 0 0 calc(var(--level-glow, 0) * 16px) calc(var(--level-glow, 0) * 4px) var(--level-glow-color, transparent);
 
     ${({ $sustainedLoud }) => $sustainedLoud && `
       border: 2px solid rgb(232, 161, 61);
