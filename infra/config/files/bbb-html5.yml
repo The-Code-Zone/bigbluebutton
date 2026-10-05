@@ -12,6 +12,7 @@ public:
     showMediaAreaButton: false
     presenterCameraAsContent: true
     simplifiedMobileLayout: true
+    floatingNavigation: true
     requireOwnWebcamToViewWebcams: true
     reactionsButton:
       enabled: true
