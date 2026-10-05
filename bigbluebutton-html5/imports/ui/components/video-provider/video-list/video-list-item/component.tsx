@@ -23,6 +23,7 @@ import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
 import PluginButtonContainer from '../../../plugins/plugin-button/container';
 import { UserCameraHelperAreas } from '../../../plugins-engine/extensible-areas/components/user-camera-helper/types';
 import PluginMenuActions from './plugin-menu-actions/component';
+import UserVolumeControl from '/imports/ui/components/user-list/user-list-participants/list-item/user-volume-control/component';
 
 const intlMessages = defineMessages({
   disableDesc: {
@@ -400,6 +401,9 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
           isFullscreenContext={isFullscreenContext}
           layoutContextDispatch={layoutContextDispatch}
         />
+        {stream.userId !== Auth.userID && voiceUser?.joined && !voiceUser?.listenOnly && (
+          <UserVolumeControl userId={stream.userId} userName={name} />
+        )}
         <UserStatus
           voiceUser={voiceUser}
           user={user}

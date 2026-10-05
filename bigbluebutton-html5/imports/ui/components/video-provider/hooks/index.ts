@@ -773,8 +773,31 @@ export const useVideoStreams = () => {
   if (connectingStream) streams.push(connectingStream);
 
   const requireOwnWebcam = window.meetingClientSettings.public.app.requireOwnWebcamToViewWebcams;
+  const safeguardMasked = requireOwnWebcam && !myVideoEnabled && !currentUser?.isModerator;
+  const maskedCameraUsers: GridItem[] = [];
 
-  if (!viewParticipantsWebcams || (requireOwnWebcam && !myVideoEnabled && !currentUser?.isModerator)) {
+  if (!viewParticipantsWebcams || safeguardMasked) {
+    if (safeguardMasked && viewParticipantsWebcams) {
+      const seenMasked = new Set<string>();
+      streams.forEach((vs) => {
+        if (
+          vs.type !== VIDEO_TYPES.STREAM
+          || videoService.isLocalStream(vs.stream)
+          || seenMasked.has(vs.userId)
+        ) return;
+        seenMasked.add(vs.userId);
+        maskedCameraUsers.push({
+          ...vs.user,
+          voice: {
+            joined: vs.voice?.joined ?? false,
+            listenOnly: vs.voice?.listenOnly ?? false,
+            userId: vs.userId,
+          },
+          type: VIDEO_TYPES.GRID,
+          cameraMasked: true,
+        });
+      });
+    }
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream));
   } else if (inAnyGroup) {
     streams = streams.filter((vs) => videoService.isLocalStream(vs.stream)
@@ -929,9 +952,15 @@ export const useVideoStreams = () => {
     ))
     .slice(0, Math.min(overflowCount, OVERFLOW_TILE_PREVIEW_LIMIT));
 
+  const visibleGridUsers = [...gridUsers, ...maskedCameraUsers]
+    .filter((u) => !streams.find((s) => s.userId === u.userId))
+    .sort((a, b) => (
+      a.nameSortable.localeCompare(b.nameSortable) || a.userId.localeCompare(b.userId)
+    ));
+
   return {
     streams,
-    gridUsers: isSimplifiedMobile ? [] : gridUsers.filter((u) => !streams.find((s) => s.userId === u.userId)),
+    gridUsers: isSimplifiedMobile ? [] : visibleGridUsers,
     overflowCount: isSimplifiedMobile ? 0 : overflowCount,
     overflowUsers: isSimplifiedMobile ? [] : overflowPreviewUsers,
     totalNumberOfStreams: streams.length,

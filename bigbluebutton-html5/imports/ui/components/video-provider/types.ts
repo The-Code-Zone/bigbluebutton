@@ -81,7 +81,7 @@ export type AudioOnlyStream = {
 }
 
 export type StreamItem = Stream | ConnectingStream | AudioOnlyStream;
-export type GridItem = GridUser & { type: typeof VIDEO_TYPES.GRID };
+export type GridItem = GridUser & { type: typeof VIDEO_TYPES.GRID; cameraMasked?: boolean };
 export type VideoItem = StreamItem | GridItem;
 export type StreamSubscriptionData = VideoStreamsResponse['user_camera'][number];
 
