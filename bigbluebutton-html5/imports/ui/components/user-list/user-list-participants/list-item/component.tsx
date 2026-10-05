@@ -24,6 +24,7 @@ import {
 import { UserListItemProps } from './types';
 import UserNameWithSubs from './user-name-with-subs/component';
 import UserVolumeControl from './user-volume-control/component';
+import { useLiveAudioLevelIndicators } from '/imports/ui/components/livekit/user-volume/service';
 import { PluginsContext } from '/imports/ui/components/components-data/plugin-context/context';
 import { useUserOperations } from '/imports/ui/components/user-list/hooks/useUserOperations';
 
@@ -100,6 +101,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
   const { data: unmutedUsers } = useWhoIsUnmuted();
   const isMuted = !unmutedUsers[user.userId];
   const isTalking = talkingUsers[user.userId];
+  const liveLevelIndicators = useLiveAudioLevelIndicators();
 
   const actionsPermitions = generateActionsPermissions(
     user,
@@ -174,7 +176,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
           data-test-avatar="userAvatar"
           moderator={user.isModerator}
           presenter={user.presenter}
-          talking={isTalking}
+          talking={isTalking && !liveLevelIndicators}
           muted={isMuted}
           color={user.color}
           animations={animations}

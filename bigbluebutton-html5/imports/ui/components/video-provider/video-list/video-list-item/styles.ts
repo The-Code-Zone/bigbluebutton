@@ -72,7 +72,7 @@ const Content = styled.div<{
       border: 2px solid rgb(232, 161, 61);
     `}
 
-    box-shadow: inset 0 0 calc(var(--level-glow, 0) * 36px) calc(var(--level-glow, 0) * 6px) var(--level-glow-color, transparent);
+    box-shadow: inset 0 0 calc(var(--level-glow, 0) * 24px) calc(var(--level-glow, 0) * 4px) var(--level-glow-color, transparent);
     transition: box-shadow 0.3s ease-out, opacity 0.1s;
 
     ${({ animations }) => animations && `

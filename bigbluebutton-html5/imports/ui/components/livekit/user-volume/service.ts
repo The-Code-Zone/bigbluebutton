@@ -128,13 +128,18 @@ export const attachLevelAnalyser = (
   const samples = new Float32Array(analyser.fftSize);
   analyzedUsers.add(userId);
 
+  let displayLevel = 0;
   const timer = setInterval(() => {
     analyser.getFloatTimeDomainData(samples);
     let sum = 0;
     for (let i = 0; i < samples.length; i += 1) sum += samples[i] * samples[i];
     const rms = Math.sqrt(sum / samples.length);
     const normalized = Math.min(1, rms / LEVEL_RMS_REFERENCE) ** LEVEL_RMS_EXPONENT;
-    userAudioLevels.setValue(userId, Math.round(normalized * 100) / 100);
+    displayLevel = normalized >= displayLevel
+      ? normalized
+      : displayLevel * 0.75 + normalized * 0.25;
+    if (displayLevel < 0.01) displayLevel = 0;
+    userAudioLevels.setValue(userId, Math.round(displayLevel * 100) / 100);
   }, ANALYSER_INTERVAL_MS);
 
   return () => {

@@ -9,6 +9,20 @@ import BBBMenu from '/imports/ui/components/common/menu/component';
 import Styled from './styles';
 import { uniqueId } from '/imports/utils/string-utils';
 import makeDropdownPluginItem from './service';
+import {
+  useUserAudioLevel,
+  useLiveAudioLevelIndicators,
+} from '/imports/ui/components/livekit/user-volume/service';
+
+const RowMicMeter: React.FC<{ userId: string }> = ({ userId }) => {
+  const level = useUserAudioLevel(userId);
+  return (
+    <Styled.MicMeter data-test="userListMicMeter">
+      <Styled.MicMeterFill style={{ height: `${Math.round(level * 100)}%` }} />
+      <Styled.MicMeterIcon iconName="unmute" />
+    </Styled.MicMeter>
+  );
+};
 
 const intlMessages = defineMessages({
   more: {
@@ -26,6 +40,7 @@ const UserItemToolbar: React.FC<UserItemToolbarProps> = ({
   userListDropdownItems = [],
 }) => {
   const intl = useIntl();
+  const liveLevelIndicators = useLiveAudioLevelIndicators();
   const userDropdownItems = userListDropdownItems.filter(
     (item: PluginSdk.UserListDropdownInterface) => (subjectUser?.userId === item?.userId),
   );
@@ -50,7 +65,9 @@ const UserItemToolbar: React.FC<UserItemToolbarProps> = ({
           <Tooltip
             title={label}
           >
-            <Icon iconName={icon} />
+            {liveLevelIndicators && key === 'audio' && icon === 'unmute'
+              ? <RowMicMeter userId={subjectUser.userId} />
+              : <Icon iconName={icon} />}
           </Tooltip>
         </Styled.ToolbarItem>
       );

@@ -496,7 +496,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
     // @ts-expect-error -> Until everything in Typescript.
     <Styled.Content
       ref={videoContainer}
-      talking={talking}
+      talking={talking && !liveLevelIndicators}
       customHighlight={webcamBorderHighlightColor}
       $sustainedLoud={sustainedLoud && liveLevelIndicators}
       style={glowStyle}
