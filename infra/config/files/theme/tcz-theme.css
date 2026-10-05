@@ -7,7 +7,14 @@ div:has(> div[data-test="navigationSidebarContainer"]) {
   background-color: transparent !important;
 }
 
+header[id="Navbar"],
+section[id="ActionsBar"] {
+  background-color: transparent !important;
+}
+
 html[data-darkreader-scheme="dark"] div[id="app"],
-html[data-darkreader-scheme="dark"] div[id="cameraDock"] {
+html[data-darkreader-scheme="dark"] div[id="cameraDock"],
+html[data-darkreader-scheme="dark"] header[id="Navbar"],
+html[data-darkreader-scheme="dark"] section[id="ActionsBar"] {
   background-color: transparent !important;
 }
