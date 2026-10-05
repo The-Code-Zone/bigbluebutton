@@ -146,6 +146,23 @@ const Gap = styled.div`
   gap: .5rem;
 `;
 
+const KidUserListWrapper = styled.div`
+  position: absolute;
+  bottom: 100%;
+  right: 1rem;
+  width: 20rem;
+  max-width: 85vw;
+  max-height: 60vh;
+  overflow-y: auto;
+  z-index: 5;
+  margin-bottom: 0.5rem;
+
+  & > div {
+    padding: 8px;
+    height: auto;
+  }
+`;
+
 export default {
   ActionsBar,
   Left,
@@ -160,4 +177,5 @@ export default {
   ActionsBarWrapper,
   Gap,
   Separator,
+  KidUserListWrapper,
 };

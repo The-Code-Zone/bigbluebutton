@@ -275,6 +275,28 @@ const UserCameraButtonsContainerWrapper = styled.div<UserCameraButtonsContainerW
   `}
 `;
 
+const TileVolume = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 0.25rem;
+
+  input {
+    width: 7rem;
+    height: 0.5rem;
+  }
+
+  input::-webkit-slider-thumb {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  input::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+  }
+`;
+
 export default {
   Content,
   UserCameraButtonsContainerWrapper,
@@ -289,4 +311,5 @@ export default {
   RaiseHand,
   RaiseHandNumber,
   RaiseHandEmoji,
+  TileVolume,
 };

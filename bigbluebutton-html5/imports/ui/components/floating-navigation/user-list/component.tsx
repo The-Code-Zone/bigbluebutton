@@ -62,14 +62,16 @@ const FloatingUserList: React.FC = () => {
                 {isMe && ` (${intl.formatMessage(intlMessages.you)})`}
               </Styled.Name>
               {subs.length > 0 && <Styled.Sub>{subs.join(' · ')}</Styled.Sub>}
-              {!isMe && user.voice?.joined && !user.voice?.listenOnly && (
-                <UserVolumeControl userId={user.userId} userName={user.name} />
-              )}
             </Styled.Text>
             {user.voice?.deafened && (
               <Styled.DeafenedBadge>
                 {intl.formatMessage(intlMessages.deafened)}
               </Styled.DeafenedBadge>
+            )}
+            {!isMe && user.voice?.joined && !user.voice?.listenOnly && (
+              <Styled.VolumeSlot>
+                <UserVolumeControl userId={user.userId} userName={user.name} />
+              </Styled.VolumeSlot>
             )}
           </Styled.Bubble>
         );

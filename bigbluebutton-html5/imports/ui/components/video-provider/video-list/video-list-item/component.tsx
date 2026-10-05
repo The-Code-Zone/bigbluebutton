@@ -402,7 +402,9 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
           layoutContextDispatch={layoutContextDispatch}
         />
         {stream.userId !== Auth.userID && voiceUser?.joined && !voiceUser?.listenOnly && (
-          <UserVolumeControl userId={stream.userId} userName={name} />
+          <Styled.TileVolume>
+            <UserVolumeControl userId={stream.userId} userName={name} />
+          </Styled.TileVolume>
         )}
         <UserStatus
           voiceUser={voiceUser}

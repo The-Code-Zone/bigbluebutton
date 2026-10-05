@@ -14,6 +14,7 @@ import Button from '/imports/ui/components/common/button/component';
 import { LAYOUT_TYPE } from '../layout/enums';
 import ReactionsButtonContainer from '/imports/ui/components/actions-bar/reactions-button/container';
 import RaiseHandButtonContainer from '/imports/ui/components/actions-bar/raise-hand-button/container';
+import FloatingUserList from '/imports/ui/components/floating-navigation/user-list/component';
 import Selector from '/imports/ui/components/common/selector/component';
 import ToggleGroup from '/imports/ui/components/common/toggle-group/component';
 import Separator from '/imports/ui/components/common/separator/component';
@@ -24,11 +25,19 @@ const intlMessages = defineMessages({
     id: 'app.actionsBar.label',
     description: 'Aria-label for ActionsBar Section',
   },
+  userListLabel: {
+    id: 'app.actionsBar.userListLabel',
+    description: 'Label for the simplified-view user list toggle',
+  },
 });
 
 class ActionsBar extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isKidUserListOpen: false,
+    };
 
     this.actionsBarRef = React.createRef();
     this.renderPluginsActionBarItems = this.renderPluginsActionBarItems.bind(this);
@@ -161,6 +170,7 @@ class ActionsBar extends PureComponent {
       isRaiseHandEnabled,
       selectedLayout,
     } = this.props;
+    const { isKidUserListOpen } = this.state;
 
     const shouldShowPresentationButton = selectedLayout !== LAYOUT_TYPE.CAMERAS_ONLY
       && selectedLayout !== LAYOUT_TYPE.PARTICIPANTS_AND_CHAT_ONLY;
@@ -208,8 +218,25 @@ class ActionsBar extends PureComponent {
                 )
                 : null}
               {isReactionsButtonEnabled && this.renderReactionsButton()}
+              <Button
+                icon="user_list"
+                label={intl.formatMessage(intlMessages.userListLabel)}
+                hideLabel
+                circle
+                size="lg"
+                color={isKidUserListOpen ? 'primary' : 'default'}
+                onClick={() => this.setState(
+                  (prev) => ({ isKidUserListOpen: !prev.isKidUserListOpen }),
+                )}
+                data-test="simplifiedViewUserListToggle"
+              />
             </Styled.Center>
           </Styled.ActionsBar>
+          {isKidUserListOpen && (
+            <Styled.KidUserListWrapper>
+              <FloatingUserList />
+            </Styled.KidUserListWrapper>
+          )}
         </Styled.ActionsBarWrapper>
       );
     }
