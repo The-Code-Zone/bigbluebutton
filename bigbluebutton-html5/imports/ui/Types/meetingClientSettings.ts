@@ -904,6 +904,8 @@ export interface External {
 export interface VirtualBackgrounds {
   enabled: boolean
   enableVirtualBackgroundUpload: boolean
+  virtualBackgroundUploadModeratorOnly: boolean
+  showInCameraAsContent: boolean
   storedOnBBB: boolean
   showThumbnails: boolean
   imagesPath: string
