@@ -334,7 +334,8 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
 
     return (
       <Styled.RaiseHand data-test="webcamItemRaisedHand">
-        {raisedHandPosition > 0 && <Styled.RaiseHandNumber>{raisedHandPosition}</Styled.RaiseHandNumber>}
+        {raisedHandPosition > 0 && amIModerator
+          && <Styled.RaiseHandNumber>{raisedHandPosition}</Styled.RaiseHandNumber>}
         <Styled.RaiseHandEmoji>✋</Styled.RaiseHandEmoji>
       </Styled.RaiseHand>
     );

@@ -13,6 +13,7 @@ public:
     presenterCameraAsContent: true
     simplifiedMobileLayout: true
     hideSidebarNavigationForViewers: true
+    hideSidebarNavigation: true
     requireOwnWebcamToViewWebcams: true
     reactionsButton:
       enabled: true

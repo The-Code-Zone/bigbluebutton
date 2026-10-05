@@ -83,6 +83,7 @@ export interface App {
   presenterCameraAsContent: boolean
   simplifiedMobileLayout: boolean
   hideSidebarNavigationForViewers: boolean
+  hideSidebarNavigation: boolean
   requireOwnWebcamToViewWebcams: boolean
   mirrorOwnWebcam: boolean
   viewersInWebcam: number

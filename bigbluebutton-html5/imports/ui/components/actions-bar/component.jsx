@@ -238,6 +238,7 @@ class ActionsBar extends PureComponent {
                 )
                 : null}
               {isReactionsButtonEnabled && this.renderReactionsButton()}
+              {isRaiseHandEnabled && <RaiseHandButtonContainer />}
               {this.renderUserListToggle()}
             </Styled.Center>
           </Styled.ActionsBar>
