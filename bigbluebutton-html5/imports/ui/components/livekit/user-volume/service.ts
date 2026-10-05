@@ -1,4 +1,6 @@
-import { useMemo } from 'react';
+import {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 import { makeVar, useReactiveVar, ReactiveVar } from '@apollo/client';
 import {
   Participant,
@@ -76,6 +78,42 @@ export const useUserVolume = (userId: string): number => userVolumes.useValue(us
 export const useUserVolumes = (): Record<string, number> => userVolumes.useAll();
 
 export const useUserAudioLevel = (userId: string): number => userAudioLevels.useValue(userId);
+
+export const useLiveAudioLevelIndicators = (): boolean => (
+  window.meetingClientSettings?.public?.app?.liveAudioLevelIndicators ?? false
+);
+
+const SUSTAINED_LOUD_LEVEL = 0.35;
+const SUSTAINED_LOUD_HOLD_MS = 10000;
+const SUSTAINED_LOUD_RELEASE_MS = 5000;
+const SUSTAINED_LOUD_TICK_MS = 1000;
+
+export const useSustainedLoud = (userId: string): boolean => {
+  const level = useUserAudioLevel(userId);
+  const levelRef = useRef(level);
+  levelRef.current = level;
+  const [sustained, setSustained] = useState(false);
+  const loudSinceRef = useRef<number | null>(null);
+  const quietSinceRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const tick = setInterval(() => {
+      const now = Date.now();
+      if (levelRef.current >= SUSTAINED_LOUD_LEVEL) {
+        quietSinceRef.current = null;
+        if (loudSinceRef.current == null) loudSinceRef.current = now;
+        if (now - loudSinceRef.current >= SUSTAINED_LOUD_HOLD_MS) setSustained(true);
+      } else {
+        loudSinceRef.current = null;
+        if (quietSinceRef.current == null) quietSinceRef.current = now;
+        if (now - quietSinceRef.current >= SUSTAINED_LOUD_RELEASE_MS) setSustained(false);
+      }
+    }, SUSTAINED_LOUD_TICK_MS);
+    return () => clearInterval(tick);
+  }, []);
+
+  return sustained;
+};
 
 const LEVEL_QUANTUM = 0.05;
 const sampledRooms = new WeakSet<Room>();

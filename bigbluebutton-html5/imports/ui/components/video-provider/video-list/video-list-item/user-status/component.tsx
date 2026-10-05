@@ -2,6 +2,10 @@ import React from 'react';
 import Styled from './styles';
 import { User, VideoItem } from '/imports/ui/components/video-provider/types';
 import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
+import {
+  useUserAudioLevel,
+  useLiveAudioLevelIndicators,
+} from '/imports/ui/components/livekit/user-volume/service';
 
 interface UserStatusProps {
   user: Partial<User>;
@@ -17,6 +21,9 @@ interface UserStatusProps {
 const UserStatus: React.FC<UserStatusProps> = (props) => {
   const { voiceUser, user, stream } = props;
   const data = { ...user, ...stream };
+  const liveLevelIndicators = useLiveAudioLevelIndicators();
+  const level = useUserAudioLevel(stream.userId);
+  const levelFill = Math.round(Math.sqrt(level) * 100);
 
   const listenOnly = voiceUser?.listenOnly;
   const muted = voiceUser?.muted;
@@ -37,7 +44,14 @@ const UserStatus: React.FC<UserStatusProps> = (props) => {
         <>
           {(muted && !listenOnly) && <Styled.Muted iconName="unmute_filled" />}
           {listenOnly && <Styled.Voice iconName="listen" />}
-          {!muted && <Styled.Voice iconName="unmute" />}
+          {!muted && (liveLevelIndicators ? (
+            <Styled.VoiceMeter data-test="webcamVoiceMeter">
+              <Styled.VoiceMeterFill style={{ height: `${levelFill}%` }} />
+              <Styled.VoiceMeterIcon iconName="unmute" />
+            </Styled.VoiceMeter>
+          ) : (
+            <Styled.Voice iconName="unmute" />
+          ))}
         </>
       )}
     </div>

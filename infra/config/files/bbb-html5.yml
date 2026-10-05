@@ -15,6 +15,7 @@ public:
     hideSidebarNavigationForViewers: true
     hideSidebarNavigation: true
     allowPromoteToModerator: false
+    liveAudioLevelIndicators: true
     requireOwnWebcamToViewWebcams: true
     reactionsButton:
       enabled: true

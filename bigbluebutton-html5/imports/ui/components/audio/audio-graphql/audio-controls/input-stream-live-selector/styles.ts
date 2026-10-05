@@ -97,8 +97,28 @@ export const AudioDropdown = styled(ButtonEmoji)`
   }
 `;
 
+export const SelfLevelClip = styled.span`
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+`;
+
+export const SelfLevelFill = styled.span`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(47, 179, 128, 0.55);
+  transition: height 0.1s linear;
+`;
+
 export default {
   RelativePositioningContainer,
+  SelfLevelClip,
+  SelfLevelFill,
   MuteToggleButton,
   DisabledLabel,
   DeviceLabel,
