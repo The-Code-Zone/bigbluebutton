@@ -297,7 +297,7 @@ const LayoutEngine = () => {
     let width = 0;
     let maxWidth = 0;
 
-    if (isOpen && !sidebarsHiddenForViewer) {
+    if (isOpen) {
       if (isMobile) {
         minWidth = windowWidth();
         width = windowWidth();

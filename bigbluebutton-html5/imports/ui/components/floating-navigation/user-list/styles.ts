@@ -17,11 +17,19 @@ const Bubble = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
   max-width: 100%;
   padding: 7px 14px 7px 8px;
   border-radius: 24px;
   background-color: rgba(22, 24, 30, 0.72);
   color: ${colorWhite};
+`;
+
+const VolumeSlot = styled.span`
+  flex: none;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 `;
 
 const AvatarInitials = styled.span`
@@ -82,4 +90,5 @@ export default {
   Name,
   Sub,
   DeafenedBadge,
+  VolumeSlot,
 };

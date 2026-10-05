@@ -31,8 +31,7 @@ public:
         displayBrandingArea: false
   sidebarNavigation:
     buttons:
-      top:
-        - user-list
+      top: []
       center: []
       bottom:
         - settings

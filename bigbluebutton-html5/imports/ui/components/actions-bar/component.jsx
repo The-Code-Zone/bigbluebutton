@@ -11,7 +11,7 @@ import JoinVideoOptionsContainer from '../video-provider/video-button/container'
 import PresentationOptionsContainer from './presentation-options/component';
 import SwapPresentationButton from './swap-presentation/component';
 import Button from '/imports/ui/components/common/button/component';
-import { LAYOUT_TYPE } from '../layout/enums';
+import { LAYOUT_TYPE, ACTIONS, PANELS } from '../layout/enums';
 import ReactionsButtonContainer from '/imports/ui/components/actions-bar/reactions-button/container';
 import RaiseHandButtonContainer from '/imports/ui/components/actions-bar/raise-hand-button/container';
 import Selector from '/imports/ui/components/common/selector/component';
@@ -23,6 +23,10 @@ const intlMessages = defineMessages({
   actionsBarLabel: {
     id: 'app.actionsBar.label',
     description: 'Aria-label for ActionsBar Section',
+  },
+  userListLabel: {
+    id: 'app.actionsBar.userListLabel',
+    description: 'Label for the simplified-view user list toggle',
   },
 });
 
@@ -128,6 +132,32 @@ class ActionsBar extends PureComponent {
     );
   }
 
+  renderUserListToggle() {
+    const { intl, isUserListPanelOpen, layoutContextDispatch } = this.props;
+    return (
+      <Button
+        icon="user_list"
+        label={intl.formatMessage(intlMessages.userListLabel)}
+        hideLabel
+        circle
+        size="lg"
+        color={isUserListPanelOpen ? 'primary' : 'default'}
+        onClick={() => {
+          const willOpen = !isUserListPanelOpen;
+          layoutContextDispatch({
+            type: ACTIONS.SET_SIDEBAR_CONTENT_IS_OPEN,
+            value: willOpen,
+          });
+          layoutContextDispatch({
+            type: ACTIONS.SET_SIDEBAR_CONTENT_PANEL,
+            value: willOpen ? PANELS.USERLIST : PANELS.NONE,
+          });
+        }}
+        data-test="actionsBarUserListToggle"
+      />
+    );
+  }
+
   render() {
     const {
       amIPresenter,
@@ -208,6 +238,7 @@ class ActionsBar extends PureComponent {
                 )
                 : null}
               {isReactionsButtonEnabled && this.renderReactionsButton()}
+              {this.renderUserListToggle()}
             </Styled.Center>
           </Styled.ActionsBar>
         </Styled.ActionsBarWrapper>
@@ -263,6 +294,7 @@ class ActionsBar extends PureComponent {
             )}
             {isReactionsButtonEnabled && this.renderReactionsButton()}
             {isRaiseHandEnabled && <RaiseHandButtonContainer />}
+            {this.renderUserListToggle()}
             {this.renderPluginsActionBarItems(ActionsBarPosition.RIGHT)}
           </Styled.Center>
           <Styled.Right>

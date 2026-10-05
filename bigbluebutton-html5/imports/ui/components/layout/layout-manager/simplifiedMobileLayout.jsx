@@ -33,6 +33,7 @@ const SimplifiedMobileLayout = (props) => {
   const genericMainContentInput = layoutSelectInput((i) => i.genericMainContent);
   const screenShareInput = layoutSelectInput((i) => i.screenShare);
   const sharedNotesInput = layoutSelectInput((i) => i.sharedNotes);
+  const sidebarContentInput = layoutSelectInput((i) => i.sidebarContent);
   const layoutContextDispatch = layoutDispatch();
 
   const prevDeviceType = usePrevious(deviceType);
@@ -115,7 +116,20 @@ const SimplifiedMobileLayout = (props) => {
 
     layoutContextDispatch({
       type: ACTIONS.SET_SIDEBAR_CONTENT_OUTPUT,
-      value: {
+      value: sidebarContentInput.isOpen ? {
+        display: true,
+        minWidth: fullWindowBounds.width,
+        width: fullWindowBounds.width,
+        maxWidth: fullWindowBounds.width,
+        height: fullWindowBounds.height - actionbarHeight.height,
+        top: 0,
+        left: 0,
+        right: 0,
+        currentPanelType,
+        tabOrder: DEFAULT_VALUES.sidebarContentTabOrder,
+        isResizable: false,
+        zIndex: 2,
+      } : {
         display: false,
         minWidth: 0,
         width: 0,
