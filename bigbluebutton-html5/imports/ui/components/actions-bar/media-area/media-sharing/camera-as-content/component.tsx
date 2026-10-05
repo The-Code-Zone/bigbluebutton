@@ -17,6 +17,11 @@ import * as ScreenShareService from '/imports/ui/components/screenshare/service'
 import { useStopVideo, useStreams } from '/imports/ui/components/video-provider/hooks';
 import { useVideoPreview } from '/imports/ui/components/video-preview/hooks/useVideoPreview';
 import BBBVideoStream from '/imports/ui/services/webrtc-base/bbb-video-stream';
+import VirtualBgSelector from '/imports/ui/components/video-preview/virtual-background/component';
+import {
+  useIsVirtualBackgroundsEnabled,
+  useIsCustomVirtualBackgroundsEnabled,
+} from '/imports/ui/services/features';
 
 interface CameraAsContentViewProps {
   intl: IntlShape;
@@ -77,12 +82,26 @@ const CameraAsContentView: React.FC<CameraAsContentViewProps> = ({
     cleanupStreamAndVideo,
     setCurrentVideoStream,
     initializeCameras,
+    handleVirtualBgSelected,
   } = useVideoPreview({
     initialDeviceId: initialWebcamDeviceId,
     initialProfileId: PreviewService.getCameraAsContentProfile()?.id || '',
     isCameraAsContent: true,
     forceOpen: true,
   });
+
+  const isVirtualBackgroundsEnabled = useIsVirtualBackgroundsEnabled();
+  const isCustomVirtualBackgroundsEnabled = useIsCustomVirtualBackgroundsEnabled();
+  // @ts-ignore
+  const vbgConfig = window.meetingClientSettings.public.virtualBackgrounds;
+  const showVirtualBgSelector = isVirtualBackgroundsEnabled
+    && (vbgConfig.showInCameraAsContent ?? false);
+  const showVbgThumbnails = vbgConfig.showThumbnails ?? true;
+  const initialVirtualBgState = currentVideoStream.current ? {
+    type: currentVideoStream.current.virtualBgType,
+    name: currentVideoStream.current.virtualBgName,
+    uniqueId: currentVideoStream.current.virtualBgUniqueId,
+  } : undefined;
 
   function renderWebcamPreview(): React.ReactNode {
     const Settings = getSettingsSingletonInstance();
@@ -245,6 +264,16 @@ const CameraAsContentView: React.FC<CameraAsContentViewProps> = ({
             )
             : <span>{formatMessage(intlMessages.webcamNotFoundLabel)}</span>}
         </ProfileStyled.DeviceContainer>
+        {showVirtualBgSelector && (
+          <VirtualBgSelector
+            handleVirtualBgSelected={handleVirtualBgSelected}
+            locked={isCameraLoading}
+            showThumbnails={showVbgThumbnails}
+            initialVirtualBgState={initialVirtualBgState}
+            isCustomVirtualBackgroundsEnabled={isCustomVirtualBackgroundsEnabled}
+            renderSettingsLabel={false}
+          />
+        )}
       </Styled.Content>
       <ModalStyled.FooterContainer>
         <BBButton

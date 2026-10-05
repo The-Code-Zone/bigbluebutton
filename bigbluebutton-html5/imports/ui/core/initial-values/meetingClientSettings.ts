@@ -981,6 +981,8 @@ export const meetingClientSettingsInitialValues: MeetingClientSettings = {
     virtualBackgrounds: {
       enabled: true,
       enableVirtualBackgroundUpload: true,
+      virtualBackgroundUploadModeratorOnly: false,
+      showInCameraAsContent: false,
       storedOnBBB: true,
       showThumbnails: true,
       imagesPath: '/resources/images/virtual-backgrounds/',

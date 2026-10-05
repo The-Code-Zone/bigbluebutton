@@ -120,5 +120,8 @@ public:
         native: "\U0001F62E"
       - id: 'crying_laughing'
         native: "\U0001F602"
+  virtualBackgrounds:
+    virtualBackgroundUploadModeratorOnly: true
+    showInCameraAsContent: true
   pads:
     url: https://${BBB_HOST}/pad

@@ -19,6 +19,7 @@ import withFileReader from '/imports/ui/components/common/file-reader/component'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { getSettingsSingletonInstance } from '/imports/ui/services/settings';
+import useCurrentUser from '/imports/ui/core/hooks/useCurrentUser';
 
 const { MIME_TYPES_ALLOWED, MAX_FILE_SIZE } = VirtualBgService;
 
@@ -38,10 +39,11 @@ const propTypes = {
 
 const SKELETON_COUNT = 5;
 
-const shouldEnableBackgroundUpload = (isCustomVirtualBackgroundsEnabled) => {
+const shouldEnableBackgroundUpload = (isCustomVirtualBackgroundsEnabled, amIModerator) => {
   const VIRTUAL_BACKGROUNDS_CONFIG = window.meetingClientSettings.public.virtualBackgrounds;
   const ENABLE_UPLOAD = VIRTUAL_BACKGROUNDS_CONFIG.enableVirtualBackgroundUpload;
-  return ENABLE_UPLOAD && isCustomVirtualBackgroundsEnabled;
+  const MODERATOR_ONLY = VIRTUAL_BACKGROUNDS_CONFIG.virtualBackgroundUploadModeratorOnly ?? false;
+  return ENABLE_UPLOAD && isCustomVirtualBackgroundsEnabled && (!MODERATOR_ONLY || amIModerator);
 };
 
 const defaultInitialVirtualBgState = {
@@ -129,8 +131,11 @@ const VirtualBgSelector = ({
     loadFromDB,
   } = useContext(CustomVirtualBackgroundsContext);
 
+  const { data: vbgCurrentUser } = useCurrentUser((u) => ({ isModerator: u.isModerator }));
+  const amIModerator = !!vbgCurrentUser?.isModerator;
+
   useEffect(() => {
-    if (shouldEnableBackgroundUpload(isCustomVirtualBackgroundsEnabled)) {
+    if (shouldEnableBackgroundUpload(isCustomVirtualBackgroundsEnabled, amIModerator)) {
       if (!defaultSetUp) {
         const defaultBackgrounds = ['Blur', ...IMAGE_NAMES].map((imageName) => ({
           uniqueId: imageName,
@@ -144,7 +149,7 @@ const VirtualBgSelector = ({
       }
       if (!loaded) loadFromDB();
     }
-  }, [isCustomVirtualBackgroundsEnabled]);
+  }, [isCustomVirtualBackgroundsEnabled, amIModerator]);
 
   const _virtualBgSelected = (
     type,
@@ -164,7 +169,7 @@ const VirtualBgSelector = ({
 
       if (!index || index < 0) return null;
 
-      if (!shouldEnableBackgroundUpload(isCustomVirtualBackgroundsEnabled)) {
+      if (!shouldEnableBackgroundUpload(isCustomVirtualBackgroundsEnabled, amIModerator)) {
         // eslint-disable-next-line react/no-find-dom-node
         findDOMNode(inputElementsRef.current[index]).focus();
       } else {
@@ -458,7 +463,7 @@ const VirtualBgSelector = ({
         brightnessEnabled={ENABLE_CAMERA_BRIGHTNESS}
         data-test="virtualBackground"
       >
-        {shouldEnableBackgroundUpload(isCustomVirtualBackgroundsEnabled) && (
+        {shouldEnableBackgroundUpload(isCustomVirtualBackgroundsEnabled, amIModerator) && (
           <>
             {!ready && renderSkeleton()}
 
@@ -484,7 +489,7 @@ const VirtualBgSelector = ({
           </>
         )}
 
-        {!shouldEnableBackgroundUpload(isCustomVirtualBackgroundsEnabled) && (
+        {!shouldEnableBackgroundUpload(isCustomVirtualBackgroundsEnabled, amIModerator) && (
           <>
             {renderNoneButton()}
 
