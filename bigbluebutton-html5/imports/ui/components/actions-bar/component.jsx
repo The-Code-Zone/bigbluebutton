@@ -137,6 +137,35 @@ class ActionsBar extends PureComponent {
     );
   }
 
+  renderUserListToggle() {
+    const { intl } = this.props;
+    const { isKidUserListOpen } = this.state;
+    return (
+      <Button
+        icon="user_list"
+        label={intl.formatMessage(intlMessages.userListLabel)}
+        hideLabel
+        circle
+        size="lg"
+        color={isKidUserListOpen ? 'primary' : 'default'}
+        onClick={() => this.setState(
+          (prev) => ({ isKidUserListOpen: !prev.isKidUserListOpen }),
+        )}
+        data-test="floatingUserListToggle"
+      />
+    );
+  }
+
+  renderFloatingUserList() {
+    const { isKidUserListOpen } = this.state;
+    if (!isKidUserListOpen) return null;
+    return (
+      <Styled.KidUserListWrapper>
+        <FloatingUserList />
+      </Styled.KidUserListWrapper>
+    );
+  }
+
   render() {
     const {
       amIPresenter,
@@ -170,7 +199,6 @@ class ActionsBar extends PureComponent {
       isRaiseHandEnabled,
       selectedLayout,
     } = this.props;
-    const { isKidUserListOpen } = this.state;
 
     const shouldShowPresentationButton = selectedLayout !== LAYOUT_TYPE.CAMERAS_ONLY
       && selectedLayout !== LAYOUT_TYPE.PARTICIPANTS_AND_CHAT_ONLY;
@@ -218,25 +246,10 @@ class ActionsBar extends PureComponent {
                 )
                 : null}
               {isReactionsButtonEnabled && this.renderReactionsButton()}
-              <Button
-                icon="user_list"
-                label={intl.formatMessage(intlMessages.userListLabel)}
-                hideLabel
-                circle
-                size="lg"
-                color={isKidUserListOpen ? 'primary' : 'default'}
-                onClick={() => this.setState(
-                  (prev) => ({ isKidUserListOpen: !prev.isKidUserListOpen }),
-                )}
-                data-test="simplifiedViewUserListToggle"
-              />
+              {this.renderUserListToggle()}
             </Styled.Center>
           </Styled.ActionsBar>
-          {isKidUserListOpen && (
-            <Styled.KidUserListWrapper>
-              <FloatingUserList />
-            </Styled.KidUserListWrapper>
-          )}
+          {this.renderFloatingUserList()}
         </Styled.ActionsBarWrapper>
       );
     }
@@ -290,6 +303,7 @@ class ActionsBar extends PureComponent {
             )}
             {isReactionsButtonEnabled && this.renderReactionsButton()}
             {isRaiseHandEnabled && <RaiseHandButtonContainer />}
+            {this.renderUserListToggle()}
             {this.renderPluginsActionBarItems(ActionsBarPosition.RIGHT)}
           </Styled.Center>
           <Styled.Right>
@@ -338,6 +352,7 @@ class ActionsBar extends PureComponent {
             </Styled.Gap>
           </Styled.Right>
         </Styled.ActionsBar>
+        {this.renderFloatingUserList()}
       </Styled.ActionsBarWrapper>
     );
   }

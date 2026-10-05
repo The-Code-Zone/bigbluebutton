@@ -15,6 +15,7 @@ import { SETTINGS } from '/imports/ui/services/settings/enums';
 import useSettings from '/imports/ui/services/settings/hooks/useSettings';
 import getFromUserSettings from '/imports/ui/services/users-settings';
 import useMeeting from '/imports/ui/core/hooks/useMeeting';
+import useCurrentUser from '/imports/ui/core/hooks/useCurrentUser';
 import MediaService from '/imports/ui/components/media/service';
 import { useVideoStreams, useVideoStreamsCount } from '/imports/ui/components/video-provider/hooks';
 import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
@@ -104,11 +105,17 @@ const LayoutObserver: React.FC = () => {
   const isScreenSharingEnabled = useIsScreenSharingEnabled();
   const isPresentationEnabled = useIsPresentationEnabled();
   const isChatEnabled = useIsChatEnabled();
+  const { data: observerCurrentUser } = useCurrentUser((u) => ({ isModerator: u.isModerator }));
+  const sidebarsHiddenForViewer = (
+    window.meetingClientSettings?.public?.app?.hideSidebarNavigationForViewers ?? false
+  ) && !!observerCurrentUser && !observerCurrentUser.isModerator;
   const initialSidebarContentPanel = getInitialSidebarContentPanel(isChatEnabled);
   // On phones the sidebar content covers the whole screen, so no panel is opened
   // automatically on join. Tablets keep the regular behavior.
-  const shouldOpenChatPanel = initialSidebarContentPanel === PANELS.CHAT && !deviceInfo.isPhone;
-  const shouldOpenUserListPanel = initialSidebarContentPanel === PANELS.USERLIST && !deviceInfo.isPhone;
+  const shouldOpenChatPanel = initialSidebarContentPanel === PANELS.CHAT && !deviceInfo.isPhone
+    && !sidebarsHiddenForViewer;
+  const shouldOpenUserListPanel = initialSidebarContentPanel === PANELS.USERLIST && !deviceInfo.isPhone
+    && !sidebarsHiddenForViewer;
 
   const setLocalSettings = useUserChangedLocalSettings();
 
