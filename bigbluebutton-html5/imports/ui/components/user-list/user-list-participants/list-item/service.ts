@@ -203,6 +203,7 @@ export const generateActionsPermissions = (
     && (type === 'participant' || type === 'raised-hand');
 
   const allowedToPromote = amIModerator
+    && (window.meetingClientSettings?.public?.app?.allowPromoteToModerator ?? true)
     && !amISubjectUser
     && !isSubjectUserModerator
     && !isDialInUser

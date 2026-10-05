@@ -1,6 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import Auth from '/imports/ui/services/auth';
+import useCurrentUser from '/imports/ui/core/hooks/useCurrentUser';
 import useDeduplicatedSubscription from '/imports/ui/core/hooks/useDeduplicatedSubscription';
 import { USER_LIST_SUBSCRIPTION } from '/imports/ui/core/graphql/queries/users';
 import { User } from '/imports/ui/Types/user';
@@ -32,6 +33,8 @@ interface UserListSubscriptionResponse {
 
 const FloatingUserList: React.FC = () => {
   const intl = useIntl();
+  const { data: currentUser } = useCurrentUser((u) => ({ isModerator: u.isModerator }));
+  const amIModerator = !!currentUser?.isModerator;
   const { data } = useDeduplicatedSubscription<UserListSubscriptionResponse>(
     USER_LIST_SUBSCRIPTION,
     { variables: { offset: 0, limit: 60, where: { bot: { _eq: false } } } },
@@ -68,7 +71,8 @@ const FloatingUserList: React.FC = () => {
                 {intl.formatMessage(intlMessages.deafened)}
               </Styled.DeafenedBadge>
             )}
-            {!isMe && user.voice?.joined && !user.voice?.listenOnly && (
+            {!isMe && user.voice?.joined && !user.voice?.listenOnly
+              && (amIModerator || !user.isModerator) && (
               <Styled.VolumeSlot>
                 <UserVolumeControl userId={user.userId} userName={user.name} />
               </Styled.VolumeSlot>

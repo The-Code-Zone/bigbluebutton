@@ -194,7 +194,8 @@ const UserListItem: React.FC<UserListItemProps> = ({
         intl={intl}
         userItemsFromPlugin={userItemsFromPlugin}
       />
-      {!isMe(user.userId) && user.voice?.joined && !user.voice?.listenOnly && (
+      {!isMe(user.userId) && user.voice?.joined && !user.voice?.listenOnly
+        && (currentUserIsModerator || !user.isModerator) && (
         <UserVolumeControl userId={user.userId} userName={user.name} />
       )}
       {renderUserListItemIconsFromPlugin(userItemsFromPlugin)}

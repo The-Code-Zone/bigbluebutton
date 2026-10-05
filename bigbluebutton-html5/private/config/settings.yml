@@ -91,6 +91,7 @@ public:
     simplifiedMobileLayout: false
     hideSidebarNavigationForViewers: false
     hideSidebarNavigation: false
+    allowPromoteToModerator: true
     requireOwnWebcamToViewWebcams: false
     mirrorOwnWebcam: true
     viewersInWebcam: 8
