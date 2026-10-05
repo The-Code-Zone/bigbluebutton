@@ -23,7 +23,7 @@ const UserStatus: React.FC<UserStatusProps> = (props) => {
   const data = { ...user, ...stream };
   const liveLevelIndicators = useLiveAudioLevelIndicators();
   const level = useUserAudioLevel(stream.userId);
-  const levelFill = Math.round(Math.sqrt(level) * 100);
+  const levelFill = Math.round(level * 100);
 
   const listenOnly = voiceUser?.listenOnly;
   const muted = voiceUser?.muted;

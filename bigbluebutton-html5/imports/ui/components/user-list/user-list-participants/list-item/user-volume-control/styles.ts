@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colorSuccess, colorGrayLighter, colorPrimary } from '/imports/ui/stylesheets/styled-components/palette';
+import { colorGrayLighter, colorPrimary } from '/imports/ui/stylesheets/styled-components/palette';
 
 const VolumeControlContainer = styled.div`
   display: flex;
@@ -16,8 +16,8 @@ const VolumeSlider = styled.input`
   border-radius: 0.25rem;
   background: linear-gradient(
     to right,
-    ${colorSuccess} 0%,
-    ${colorSuccess} var(--level-fill),
+    ${colorPrimary} 0%,
+    ${colorPrimary} var(--level-fill),
     ${colorGrayLighter} var(--level-fill),
     ${colorGrayLighter} 100%
   );
