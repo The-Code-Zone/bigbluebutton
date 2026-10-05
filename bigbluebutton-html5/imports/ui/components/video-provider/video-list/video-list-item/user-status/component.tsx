@@ -5,7 +5,6 @@ import { VIDEO_TYPES } from '/imports/ui/components/video-provider/enums';
 import {
   useUserAudioLevel,
   useLiveAudioLevelIndicators,
-  levelToFill,
 } from '/imports/ui/components/livekit/user-volume/service';
 
 interface UserStatusProps {
@@ -24,7 +23,7 @@ const UserStatus: React.FC<UserStatusProps> = (props) => {
   const data = { ...user, ...stream };
   const liveLevelIndicators = useLiveAudioLevelIndicators();
   const level = useUserAudioLevel(stream.userId);
-  const levelFill = levelToFill(level);
+  const levelFill = Math.round(level * 100);
 
   const listenOnly = voiceUser?.listenOnly;
   const muted = voiceUser?.muted;
