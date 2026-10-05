@@ -79,7 +79,7 @@ export const MuteToggle: React.FC<MuteToggleProps> = ({
   const intl = useIntl();
   const liveLevelIndicators = useLiveAudioLevelIndicators();
   const ownLevel = useUserAudioLevel(typeof Auth.userID === 'string' ? Auth.userID : '');
-  const ownLevelFill = Math.round(Math.sqrt(ownLevel) * 100);
+  const ownLevelFill = Math.round(ownLevel * 100);
   const toggleMuteShourtcut = useShortcut('toggleMute');
   const toggleVoice = useToggleVoice();
   const [setAway] = useMutation(SET_AWAY);

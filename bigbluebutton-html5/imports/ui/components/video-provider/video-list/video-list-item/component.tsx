@@ -177,7 +177,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
   const liveLevelIndicators = useLiveAudioLevelIndicators();
   const audioLevel = useUserAudioLevel(stream.userId);
   const sustainedLoud = useSustainedLoud(stream.userId);
-  const levelGlow = liveLevelIndicators ? Math.round(Math.sqrt(audioLevel) * 100) / 100 : 0;
+  const levelGlow = liveLevelIndicators ? Math.round(audioLevel * 100) / 100 : 0;
   const glowStyle = liveLevelIndicators && levelGlow > 0.05 ? {
     '--level-glow': levelGlow,
     '--level-glow-color': sustainedLoud ? 'rgba(232, 161, 61, 0.9)' : 'rgba(47, 179, 128, 0.75)',
