@@ -15,7 +15,7 @@ import {
   layoutDispatch,
   layoutSelect,
 } from '/imports/ui/components/layout/context';
-import { DEVICE_TYPE, SMALL_VIEWPORT_BREAKPOINT } from '/imports/ui/components/layout/enums';
+import { DEVICE_TYPE, SMALL_VIEWPORT_BREAKPOINT, PANELS } from '/imports/ui/components/layout/enums';
 import {
   useIsExternalVideoEnabled,
   useIsPollingEnabled,
@@ -105,6 +105,8 @@ const ActionsBarContainer = (props) => {
   const { selectedLayout } = layoutSettings;
   const { isOpen: sidebarNavigationIsOpen } = sidebarNavigation;
   const { isOpen: sidebarContentIsOpen } = sidebarContent;
+  const isUserListPanelOpen = sidebarContentIsOpen
+    && sidebarContent.sidebarContentPanel === PANELS.USERLIST;
   const ariaHidden = sidebarNavigationIsOpen
     && sidebarContentIsOpen
     && (deviceInfo.isPhone || isLayeredView.matches);
@@ -163,6 +165,7 @@ const ActionsBarContainer = (props) => {
         isDarkThemeEnabled: darkModeIsEnabled,
         isMobile,
         isSimplifiedMobileView,
+        isUserListPanelOpen,
         selectedLayout,
       }
     }

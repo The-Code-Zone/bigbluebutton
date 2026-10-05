@@ -11,10 +11,9 @@ import JoinVideoOptionsContainer from '../video-provider/video-button/container'
 import PresentationOptionsContainer from './presentation-options/component';
 import SwapPresentationButton from './swap-presentation/component';
 import Button from '/imports/ui/components/common/button/component';
-import { LAYOUT_TYPE } from '../layout/enums';
+import { LAYOUT_TYPE, ACTIONS, PANELS } from '../layout/enums';
 import ReactionsButtonContainer from '/imports/ui/components/actions-bar/reactions-button/container';
 import RaiseHandButtonContainer from '/imports/ui/components/actions-bar/raise-hand-button/container';
-import FloatingUserList from '/imports/ui/components/floating-navigation/user-list/component';
 import Selector from '/imports/ui/components/common/selector/component';
 import ToggleGroup from '/imports/ui/components/common/toggle-group/component';
 import Separator from '/imports/ui/components/common/separator/component';
@@ -34,10 +33,6 @@ const intlMessages = defineMessages({
 class ActionsBar extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      isKidUserListOpen: false,
-    };
 
     this.actionsBarRef = React.createRef();
     this.renderPluginsActionBarItems = this.renderPluginsActionBarItems.bind(this);
@@ -138,8 +133,7 @@ class ActionsBar extends PureComponent {
   }
 
   renderUserListToggle() {
-    const { intl } = this.props;
-    const { isKidUserListOpen } = this.state;
+    const { intl, isUserListPanelOpen, layoutContextDispatch } = this.props;
     return (
       <Button
         icon="user_list"
@@ -147,22 +141,20 @@ class ActionsBar extends PureComponent {
         hideLabel
         circle
         size="lg"
-        color={isKidUserListOpen ? 'primary' : 'default'}
-        onClick={() => this.setState(
-          (prev) => ({ isKidUserListOpen: !prev.isKidUserListOpen }),
-        )}
-        data-test="floatingUserListToggle"
+        color={isUserListPanelOpen ? 'primary' : 'default'}
+        onClick={() => {
+          const willOpen = !isUserListPanelOpen;
+          layoutContextDispatch({
+            type: ACTIONS.SET_SIDEBAR_CONTENT_IS_OPEN,
+            value: willOpen,
+          });
+          layoutContextDispatch({
+            type: ACTIONS.SET_SIDEBAR_CONTENT_PANEL,
+            value: willOpen ? PANELS.USERLIST : PANELS.NONE,
+          });
+        }}
+        data-test="actionsBarUserListToggle"
       />
-    );
-  }
-
-  renderFloatingUserList() {
-    const { isKidUserListOpen } = this.state;
-    if (!isKidUserListOpen) return null;
-    return (
-      <Styled.KidUserListWrapper>
-        <FloatingUserList />
-      </Styled.KidUserListWrapper>
     );
   }
 
@@ -249,7 +241,6 @@ class ActionsBar extends PureComponent {
               {this.renderUserListToggle()}
             </Styled.Center>
           </Styled.ActionsBar>
-          {this.renderFloatingUserList()}
         </Styled.ActionsBarWrapper>
       );
     }
@@ -352,7 +343,6 @@ class ActionsBar extends PureComponent {
             </Styled.Gap>
           </Styled.Right>
         </Styled.ActionsBar>
-        {this.renderFloatingUserList()}
       </Styled.ActionsBarWrapper>
     );
   }

@@ -1,15 +1,11 @@
 import React, { useEffect } from 'react';
-import {
-  layoutSelect, layoutSelectInput, layoutSelectOutput, layoutDispatch,
-} from '/imports/ui/components/layout/context';
+import { layoutSelect, layoutSelectInput, layoutSelectOutput } from '/imports/ui/components/layout/context';
 import DEFAULT_VALUES, {
   SIDEBAR_CONTENT_MARGIN_TO_MEDIA_PERCENTAGE_WIDTH,
   SIDEBAR_NAVIGATION_PANEL_WIDTH,
   SIDEBAR_NAVIGATION_MARGIN_PERCENTAGE_WIDTH,
 } from '/imports/ui/components/layout/defaultValues';
-import {
-  LAYOUT_TYPE, DEVICE_TYPE, ACTIONS, PANELS,
-} from '/imports/ui/components/layout/enums';
+import { LAYOUT_TYPE, DEVICE_TYPE } from '/imports/ui/components/layout/enums';
 
 import UnifiedLayout from '/imports/ui/components/layout/layout-manager/unifiedLayout';
 import CamerasOnlyLayout from '/imports/ui/components/layout/layout-manager/camerasOnly';
@@ -57,13 +53,6 @@ const LayoutEngine = () => {
   const sidebarsHiddenForViewer = (
     window.meetingClientSettings?.public?.app?.hideSidebarNavigationForViewers ?? false
   ) && !!currentUserData && !currentUserData.isModerator;
-  const layoutContextDispatch = layoutDispatch();
-
-  useEffect(() => {
-    if (!sidebarsHiddenForViewer || !sidebarContentInput.isOpen) return;
-    layoutContextDispatch({ type: ACTIONS.SET_SIDEBAR_CONTENT_IS_OPEN, value: false });
-    layoutContextDispatch({ type: ACTIONS.SET_SIDEBAR_CONTENT_PANEL, value: PANELS.NONE });
-  }, [sidebarsHiddenForViewer, sidebarContentInput.isOpen]);
 
   const isMobile = deviceType === DEVICE_TYPE.MOBILE;
   const isTablet = deviceType === DEVICE_TYPE.TABLET;
@@ -308,7 +297,7 @@ const LayoutEngine = () => {
     let width = 0;
     let maxWidth = 0;
 
-    if (isOpen && !sidebarsHiddenForViewer) {
+    if (isOpen) {
       if (isMobile) {
         minWidth = windowWidth();
         width = windowWidth();
