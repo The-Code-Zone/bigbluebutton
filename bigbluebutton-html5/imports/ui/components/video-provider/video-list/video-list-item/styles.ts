@@ -45,8 +45,6 @@ const Content = styled.div<{
   display: flex;
   min-width: 100%;
   border-radius: 10px;
-  box-shadow: 0 0 calc(var(--level-glow, 0) * 48px) calc(var(--level-glow, 0) * 10px) var(--level-glow-color, transparent);
-  transition: box-shadow 0.3s ease-out;
   &::after {
     content: "";
     position: absolute;
@@ -73,6 +71,9 @@ const Content = styled.div<{
     ${({ $sustainedLoud }) => $sustainedLoud && `
       border: 2px solid rgb(232, 161, 61);
     `}
+
+    box-shadow: inset 0 0 calc(var(--level-glow, 0) * 36px) calc(var(--level-glow, 0) * 6px) var(--level-glow-color, transparent);
+    transition: box-shadow 0.3s ease-out, opacity 0.1s;
 
     ${({ animations }) => animations && `
       transition: opacity .1s;
