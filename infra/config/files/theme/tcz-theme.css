@@ -3,6 +3,10 @@ body {
   background-image: url('background.jpg');
 }
 
+div:has(> div[data-test="navigationSidebarContainer"]) {
+  background-color: transparent !important;
+}
+
 html[data-darkreader-scheme="dark"] div[id="app"],
 html[data-darkreader-scheme="dark"] div[id="cameraDock"] {
   background-color: transparent !important;
